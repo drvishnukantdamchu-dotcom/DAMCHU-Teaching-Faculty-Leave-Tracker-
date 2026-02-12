@@ -1,758 +1,1653 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DAMCH - Faculty Leave Tracker</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>">
+<title>DAMCH Teaching Faculty Leave Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-:root{--p:#1a237e;--pl:#3949ab;--pd:#0d1342;--a:#b71c1c;--al:#e53935;--s:#1b5e20;--sl:#43a047;--w:#e65100;--i:#01579b;--g:#f9a825;--bg:#f0f2f5;--c:#fff;--t:#212121;--tl:#616161;--bd:#e0e0e0;--sh:0 2px 12px rgba(0,0,0,.08);--r:10px;--tr:all .3s ease}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--t);font-size:14px;line-height:1.5}
-::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:#bbb;border-radius:3px}
-#loginPage{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--pd),var(--p),var(--pl));padding:20px}
-.lcard{background:var(--c);border-radius:var(--r);box-shadow:0 20px 60px rgba(0,0,0,.3);width:100%;max-width:440px;overflow:hidden}
-.lhdr{text-align:center;padding:25px 20px 12px;border-bottom:3px solid var(--a)}
-.lhdr .lgo{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--a));display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:36px;color:#fff;box-shadow:0 4px 15px rgba(0,0,0,.2)}
-.lhdr h2{font-size:13px;color:var(--a);font-weight:800;text-transform:uppercase}
-.lhdr h1{font-size:15px;color:var(--p);font-weight:900;margin:3px 0}
-.lhdr h3{font-size:10px;color:var(--tl)}
-.lhdr .sub{font-size:12px;color:var(--p);font-weight:700;margin-top:6px;padding:4px;background:#e8eaf6;border-radius:5px}
-.lbody{padding:20px 28px 25px}
-.fg{margin-bottom:14px}
-.fg label{display:block;font-size:10px;font-weight:700;color:var(--tl);margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px}
-.fg input,.fg select,.fg textarea{width:100%;padding:10px 12px;border:2px solid var(--bd);border-radius:8px;font-size:13px;transition:var(--tr);background:#fafafa}
-.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--p);background:#fff;outline:none;box-shadow:0 0 0 3px rgba(26,35,126,.1)}
-.btn-login{width:100%;padding:12px;border:none;border-radius:8px;background:linear-gradient(135deg,var(--p),var(--pl));color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:var(--tr);text-transform:uppercase;letter-spacing:1px}
-.btn-login:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,35,126,.4)}
-.lft{text-align:center;padding:10px;background:#f5f5f5;border-top:1px solid var(--bd)}
-.lft p{font-size:9px;color:var(--tl)}
-.lerr{color:var(--a);font-size:11px;font-weight:600;text-align:center;margin-bottom:8px;min-height:16px}
-#app{display:none;min-height:100vh}
-.tnav{background:linear-gradient(135deg,var(--pd),var(--p));color:#fff;padding:0 15px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,.3)}
-.nbrand{display:flex;align-items:center;gap:8px}
-.nlogo{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:18px}
-.nbrand span{font-size:12px;font-weight:700}
-.nright{display:flex;align-items:center;gap:10px}
-.nuser{font-size:10px;opacity:.9}
-.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:var(--tr);white-space:nowrap}
-.btn:hover{transform:translateY(-1px);box-shadow:var(--sh)}
-.btn-s{padding:4px 8px;font-size:10px}
-.bp{background:var(--p);color:#fff}.ba{background:var(--a);color:#fff}.bs{background:var(--s);color:#fff}
-.bw{background:var(--w);color:#fff}.bi{background:var(--i);color:#fff}.bo{background:transparent;border:2px solid #fff;color:#fff}
-.bo:hover{background:#fff;color:var(--p)}.bg2{background:var(--g);color:#333}.bgh{background:transparent;color:var(--p);border:1px solid var(--bd)}
-.mwrap{display:flex}
-.side{width:220px;min-height:calc(100vh - 52px);background:#fff;border-right:1px solid var(--bd);padding:10px 0;position:sticky;top:52px;overflow-y:auto;max-height:calc(100vh - 52px);flex-shrink:0}
-.msec{padding:6px 12px;font-size:8px;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:1px;margin-top:6px}
-.mi{display:flex;align-items:center;gap:8px;padding:8px 15px;font-size:11px;color:var(--t);cursor:pointer;transition:var(--tr);border-left:3px solid transparent}
-.mi:hover{background:#e8eaf6;color:var(--p)}
-.mi.act{background:#e8eaf6;color:var(--p);border-left-color:var(--p);font-weight:700}
-.mi .ic{width:16px;text-align:center;font-size:14px}
-.cnt{flex:1;padding:15px;max-width:calc(100% - 220px);overflow-x:hidden}
-.ptitle{font-size:18px;font-weight:800;color:var(--pd);margin-bottom:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.card{background:var(--c);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:15px;overflow:hidden}
-.chdr{padding:10px 15px;font-weight:700;font-size:12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
-.cbody{padding:15px}
-.srow{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:15px}
-.scard{background:var(--c);border-radius:var(--r);padding:14px;box-shadow:var(--sh);border-left:4px solid var(--p);display:flex;align-items:center;gap:10px}
-.sicon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px}
-.sinfo h3{font-size:20px;font-weight:800}.sinfo p{font-size:9px;color:var(--tl);text-transform:uppercase;letter-spacing:.5px}
-.tw{overflow-x:auto;max-height:72vh;overflow-y:auto}
-table.dt{width:100%;border-collapse:collapse;font-size:11px;min-width:1500px}
-table.dt th{background:var(--p);color:#fff;padding:7px 4px;text-align:center;font-weight:700;text-transform:uppercase;font-size:9px;letter-spacing:.3px;position:sticky;top:0;z-index:5;white-space:nowrap}
-table.dt td{padding:5px 3px;text-align:center;border-bottom:1px solid var(--bd);vertical-align:middle}
-table.dt tr:hover{background:#e8eaf6}
-table.dt .nc{text-align:left;font-weight:600;min-width:200px;position:sticky;left:0;background:#fff;z-index:3;border-right:2px solid var(--p);padding-left:5px}
-table.dt tr:hover .nc{background:#e8eaf6}
-.ci{width:38px;text-align:center;border:1px solid var(--bd);border-radius:3px;padding:3px;font-size:11px;font-weight:600;transition:var(--tr)}
-.ci:focus{border-color:var(--p);box-shadow:0 0 0 2px rgba(26,35,126,.1);outline:none}
-.ci[disabled]{background:#f5f5f5;color:var(--t);border-color:transparent}
-.bc{font-weight:800;font-size:11px}.bpos{color:var(--s)}.bneg{color:var(--a);background:#ffebee;border-radius:3px;padding:1px 3px}.bzr{color:var(--tl)}
-.tp{background:#e8f5e9;font-weight:800;color:var(--s);font-size:12px}
-.tu{background:#ffebee;font-weight:800;color:var(--a);font-size:12px}
-.tg{background:#fff9c4;font-weight:900;font-size:13px;color:#333}
-.thp{background:var(--s)!important}.thu{background:var(--a)!important}.thel{background:#1565c0!important}.thlt{background:#333!important}.thsub{background:#37474f!important;font-size:8px!important}
-.badge{display:inline-block;padding:2px 6px;border-radius:10px;font-size:9px;font-weight:700}
-.bdp{background:#e8eaf6;color:var(--p)}.bds{background:#e8f5e9;color:var(--s)}.bdd{background:#ffebee;color:var(--a)}.bdw{background:#fff3e0;color:var(--w)}.bdi{background:#e1f5fe;color:var(--i)}
-.mov{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2000;display:none;align-items:center;justify-content:center;padding:15px}
-.mov.show{display:flex}
-.mod{background:#fff;border-radius:var(--r);box-shadow:0 20px 60px rgba(0,0,0,.3);width:100%;max-width:620px;max-height:90vh;overflow-y:auto}
-.mhdr{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1}
-.mhdr h3{font-size:14px;color:var(--p)}
-.mcls{width:26px;height:26px;border:none;background:#f5f5f5;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
-.mcls:hover{background:#e0e0e0}
-.mbody{padding:18px}
-.mft{padding:10px 18px;border-top:1px solid var(--bd);display:flex;justify-content:flex-end;gap:6px}
-.pgrid{display:grid;grid-template-columns:160px 1fr;gap:15px}
-.pharea{text-align:center;padding:12px}
-.photo{width:120px;height:120px;border-radius:50%;border:3px solid var(--p);object-fit:cover;background:#e8eaf6;display:flex;align-items:center;justify-content:center;font-size:40px;color:var(--p);margin:0 auto 6px;overflow:hidden}
-.photo img{width:100%;height:100%;object-fit:cover}
-.pdet{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.pf label{font-size:9px;color:var(--tl);font-weight:600;text-transform:uppercase;display:block;margin-bottom:2px}
-.pf .val{font-size:12px;font-weight:600;color:var(--t);padding:6px 10px;background:#f5f5f5;border-radius:5px;min-height:32px;display:flex;align-items:center}
-.pf input,.pf select,.pf textarea{width:100%;padding:6px 10px;border:2px solid var(--bd);border-radius:5px;font-size:11px;transition:var(--tr)}
-.pf input:focus,.pf select:focus{border-color:var(--p);outline:none}
-.pfull{grid-column:1/-1}
-.ptbl{width:100%;border-collapse:collapse;margin-bottom:10px}
-.ptbl th,.ptbl td{border:1px solid var(--bd);padding:7px 9px;text-align:left;font-size:11px}
-.ptbl th{background:var(--p);color:#fff;font-size:10px;text-transform:uppercase}
-.ptbl tr:nth-child(even){background:#f5f5f5}
-.ptbl .hl{background:#fff9c4;font-weight:700}
-.hrow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd)}
-.hdate{background:var(--p);color:#fff;padding:3px 7px;border-radius:5px;font-weight:700;min-width:70px;text-align:center;font-size:10px}
-.hname{font-weight:600;font-size:11px;flex:1}
-.lacard{border:2px dashed var(--bd);border-radius:var(--r);padding:12px;margin-bottom:10px;background:#fafafa;display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:6px;align-items:center;font-size:11px}
-.lacard.pend{border-color:var(--g);background:#fffde7}
-.lacard.appr{border-color:var(--sl);background:#e8f5e9}
-.lacard.rej{border-color:var(--al);background:#ffebee}
-.yrb{padding:4px 12px;border:2px solid var(--p);border-radius:5px;background:#fff;color:var(--p);font-weight:700;cursor:pointer;font-size:11px;transition:var(--tr)}
-.yrb.act{background:var(--p);color:#fff}.yrb:hover{background:var(--p);color:#fff}
-.exp{font-size:9px;color:var(--i);font-weight:700;background:#e1f5fe;padding:1px 5px;border-radius:3px;display:inline-block}
-.toast{position:fixed;top:60px;right:15px;padding:10px 18px;border-radius:8px;color:#fff;font-weight:600;font-size:12px;z-index:3000;transform:translateX(120%);transition:transform .3s ease;box-shadow:0 4px 15px rgba(0,0,0,.2)}
-.toast.show{transform:translateX(0)}.ts{background:var(--s)}.te{background:var(--a)}.tw2{background:var(--w)}
-@media print{
-body{background:#fff;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-#loginPage,.tnav,.side,.nopr,.toast,.mov{display:none!important}
-#app{display:block!important}.cnt{max-width:100%;padding:0}.mwrap{display:block}
-@page{size:A4 portrait;margin:.5cm}
-.rt{width:100%;border-collapse:collapse;font-size:8px;border:2px solid #000!important;margin-bottom:8px}
-.rt th,.rt td{border:1px solid #000!important;padding:2px;text-align:center;color:#000}
-.rt th{background:#ddd!important;font-weight:bold}
-.rh{display:flex;align-items:center;border-bottom:2px solid #000!important;padding-bottom:4px;margin-bottom:6px}
-.rl{width:50px;height:50px;margin-right:6px}.rl img{max-width:100%;max-height:100%}
-.rti{text-align:center;flex:1}
-.rti h3{margin:1px 0;font-size:11px}.rti h2{margin:1px 0;font-size:13px;font-weight:900}.rti h5{margin:1px 0;font-size:8px}
-.ic2{border:1px solid #000!important;padding:4px;margin-bottom:6px;page-break-inside:avoid;width:99%}
-.dh{background:#eee;font-weight:bold;text-align:left;padding:2px;font-size:9px;border:1px solid #000!important;margin-top:4px}
+:root{
+--primary:#0f4c81;--primary-light:#1a6bab;--primary-dark:#0a3459;
+--accent:#e8a838;--accent-light:#f0c060;
+--success:#10b981;--warning:#f59e0b;--danger:#ef4444;--info:#3b82f6;
+--bg:#f0f4f8;--bg-card:#ffffff;--bg-sidebar:#0b1a2e;
+--text:#1e293b;--text-light:#64748b;--text-white:#f8fafc;
+--border:#e2e8f0;--shadow:0 4px 24px rgba(0,0,0,0.08);
+--shadow-lg:0 12px 40px rgba(0,0,0,0.12);
+--radius:12px;--radius-sm:8px;--radius-lg:16px;
+--transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
 }
-@media(max-width:768px){.side{display:none}.cnt{max-width:100%;padding:8px}.pgrid{grid-template-columns:1fr}.pdet{grid-template-columns:1fr}.srow{grid-template-columns:1fr 1fr}.lacard{grid-template-columns:1fr}}
-.hid{display:none!important}.mt8{margin-top:8px}.mb8{margin-bottom:8px}
-.flx{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
-.tc{text-align:center}.tr{text-align:right}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--primary-light);border-radius:3px}
+
+/* === LOGIN PAGE === */
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;
+background:linear-gradient(135deg,#0b1a2e 0%,#0f4c81 50%,#1a6bab 100%);
+position:relative;overflow:hidden}
+.login-page::before{content:'';position:absolute;width:600px;height:600px;
+background:radial-gradient(circle,rgba(232,168,56,0.15),transparent 70%);
+top:-200px;right:-200px;border-radius:50%}
+.login-page::after{content:'';position:absolute;width:400px;height:400px;
+background:radial-gradient(circle,rgba(26,107,171,0.2),transparent 70%);
+bottom:-100px;left:-100px;border-radius:50%}
+.login-container{background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);
+border-radius:var(--radius-lg);padding:48px 40px;width:440px;max-width:95%;
+box-shadow:var(--shadow-lg);position:relative;z-index:1;
+border:1px solid rgba(255,255,255,0.2)}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-logo .college-emblem{width:80px;height:80px;
+background:linear-gradient(135deg,var(--primary),var(--accent));
+border-radius:50%;display:flex;align-items:center;justify-content:center;
+margin:0 auto 16px;box-shadow:0 8px 24px rgba(15,76,129,0.3)}
+.login-logo .college-emblem i{font-size:36px;color:#fff}
+.login-logo h2{font-family:'Noto Sans Devanagari',sans-serif;font-size:17px;
+color:var(--primary-dark);font-weight:700;line-height:1.5}
+.login-logo h3{font-size:12px;color:var(--text-light);margin-top:4px;font-weight:500;letter-spacing:0.5px}
+.login-logo .addr{font-size:11px;color:var(--text-light);margin-top:6px;line-height:1.5}
+.form-group{margin-bottom:20px;position:relative}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+.form-group input,.form-group select{width:100%;padding:12px 16px 12px 44px;
+border:2px solid var(--border);border-radius:var(--radius-sm);font-size:14px;
+transition:var(--transition);background:#fff;color:var(--text)}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary);
+box-shadow:0 0 0 4px rgba(15,76,129,0.1)}
+.form-group .icon{position:absolute;left:14px;top:38px;color:var(--text-light);font-size:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+padding:12px 24px;border:none;border-radius:var(--radius-sm);font-size:14px;
+font-weight:600;cursor:pointer;transition:var(--transition);text-decoration:none}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-light));
+color:#fff;box-shadow:0 4px 16px rgba(15,76,129,0.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(15,76,129,0.4)}
+.btn-success{background:linear-gradient(135deg,var(--success),#059669);color:#fff}
+.btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:#fff}
+.btn-warning{background:linear-gradient(135deg,var(--warning),#d97706);color:#fff}
+.btn-info{background:linear-gradient(135deg,var(--info),#2563eb);color:#fff}
+.btn-outline{background:transparent;border:2px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary)}
+.btn-sm{padding:8px 16px;font-size:12px}
+.btn-lg{padding:14px 32px;font-size:16px}
+.btn-block{width:100%}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none!important}
+.login-btn{width:100%;padding:14px;font-size:15px;font-weight:700;letter-spacing:0.5px;
+margin-top:8px}
+.forgot-link{text-align:center;margin-top:16px}
+.forgot-link a{color:var(--primary);font-size:13px;text-decoration:none;font-weight:500}
+.forgot-link a:hover{text-decoration:underline}
+
+/* === MAIN APP LAYOUT === */
+.app{display:flex;min-height:100vh;display:none}
+.sidebar{width:270px;background:var(--bg-sidebar);color:var(--text-white);
+display:flex;flex-direction:column;position:fixed;height:100vh;z-index:100;
+transition:var(--transition);overflow-y:auto}
+.sidebar-header{padding:20px;text-align:center;
+border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-header .logo-circle{width:56px;height:56px;
+background:linear-gradient(135deg,var(--accent),var(--accent-light));
+border-radius:50%;display:flex;align-items:center;justify-content:center;
+margin:0 auto 10px;font-size:24px;color:var(--primary-dark);font-weight:800}
+.sidebar-header h3{font-family:'Noto Sans Devanagari',sans-serif;font-size:13px;
+font-weight:600;line-height:1.5;color:var(--text-white)}
+.sidebar-header p{font-size:10px;color:rgba(255,255,255,0.5);margin-top:4px}
+.sidebar-nav{flex:1;padding:12px 0}
+.nav-section{padding:8px 20px 4px;font-size:10px;font-weight:700;
+color:rgba(255,255,255,0.35);letter-spacing:1.5px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 20px;
+color:rgba(255,255,255,0.65);font-size:13px;font-weight:500;cursor:pointer;
+transition:var(--transition);border-left:3px solid transparent;margin:1px 0}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:#fff}
+.nav-item.active{background:rgba(232,168,56,0.12);color:var(--accent);
+border-left-color:var(--accent)}
+.nav-item i{width:20px;text-align:center;font-size:15px}
+.nav-item .badge{margin-left:auto;background:var(--accent);color:var(--primary-dark);
+font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px}
+.sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08)}
+.user-info{display:flex;align-items:center;gap:10px}
+.user-avatar{width:36px;height:36px;border-radius:50%;
+background:linear-gradient(135deg,var(--accent),var(--accent-light));
+display:flex;align-items:center;justify-content:center;font-size:14px;
+font-weight:700;color:var(--primary-dark)}
+.user-details{flex:1}
+.user-details .name{font-size:13px;font-weight:600;color:#fff}
+.user-details .role{font-size:10px;color:rgba(255,255,255,0.5)}
+
+/* === MAIN CONTENT === */
+.main{margin-left:270px;flex:1;min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:#fff;padding:16px 32px;display:flex;align-items:center;
+justify-content:space-between;border-bottom:1px solid var(--border);
+box-shadow:0 2px 8px rgba(0,0,0,0.04);position:sticky;top:0;z-index:50}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.topbar-left h1{font-size:20px;font-weight:700;color:var(--primary-dark)}
+.topbar-left .breadcrumb{font-size:12px;color:var(--text-light)}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-right .btn-icon{width:40px;height:40px;border-radius:50%;border:none;
+background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;
+color:var(--text-light);transition:var(--transition);font-size:16px}
+.topbar-right .btn-icon:hover{background:var(--primary);color:#fff}
+.content{flex:1;padding:28px 32px;overflow-y:auto}
+.page{display:none}
+.page.active{display:block}
+
+/* === CARDS === */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-bottom:28px}
+.stat-card{background:#fff;border-radius:var(--radius);padding:24px;
+box-shadow:var(--shadow);position:relative;overflow:hidden;
+transition:var(--transition)}
+.stat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.stat-card:nth-child(1)::before{background:linear-gradient(90deg,var(--primary),var(--primary-light))}
+.stat-card:nth-child(2)::before{background:linear-gradient(90deg,var(--success),#059669)}
+.stat-card:nth-child(3)::before{background:linear-gradient(90deg,var(--warning),#d97706)}
+.stat-card:nth-child(4)::before{background:linear-gradient(90deg,var(--info),#2563eb)}
+.stat-card:nth-child(5)::before{background:linear-gradient(90deg,var(--danger),#dc2626)}
+.stat-card .stat-icon{width:48px;height:48px;border-radius:var(--radius-sm);
+display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+.stat-card:nth-child(1) .stat-icon{background:rgba(15,76,129,0.1);color:var(--primary)}
+.stat-card:nth-child(2) .stat-icon{background:rgba(16,185,129,0.1);color:var(--success)}
+.stat-card:nth-child(3) .stat-icon{background:rgba(245,158,11,0.1);color:var(--warning)}
+.stat-card:nth-child(4) .stat-icon{background:rgba(59,130,246,0.1);color:var(--info)}
+.stat-card:nth-child(5) .stat-icon{background:rgba(239,68,68,0.1);color:var(--danger)}
+.stat-card .stat-value{font-size:28px;font-weight:800;color:var(--text)}
+.stat-card .stat-label{font-size:12px;color:var(--text-light);margin-top:4px;font-weight:500}
+
+/* === CHARTS === */
+.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:24px;margin-bottom:28px}
+.chart-card{background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.chart-card h3{font-size:15px;font-weight:700;color:var(--text);margin-bottom:16px;
+padding-bottom:12px;border-bottom:1px solid var(--border)}
+
+/* === TABLE === */
+.table-container{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.table-header{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;
+border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px}
+.table-header h3{font-size:16px;font-weight:700;color:var(--text)}
+.table-actions{display:flex;gap:8px;flex-wrap:wrap}
+.search-box{position:relative}
+.search-box input{padding:10px 16px 10px 40px;border:2px solid var(--border);
+border-radius:var(--radius-sm);font-size:13px;width:260px;transition:var(--transition)}
+.search-box input:focus{border-color:var(--primary);outline:none;
+box-shadow:0 0 0 4px rgba(15,76,129,0.1)}
+.search-box i{position:absolute;left:14px;top:50%;transform:translateY(-50%);
+color:var(--text-light);font-size:14px}
+table{width:100%;border-collapse:collapse}
+th{background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;
+padding:12px 16px;text-align:left;font-size:12px;font-weight:600;
+letter-spacing:0.5px;text-transform:uppercase;white-space:nowrap}
+td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--border);
+color:var(--text);vertical-align:middle}
+tr:hover td{background:rgba(15,76,129,0.02)}
+.dept-badge{display:inline-block;padding:4px 10px;border-radius:20px;
+font-size:11px;font-weight:600;white-space:nowrap}
+.desig-badge{display:inline-block;padding:3px 10px;border-radius:4px;
+font-size:11px;font-weight:600}
+.desig-principal{background:#fef3c7;color:#92400e}
+.desig-professor{background:#dbeafe;color:#1e40af}
+.desig-reader,.desig-associate{background:#d1fae5;color:#065f46}
+.desig-lecturer,.desig-assistant{background:#ede9fe;color:#5b21b6}
+
+/* === MODAL === */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);
+backdrop-filter:blur(4px);z-index:1000;display:none;align-items:center;
+justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:var(--radius-lg);width:680px;max-width:100%;
+max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:modalIn 0.3s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(0.95) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-header{padding:20px 24px;border-bottom:1px solid var(--border);
+display:flex;align-items:center;justify-content:space-between;
+background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.modal-header h3{font-size:17px;font-weight:700;color:#fff}
+.modal-close{width:32px;height:32px;border:none;background:rgba(255,255,255,0.15);
+color:#fff;border-radius:50%;cursor:pointer;font-size:16px;display:flex;
+align-items:center;justify-content:center;transition:var(--transition)}
+.modal-close:hover{background:rgba(255,255,255,0.3)}
+.modal-body{padding:24px}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);
+display:flex;justify-content:flex-end;gap:10px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.form-row .form-group{margin-bottom:0}
+.form-group-full{grid-column:1/-1}
+.form-group textarea{width:100%;padding:10px 14px;border:2px solid var(--border);
+border-radius:var(--radius-sm);font-size:14px;resize:vertical;min-height:80px}
+
+/* === PROFILE PAGE === */
+.profile-hero{background:linear-gradient(135deg,var(--primary-dark),var(--primary),var(--primary-light));
+border-radius:var(--radius-lg);padding:40px;color:#fff;margin-bottom:24px;
+position:relative;overflow:hidden}
+.profile-hero::before{content:'';position:absolute;width:300px;height:300px;
+background:radial-gradient(circle,rgba(232,168,56,0.15),transparent);
+top:-100px;right:-50px;border-radius:50%}
+.profile-info-grid{display:grid;grid-template-columns:120px 1fr;gap:24px;align-items:start}
+.profile-photo{width:120px;height:120px;border-radius:50%;border:4px solid rgba(255,255,255,0.3);
+object-fit:cover;background:#fff;display:flex;align-items:center;justify-content:center;
+font-size:40px;color:var(--primary);overflow:hidden}
+.profile-photo img{width:100%;height:100%;object-fit:cover}
+.profile-details h2{font-size:24px;font-weight:800;margin-bottom:4px}
+.profile-details .designation{font-size:14px;opacity:0.85;margin-bottom:8px}
+.profile-details .dept{font-size:13px;opacity:0.7}
+.profile-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.profile-card{background:#fff;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.profile-card h4{font-size:14px;font-weight:700;color:var(--primary);margin-bottom:14px;
+padding-bottom:10px;border-bottom:2px solid var(--bg)}
+.profile-field{display:flex;justify-content:space-between;padding:8px 0;
+border-bottom:1px solid var(--bg);font-size:13px}
+.profile-field .label{color:var(--text-light);font-weight:500}
+.profile-field .value{font-weight:600;color:var(--text);text-align:right}
+
+/* === TOAST === */
+.toast-container{position:fixed;top:20px;right:20px;z-index:2000;display:flex;
+flex-direction:column;gap:8px}
+.toast{padding:14px 20px;border-radius:var(--radius-sm);color:#fff;font-size:13px;
+font-weight:500;display:flex;align-items:center;gap:10px;
+animation:toastIn 0.3s ease;min-width:300px;box-shadow:var(--shadow-lg)}
+.toast-success{background:linear-gradient(135deg,var(--success),#059669)}
+.toast-error{background:linear-gradient(135deg,var(--danger),#dc2626)}
+.toast-info{background:linear-gradient(135deg,var(--info),#2563eb)}
+@keyframes toastIn{from{opacity:0;transform:translateX(100px)}to{opacity:1;transform:translateX(0)}}
+
+/* === PRINT === */
+@media print{
+.sidebar,.topbar,.no-print{display:none!important}
+.main{margin-left:0!important}
+.content{padding:0!important}
+body{background:#fff}
+.stat-card,.chart-card,.table-container,.profile-hero,.profile-card{box-shadow:none;break-inside:avoid}
+.print-header{display:block!important;text-align:center;margin-bottom:20px;
+padding-bottom:16px;border-bottom:2px solid #000}
+.print-header h2{font-size:16px;margin-bottom:4px}
+.print-header p{font-size:11px}
+}
+.print-header{display:none}
+
+/* === RESPONSIVE === */
+@media(max-width:768px){
+.sidebar{transform:translateX(-100%)}
+.sidebar.open{transform:translateX(0)}
+.main{margin-left:0}
+.content{padding:16px}
+.form-row{grid-template-columns:1fr}
+.charts-grid{grid-template-columns:1fr}
+.stats-grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.search-box input{width:100%}
+.table-header{flex-direction:column;align-items:stretch}
+.profile-info-grid{grid-template-columns:1fr;text-align:center}
+.profile-photo{margin:0 auto}
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.page.active{animation:fadeIn 0.4s ease}
+.tag-approved{background:#d1fae5;color:#065f46;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.tag-pending{background:#fef3c7;color:#92400e;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.leave-card{background:#fff;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px;
+border-left:4px solid var(--primary)}
+.leave-card.approved{border-left-color:var(--success)}
+.leave-card.rejected{border-left-color:var(--danger)}
+.leave-card.pending{border-left-color:var(--warning)}
+.tab-bar{display:flex;gap:4px;margin-bottom:20px;background:#fff;padding:4px;border-radius:var(--radius-sm);box-shadow:var(--shadow)}
+.tab-btn{padding:10px 20px;border:none;background:transparent;font-size:13px;font-weight:600;
+color:var(--text-light);cursor:pointer;border-radius:var(--radius-sm);transition:var(--transition)}
+.tab-btn.active{background:var(--primary);color:#fff}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-light)}
+.empty-state i{font-size:48px;margin-bottom:16px;opacity:0.3}
+.empty-state p{font-size:14px}
+select.form-select{padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);
+font-size:13px;background:#fff;cursor:pointer;transition:var(--transition)}
+select.form-select:focus{border-color:var(--primary);outline:none}
 </style>
 </head>
 <body>
-<div class="toast" id="toast"></div>
-<!-- LOGIN -->
-<div id="loginPage">
-<div class="lcard">
-<div class="lhdr">
-<div class="lgo">🏥</div>
-<h2>Bal Bhagwan Shikshan Prasarak Mandal's</h2>
-<h1>Dhanwantari Ayurved Medical College &amp; Charitable Hospital</h1>
-<h3>Degloor Road, Udgir - 413517, Dist. Latur, Maharashtra</h3>
-<h3>Ph: (02385) 259825 | Email: contact@damchudgir.edu.in | MUHS Code: ____</h3>
-<div class="sub">📋 Teaching Faculty Leave Tracking System (UG 100 Seats)</div>
+<!-- ===== LOGIN PAGE ===== -->
+<div id="loginPage" class="login-page">
+<div class="login-container">
+<div class="login-logo">
+<div class="college-emblem"><i class="fas fa-om"></i></div>
+<h2>बाळ भगवान शिक्षण प्रसारक मंडळ, अहमदपूर</h2>
+<h2>धन्वंतरी आयुर्वेद मेडिकल कॉलेज अँड<br>चॅरिटेबल हॉस्पिटल, उदगीर</h2>
+<h3>TEACHING FACULTY LEAVE TRACKING SYSTEM</h3>
+<p class="addr">देगलूर रोड, उदगीर - 413517, जि. लातूर, महाराष्ट्र<br>
+दूरध्वनी: (02385) 259825 | Email: contact@damchudgir.edu.in</p>
 </div>
-<div class="lbody">
-<div class="lerr" id="lerr"></div>
-<div class="fg"><label>Username</label><input type="text" id="lu" placeholder="Enter Username" autofocus></div>
-<div class="fg"><label>Password</label><input type="password" id="lp" placeholder="Enter Password" onkeypress="if(event.key==='Enter')doLogin()"></div>
-<button class="btn-login" onclick="doLogin()">🔐 Sign In</button>
+<div id="loginForm">
+<div class="form-group">
+<label>Username</label>
+<i class="fas fa-user icon"></i>
+<input type="text" id="loginUser" placeholder="Enter username" autocomplete="off">
 </div>
-<div class="lft">
-<p>Designed &amp; Developed by <strong>Dr. Jadhav V.R.</strong> (95183 56305) for DAMCH Udgir</p>
-<p>© 2025-2027 | All Rights Reserved | <a href="https://www.damchudgir.edu.in" target="_blank" style="color:var(--p)">www.damchudgir.edu.in</a></p>
+<div class="form-group">
+<label>Password</label>
+<i class="fas fa-lock icon"></i>
+<input type="password" id="loginPass" placeholder="Enter password">
+</div>
+<button class="btn btn-primary login-btn" onclick="doLogin()">
+<i class="fas fa-sign-in-alt"></i> Sign In
+</button>
+<div class="forgot-link"><a href="#" onclick="showForgot()">Forgot Password?</a></div>
+</div>
+<div id="forgotForm" style="display:none">
+<div class="form-group">
+<label>Username</label>
+<i class="fas fa-user icon"></i>
+<input type="text" id="forgotUser" placeholder="Your username">
+</div>
+<div class="form-group">
+<label>Security Question: What is your favourite sport?</label>
+<i class="fas fa-shield-alt icon"></i>
+<input type="text" id="forgotAnswer" placeholder="Answer">
+</div>
+<button class="btn btn-primary login-btn" onclick="doForgotPassword()">
+<i class="fas fa-key"></i> Recover Password
+</button>
+<div class="forgot-link"><a href="#" onclick="hideForgot()">← Back to Login</a></div>
+</div>
+<div style="text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+<p style="font-size:11px;color:var(--text-light)">Designed & Developed by <strong>Dr. Jadhav V.R.</strong> | Contact: 95183 56305</p>
+<p style="font-size:10px;color:var(--text-light);margin-top:4px">© 2025-2027 | www.damchudgir.edu.in</p>
 </div>
 </div>
 </div>
-<!-- MAIN APP -->
-<div id="app">
-<div class="tnav nopr">
-<div class="nbrand"><div class="nlogo">🏥</div><span>DAMCH Leave Tracker</span></div>
-<div class="nright">
-<span class="nuser" id="navInfo"></span>
-<button class="btn bo btn-s" onclick="doLogout()">⏻ Logout</button>
+
+<!-- ===== MAIN APP ===== -->
+<div id="app" class="app">
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-header">
+<div class="logo-circle">DA</div>
+<h3>धन्वंतरी आयुर्वेद मे. कॉ.</h3>
+<p>Faculty Leave Tracker</p>
+</div>
+<nav class="sidebar-nav" id="sidebarNav"></nav>
+<div class="sidebar-footer">
+<div class="user-info">
+<div class="user-avatar" id="avatarInitial">A</div>
+<div class="user-details">
+<div class="name" id="sidebarUserName">Admin</div>
+<div class="role" id="sidebarUserRole">Administrator</div>
+</div>
+<button class="btn-icon" onclick="doLogout()" title="Logout" style="background:rgba(255,255,255,0.08);border:none;color:rgba(255,255,255,0.6);cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center">
+<i class="fas fa-sign-out-alt"></i>
+</button>
 </div>
 </div>
-<div class="mwrap">
-<div class="side nopr" id="sidebar"></div>
-<div class="cnt" id="cnt"></div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+<header class="topbar">
+<div class="topbar-left">
+<button class="btn-icon" onclick="toggleSidebar()" style="display:none" id="menuBtn">
+<i class="fas fa-bars"></i>
+</button>
+<div>
+<h1 id="pageTitle">Dashboard</h1>
+<div class="breadcrumb" id="breadcrumb">Home / Dashboard</div>
 </div>
 </div>
+<div class="topbar-right no-print">
+<button class="btn-icon" onclick="window.print()" title="Print"><i class="fas fa-print"></i></button>
+<button class="btn-icon" onclick="doLogout()" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+</div>
+</header>
+<div class="content" id="contentArea">
+<!-- Print Header -->
+<div class="print-header">
+<h2>धन्वंतरी आयुर्वेद मेडिकल कॉलेज अँड चॅरिटेबल हॉस्पिटल, उदगीर</h2>
+<p>देगलूर रोड, उदगीर - 413517, जि. लातूर | दूरध्वनी: (02385) 259825</p>
+</div>
+<!-- Pages injected by JS -->
+</div>
+</div>
+</div>
+
 <!-- MODAL -->
-<div class="mov" id="modOv" onclick="if(event.target===this)clsMod()">
-<div class="mod" id="modBox"></div>
+<div class="modal-overlay" id="modalOverlay">
+<div class="modal" id="modalContent"></div>
 </div>
-<!-- PRINT -->
-<div id="printSec" style="display:none"></div>
 
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
 <script>
-// ============================================================
-// DAMCH FACULTY LEAVE TRACKER v4.0
-// As per MUHS LIC Proforma & NCISM MESA&R 2024
-// UG 100 Seats - 14 Departments
-// ============================================================
-
-// ===== DEPARTMENTS (As per NCISM/MUHS Schedule IV for 100 seats UG) =====
+/* ======== CONSTANTS ======== */
 const DEPTS=[
-{code:"SS",name:"Samhita Siddhant & Sanskrit",short:"Samhita Siddhant",staff:{prof:1,assoc:1,asst:3}},
-{code:"RS",name:"Rachana Sharir (Anatomy)",short:"Rachana Sharir",staff:{prof:1,assoc:1,asst:1}},
-{code:"KS",name:"Kriya Sharir (Physiology)",short:"Kriya Sharir",staff:{prof:1,assoc:1,asst:1}},
-{code:"DG",name:"Dravyaguna (Pharmacology)",short:"Dravyaguna",staff:{prof:1,assoc:1,asst:1}},
-{code:"RB",name:"Rasashastra & Bhaishajya Kalpana",short:"Rasa & BK",staff:{prof:1,assoc:1,asst:1}},
-{code:"RN",name:"Roga Nidan & Vikriti Vigyan (Pathology)",short:"Roga Nidan",staff:{prof:1,assoc:1,asst:1}},
-{code:"SW",name:"Swasthavritta & Yoga (Preventive Medicine)",short:"Swasthavritta",staff:{prof:1,assoc:1,asst:1}},
-{code:"AT",name:"Agada Tantra & Vidhi Ayurved (Toxicology)",short:"Agada Tantra",staff:{prof:1,assoc:1,asst:1}},
-{code:"KC",name:"Kayachikitsa (Internal Medicine)",short:"Kayachikitsa",staff:{prof:1,assoc:2,asst:2}},
-{code:"PK",name:"Panchakarma (Bio-Purification)",short:"Panchakarma",staff:{prof:1,assoc:1,asst:2}},
-{code:"SH",name:"Shalya Tantra (Surgery)",short:"Shalya Tantra",staff:{prof:1,assoc:2,asst:2}},
-{code:"SK",name:"Shalakya Tantra (ENT, Eye & Dentistry)",short:"Shalakya Tantra",staff:{prof:1,assoc:2,asst:2}},
-{code:"PT",name:"Prasuti Tantra & Stri Roga (OBG)",short:"Prasuti & Stri Roga",staff:{prof:1,assoc:1,asst:2}},
-{code:"KB",name:"Kaumarbhritya - Balaroga (Pediatrics)",short:"Kaumarbhritya",staff:{prof:1,assoc:1,asst:2}}
+'Samhita Siddhant','Sharir Rachana','Kriya Sharir','Dravyaguna Vidnyan',
+'Rasashastra B.K.','Rognidan V.V.','Swasthavritta','Agadtantra V.A.',
+'Prasuti & Striroga','Kaumarbhritya','Kayachikitsa','Shalyatantra',
+'Shalakya Tantra','Panchakarma'];
+const DEPT_COLORS=['#3b82f6','#ef4444','#10b981','#f59e0b','#8b5cf6','#ec4899',
+'#14b8a6','#f97316','#6366f1','#84cc16','#06b6d4','#d946ef','#0ea5e9','#eab308'];
+const DESIG_ORDER={'Principal':0,'Professor':1,'Reader':2,'Associate Professor':2,
+'Lecturer':3,'Assistant Professor':3};
+const LEAVE_TYPES=['CL','ML','OD','EL','Maternity','Paternity','Study Leave',
+'Sabbatical','RH','LWP','Late Mark'];
+const YEARS=[2025,2026,2027];
+
+/* ======== DEFAULT FACULTY DATA ======== */
+const DEFAULT_FACULTY=[
+{id:'F001',name:'Vd. Patil Dattatraya Vinayakrao',code:'AYSS00481',designation:'Professor',dept:'Samhita Siddhant',email:'hnsdvp10@gmail.com',phone:'9422819195',doj:'2003-12-23',dob:'1977-05-05',approved:'Yes',isPrincipal:true,status:'active'},
+{id:'F002',name:'Vd. Khandilkar Sandeep Subhashrao',code:'AYSS00625',designation:'Professor',dept:'Samhita Siddhant',email:'sandeep.khandalikar@gmail.com',phone:'9860355409',doj:'2010-06-15',dob:'1978-03-12',approved:'Yes',status:'active'},
+{id:'F003',name:'Vda. Kulkarni Neha Madhukarrao',code:'AYSS02080',designation:'Lecturer',dept:'Samhita Siddhant',email:'drnehakulkarni19@gmail.com',phone:'7498686401',doj:'2022-07-01',dob:'1994-08-19',approved:'No',status:'active'},
+{id:'F004',name:'Vda. Tarde Ketaki Rangnath',code:'AYSS02196',designation:'Lecturer',dept:'Samhita Siddhant',email:'ketakitarde65856@gmail.com',phone:'9284782954',doj:'2023-01-15',dob:'1996-06-05',approved:'No',status:'active'},
+{id:'F005',name:'Vda. Patil Shivani Tanajirao',code:'AYSS02244',designation:'Lecturer',dept:'Samhita Siddhant',email:'shivanipatil26896@gmail.com',phone:'8857013868',doj:'2023-06-01',dob:'1997-08-26',approved:'No',status:'active'},
+{id:'F006',name:'Vd. Biradar Prashant Trembakrao',code:'AYSN00048',designation:'Lecturer',dept:'Samhita Siddhant',email:'drptbiradar14.pb@gmail.com',phone:'9970635452',doj:'2019-08-01',dob:'1990-01-14',approved:'No',status:'active'},
+{id:'F007',name:'Vda. Bhandare Alka Kishanrao',code:'AYRS0408',designation:'Professor',dept:'Sharir Rachana',email:'bakreader_10@rediffmail.com',phone:'9834257911',doj:'2014-10-01',dob:'1975-11-20',approved:'Yes',status:'active'},
+{id:'F008',name:'Vda. Thakur Mayuri Udaysingh',code:'AYRS00376',designation:'Reader',dept:'Sharir Rachana',email:'drmuthakur1986@gmail.com',phone:'9822086826',doj:'2016-03-01',dob:'1986-09-15',approved:'Yes',status:'active'},
+{id:'F009',name:'Vd. Jadhav Vishnukant Rameshrao',code:'AYRS01211',designation:'Lecturer',dept:'Sharir Rachana',email:'jadhavvishnu696@gmail.com',phone:'9518356305',doj:'2019-11-01',dob:'1991-04-22',approved:'No',status:'active'},
+{id:'F010',name:'Vda. Varnale Rakhee Gururaj',code:'AYKS00772',designation:'Reader',dept:'Kriya Sharir',email:'rakheesgowda@gmail.com',phone:'8888646429',doj:'2014-10-01',dob:'1984-07-10',approved:'Yes',status:'active'},
+{id:'F011',name:'Vda. Chidre Madhumati Shivraj',code:'AYKS01029',designation:'Lecturer',dept:'Kriya Sharir',email:'madhumatichidre1010@gmail.com',phone:'9730303206',doj:'2020-01-15',dob:'1992-10-10',approved:'No',status:'active'},
+{id:'F012',name:'Vda. Patange Pritee Panjabrao',code:'AYKS01382',designation:'Lecturer',dept:'Kriya Sharir',email:'drpriteepatange@gmail.com',phone:'8779314797',doj:'2022-08-01',dob:'1995-04-20',approved:'No',status:'active'},
+{id:'F013',name:'Vd. Biradar Patil Swapnil Janardhan',code:'AYKS01398',designation:'Lecturer',dept:'Kriya Sharir',email:'shruteeswapnil1608@gmail.com',phone:'9049823497',doj:'2022-09-01',dob:'1996-08-16',approved:'No',status:'active'},
+{id:'F014',name:'Vd. Shrigire Sayaram Ramgonda',code:'AYDG00564',designation:'Professor',dept:'Dravyaguna Vidnyan',email:'sayshrigire@gmail.com',phone:'9503870611',doj:'2008-07-01',dob:'1969-01-01',approved:'Yes',status:'active'},
+{id:'F015',name:'Vda. Ghorband Shital Dattatraya',code:'AYDG01364',designation:'Reader',dept:'Dravyaguna Vidnyan',email:'vdshitaldg@gmail.com',phone:'9503288507',doj:'2018-06-01',dob:'1988-12-25',approved:'Yes',status:'active'},
+{id:'F016',name:'Vda. Bharaswadkar Deepali Manikrao',code:'AYDG02228',designation:'Lecturer',dept:'Dravyaguna Vidnyan',email:'drdipali73@gmail.com',phone:'9422940175',doj:'2023-03-01',dob:'1990-07-03',approved:'No',status:'active'},
+{id:'F017',name:'Vd. Kattewar Balaji Deorao',code:'AYRB00597',designation:'Professor',dept:'Rasashastra B.K.',email:'bdk73prof@gmail.com',phone:'9890125683',doj:'2007-10-01',dob:'1973-06-15',approved:'Yes',status:'active'},
+{id:'F018',name:'Vd. Balutkar Pravin Dattatraya',code:'AYRB01770',designation:'Lecturer',dept:'Rasashastra B.K.',email:'vaidypravin1985@gmail.com',phone:'9028845804',doj:'2022-01-15',dob:'1985-11-20',approved:'No',status:'active'},
+{id:'F019',name:'Vd. Bansode Namdev Manoharrao',code:'AYRN00325',designation:'Professor',dept:'Rognidan V.V.',email:'bansodenamdev78@gmail.com',phone:'8485816726',doj:'2019-11-02',dob:'1978-03-25',approved:'Yes',status:'active'},
+{id:'F020',name:'Vda. Kore Namrata Virnath',code:'AYRN00765',designation:'Lecturer',dept:'Rognidan V.V.',email:'korenamrata123@gmail.com',phone:'9404168828',doj:'2021-06-01',dob:'1993-05-15',approved:'No',status:'active'},
+{id:'F021',name:'Vd. Tale Sachinkumar Vishwanath',code:'AYSV00250',designation:'Reader',dept:'Swasthavritta',email:'sachinkumartale@gmail.com',phone:'9405048466',doj:'2014-10-01',dob:'1982-04-18',approved:'Yes',status:'active'},
+{id:'F022',name:'Vda. Mulgir Kiran Devidas',code:'AYSV00947',designation:'Lecturer',dept:'Swasthavritta',email:'kiranmulgir0707@gmail.com',phone:'8482856808',doj:'2021-08-01',dob:'1994-07-07',approved:'No',status:'active'},
+{id:'F023',name:'Vda. Mulajkar Shailaja Damodhar',code:'AYRB00637',designation:'Professor',dept:'Agadtantra V.A.',email:'mscherekar@gmail.com',phone:'9423776252',doj:'2010-01-15',dob:'1976-08-10',approved:'Yes',status:'active'},
+{id:'F024',name:'Vd. Kadam Meera Shankarrao',code:'AYAT00650',designation:'Lecturer',dept:'Agadtantra V.A.',email:'meerakadam113@gmail.com',phone:'9673565437',doj:'2020-06-01',dob:'1990-01-13',approved:'No',status:'active'},
+{id:'F025',name:'Vd. Biradar Mallikarjun Vishwanath',code:'AYAT00926',designation:'Lecturer',dept:'Agadtantra V.A.',email:'mallikarjundr1966@gmail.com',phone:'9822651995',doj:'2022-01-01',dob:'1966-07-15',approved:'No',status:'active'},
+{id:'F026',name:'Vd. Bharkade Jayshree Govindrao',code:'AYAT00917',designation:'Lecturer',dept:'Agadtantra V.A.',email:'jai7g.bharkade@gmail.com',phone:'7798856306',doj:'2022-03-01',dob:'1993-07-07',approved:'No',status:'active'},
+{id:'F027',name:'Vd. Mundhe Mangesh Gopinathrao',code:'AYPS00366',designation:'Professor',dept:'Prasuti & Striroga',email:'drmangeshmundhe@gmail.com',phone:'9423350673',doj:'2009-10-01',dob:'1974-06-20',approved:'Yes',status:'active'},
+{id:'F028',name:'Vda. Gandge Rashmi Ramchandra',code:'AYPS00416',designation:'Reader',dept:'Prasuti & Striroga',email:'rashmichidre.rc@gmail.com',phone:'9423340006',doj:'2014-10-01',dob:'1983-12-05',approved:'Yes',status:'active'},
+{id:'F029',name:'Vda. Bhadre Deepika Chhandrakant',code:'AYPS01057',designation:'Reader',dept:'Prasuti & Striroga',email:'deepikabolegave@gmail.com',phone:'9405416521',doj:'2018-01-15',dob:'1989-05-25',approved:'Yes',status:'active'},
+{id:'F030',name:'Vda. Devkatte Priyanka Dnyanoba',code:'AYPS01975',designation:'Lecturer',dept:'Prasuti & Striroga',email:'pdevkate23@gmail.com',phone:'8087186702',doj:'2023-04-01',dob:'1996-03-23',approved:'No',status:'active'},
+{id:'F031',name:'Vd. Mirashi Sanskruti Suraj',code:'AYKB00213',designation:'Professor',dept:'Kaumarbhritya',email:'directors@shayanagoa.com',phone:'9890052454',doj:'2012-06-01',dob:'1978-09-15',approved:'Yes',status:'active'},
+{id:'F032',name:'Vda. Bhadre Asmita Ashokrao',code:'AYKB00709',designation:'Lecturer',dept:'Kaumarbhritya',email:'asmita4192@gmail.com',phone:'8408917577',doj:'2022-08-01',dob:'1992-04-01',approved:'No',status:'active'},
+{id:'F033',name:'Vd. Martule Shivkumar Suryakant',code:'AYKB00725',designation:'Lecturer',dept:'Kaumarbhritya',email:'shiv1194@gmail.com',phone:'9404269871',doj:'2022-08-01',dob:'1994-11-01',approved:'No',status:'active'},
+{id:'F034',name:'Vd. Biradar Shivpratap Vinayak',code:'AYKB01247',designation:'Lecturer',dept:'Kaumarbhritya',email:'biradarshivpratap@gmail.com',phone:'7517042103',doj:'2023-07-01',dob:'1997-01-15',approved:'No',status:'active'},
+{id:'F035',name:'Vda. Gawale Pushpa Dagdu',code:'AYKC01184',designation:'Professor',dept:'Kayachikitsa',email:'gawalepushpa@gmail.com',phone:'9420211572',doj:'2010-10-01',dob:'1979-05-12',approved:'Yes',status:'active'},
+{id:'F036',name:'Vda. Patil Snehal Gunderao',code:'AYKC01011',designation:'Reader',dept:'Kayachikitsa',email:'sneha4600@gmail.com',phone:'8600844983',doj:'2018-06-01',dob:'1988-06-04',approved:'Yes',status:'active'},
+{id:'F037',name:'Vda. Chetlure Shivkanta Laxman',code:'AYKC03471',designation:'Lecturer',dept:'Kayachikitsa',email:'shivkantachetlure@gmail.com',phone:'8975362849',doj:'2022-08-01',dob:'1993-02-14',approved:'No',status:'active'},
+{id:'F038',name:'Vda. Navatke Raghini Ramrao',code:'AYKC04182',designation:'Lecturer',dept:'Kayachikitsa',email:'raghini.navatke27@gmail.com',phone:'9028718443',doj:'2024-01-15',dob:'1997-07-27',approved:'No',status:'active'},
+{id:'F039',name:'Vd. Mundhe Vishnukant Dnynoba',code:'AYST00603',designation:'Professor',dept:'Shalyatantra',email:'drvishnukantmundhe@gmail.com',phone:'9890271632',doj:'2009-10-01',dob:'1974-11-10',approved:'Yes',status:'active'},
+{id:'F040',name:'Vd. Surnar Yogeshwar Namdev',code:'AYST00564',designation:'Reader',dept:'Shalyatantra',email:'surnaryogesh@gmail.com',phone:'8208655510',doj:'2014-10-01',dob:'1983-08-20',approved:'Yes',status:'active'},
+{id:'F041',name:'Vd. Patil Amol Shivajirao',code:'AYST02412',designation:'Lecturer',dept:'Shalyatantra',email:'amolpatil523@gmail.com',phone:'9595898725',doj:'2023-01-01',dob:'1995-05-23',approved:'No',status:'active'},
+{id:'F042',name:'Vda. Biradar Madhuri Suryakant',code:'AYST02720',designation:'Lecturer',dept:'Shalyatantra',email:'biradarmadhuri11@gmail.com',phone:'8496982798',doj:'2024-01-01',dob:'1996-11-11',approved:'No',status:'active'},
+{id:'F043',name:'Vd. Patil Ravikant Vinayakrao',code:'AYSK00659',designation:'Professor',dept:'Shalakya Tantra',email:'rvpatil2012@gmail.com',phone:'9422610945',doj:'2008-10-01',dob:'1972-03-15',approved:'Yes',status:'active'},
+{id:'F044',name:'Vd. Jamadar Pramodkumar Bibhishan',code:'AYSK01328',designation:'Lecturer',dept:'Shalakya Tantra',email:'pramodjamadar20041995@gmail.com',phone:'9096258925',doj:'2022-09-01',dob:'1995-04-20',approved:'No',status:'active'},
+{id:'F045',name:'Vd. Lavate Suraj Damodar',code:'AYSK01446',designation:'Lecturer',dept:'Shalakya Tantra',email:'surajlavate18@gmail.com',phone:'8485052595',doj:'2023-03-01',dob:'1996-06-18',approved:'No',status:'active'},
+{id:'F046',name:'Vd. Vansure Shivraj Shriram',code:'AYSK01538',designation:'Lecturer',dept:'Shalakya Tantra',email:'shivrajvansure20@gmail.com',phone:'7304902999',doj:'2023-08-01',dob:'1997-12-20',approved:'No',status:'active'},
+{id:'F047',name:'Vd. Patane Amol Umakant',code:'AYPK00687',designation:'Professor',dept:'Panchakarma',email:'amolpatane@gmail.com',phone:'8983064943',doj:'2012-10-01',dob:'1980-04-10',approved:'Yes',status:'active'},
+{id:'F048',name:'Vd. Chitte Om Virbhadra',code:'AYPK00360',designation:'Reader',dept:'Panchakarma',email:'chitteom555@gmail.com',phone:'9422653735',doj:'2014-10-01',dob:'1982-05-05',approved:'Yes',status:'active'},
+{id:'F049',name:'Vda. Jagtap Prajakta Sudhakar',code:'AYPK00359',designation:'Reader',dept:'Panchakarma',email:'jagtapprajakta1808@gmail.com',phone:'9403670596',doj:'2014-10-01',dob:'1985-08-18',approved:'Yes',status:'active'},
+{id:'F050',name:'Vda. Tiwari Shruti Ramchandra',code:'AYPK01561',designation:'Lecturer',dept:'Panchakarma',email:'shrutijgd18@gmail.com',phone:'7083237773',doj:'2023-05-01',dob:'1997-01-18',approved:'No',status:'active'}
 ];
 
-const DESIGS=["Principal","Professor","Associate Professor","Reader","Assistant Professor","Lecturer","Tutor"];
-const LTYPES=[
-{c:'CL',n:'Casual Leave',l:8},{c:'ML',n:'Medical Leave',l:10},{c:'EL',n:'Earned Leave',l:'15+CF'},
-{c:'OD',n:'On Duty',l:'∞'},{c:'RH',n:'Restricted Holiday',l:2},{c:'SL',n:'Study Leave',l:15},
-{c:'Mat',n:'Maternity Leave',l:180},{c:'Pat',n:'Paternity Leave',l:15},{c:'SD',n:'Special Disability',l:120},
-{c:'LWP',n:'Leave Without Pay',l:'∞'}
-];
-const DRANK={"PRINCIPAL":1,"PROFESSOR":2,"ASSOCIATE PROFESSOR":3,"READER":3,"ASSISTANT PROFESSOR":4,"LECTURER":4,"TUTOR":5};
-const YEARS=['2025','2026','2027'];
-const SEC_ANS='cricket';
-const VER='damch_v40';
-
-let S={user:null,pg:'dash',yr:'2026'};
-let DB={users:[],faculty:[],leaves:{},holidays:[],apps:[]};
-// ===== INITIAL DATA GENERATION =====
-// UG 100 seats: As per Schedule IV, staffing pattern
-// Total: 14 Prof + 14(+4 clinical extra) Assoc + varies Asst
-// Principal = 1 (from any dept, usually senior Prof)
-
-window.onload=()=>{
-let d=localStorage.getItem(VER);
-if(d){try{DB=JSON.parse(d)}catch(e){}}
-if(!DB.users||DB.users.length===0)initDB();
-let ss=sessionStorage.getItem('damch_ss');
-if(ss){try{S.user=JSON.parse(ss);showApp()}catch(e){}}
+/* ======== DB HELPERS ======== */
+const DB={
+  get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},
+  set(k,v){localStorage.setItem(k,JSON.stringify(v))},
+  del(k){localStorage.removeItem(k)}
 };
 
 function initDB(){
-DB={users:[{u:'admin',p:'Admin@2025',role:'admin',fid:'',name:'Administrator (Dr. Jadhav V.R.)'}],
-faculty:[],leaves:{'2025':{},'2026':{},'2027':{}},holidays:[],apps:[]};
-
-// Generate faculty as per MUHS Schedule IV for 100 seats
-let fid=1;
-// Principal - 1
-addF(fid++,'Principal','','Principal',DEPTS[0].name);
-
-DEPTS.forEach(dept=>{
-// Professor - 1 per dept (14 total, Principal counts as 1 professor)
-if(dept.code!=='SS') // SS dept professor is Principal
-addF(fid++,dept.code+'_P','Professor',dept.code,dept.name);
-// Associate Professor - as per schedule
-for(let i=0;i<dept.staff.assoc;i++)
-addF(fid++,dept.code+'_AP'+(i+1),'Associate Professor',dept.code,dept.name);
-// Assistant Professor - as per schedule
-for(let i=0;i<dept.staff.asst;i++)
-addF(fid++,dept.code+'_L'+(i+1),'Assistant Professor',dept.code,dept.name);
-});
-
-save();
+  if(!DB.get('db_initialized_v7')){
+    // Create users
+    let users=[{username:'admin',password:'Admin@2025',role:'admin',facultyId:null,name:'Administrator',securityAnswer:'cricket'}];
+    DEFAULT_FACULTY.forEach(f=>{
+      users.push({username:f.code,password:'damch@'+f.code,role:'faculty',
+        facultyId:f.id,name:f.name,securityAnswer:'cricket'});
+    });
+    DB.set('users',users);
+    DB.set('faculty',JSON.parse(JSON.stringify(DEFAULT_FACULTY)));
+    // Init leave data
+    let leaves={};
+    YEARS.forEach(y=>{leaves[y]={};
+      DEFAULT_FACULTY.forEach(f=>{leaves[y][f.id]={CL:0,ML:0,OD:0,EL:0,Maternity:0,Paternity:0,'Study Leave':0,Sabbatical:0,RH:0,LWP:0,'Late Mark':0}})
+    });
+    DB.set('leaves',leaves);
+    DB.set('leaveApplications',[]);
+    DB.set('holidays',getDefaultHolidays());
+    DB.set('db_initialized_v7',true);
+  }
 }
 
-function addF(num,codeBase,desig,deptCode,deptName){
-let fid='F'+num;
-let code='TC'+String(num).padStart(3,'0');
-let name=desig+' - '+deptName.split('(')[0].trim();
-if(desig==='Principal')name='Principal';
-
-DB.faculty.push({
-id:fid,name:name,desig:desig,dept:deptName,code:code,
-doj:'',dob:'',phone:'',email:'',photo:'',univApproved:'No',status:'active'
-});
-DB.users.push({u:code,p:'damch@'+code,role:'faculty',fid:fid,name:name});
-YEARS.forEach(y=>{
-DB.leaves[y][fid]={cl:0,ml:0,od:0,el_open:0,el_u:0,lat:0,mat:0,pat:0,sl:0,sd:0,rh:0,lwp:0};
-});
+function getDefaultHolidays(){
+  return [
+    {id:'H1',date:'2025-01-14',name:'Makar Sankranti',year:2025,type:'Gazetted'},
+    {id:'H2',date:'2025-01-26',name:'Republic Day',year:2025,type:'National'},
+    {id:'H3',date:'2025-03-14',name:'Holi',year:2025,type:'Gazetted'},
+    {id:'H4',date:'2025-04-10',name:'Ram Navami',year:2025,type:'Gazetted'},
+    {id:'H5',date:'2025-04-14',name:'Dr. Ambedkar Jayanti',year:2025,type:'National'},
+    {id:'H6',date:'2025-05-01',name:'Maharashtra Day',year:2025,type:'State'},
+    {id:'H7',date:'2025-08-15',name:'Independence Day',year:2025,type:'National'},
+    {id:'H8',date:'2025-10-02',name:'Gandhi Jayanti',year:2025,type:'National'},
+    {id:'H9',date:'2025-10-20',name:'Dussehra',year:2025,type:'Gazetted'},
+    {id:'H10',date:'2025-11-12',name:'Diwali',year:2025,type:'Gazetted'},
+    {id:'H11',date:'2025-12-25',name:'Christmas',year:2025,type:'Gazetted'},
+    {id:'H12',date:'2026-01-14',name:'Makar Sankranti',year:2026,type:'Gazetted'},
+    {id:'H13',date:'2026-01-26',name:'Republic Day',year:2026,type:'National'},
+    {id:'H14',date:'2026-08-15',name:'Independence Day',year:2026,type:'National'},
+    {id:'H15',date:'2026-10-02',name:'Gandhi Jayanti',year:2026,type:'National'},
+    {id:'H16',date:'2027-01-26',name:'Republic Day',year:2027,type:'National'},
+    {id:'H17',date:'2027-08-15',name:'Independence Day',year:2027,type:'National'},
+    {id:'H18',date:'2027-10-02',name:'Gandhi Jayanti',year:2027,type:'National'}
+  ];
 }
 
-function save(){localStorage.setItem(VER,JSON.stringify(DB))}
+/* ======== SESSION ======== */
+let CU=null; // current user
+let CF=null; // current faculty (if faculty login)
 
-// ===== UTILS =====
-function toast(m,t='ts'){let e=document.getElementById('toast');e.className='toast '+t+' show';e.textContent=m;setTimeout(()=>e.classList.remove('show'),3000)}
-function $(id){return document.getElementById(id)}
-function opMod(h){$('modBox').innerHTML=h;$('modOv').classList.add('show')}
-function clsMod(){$('modOv').classList.remove('show')}
-
-function calcExp(d){
-if(!d)return'-';let dj=new Date(d);if(isNaN(dj))return'-';
-let n=new Date(),y=n.getFullYear()-dj.getFullYear(),m=n.getMonth()-dj.getMonth(),dd=n.getDate()-dj.getDate();
-if(dd<0){m--;dd+=new Date(n.getFullYear(),n.getMonth(),0).getDate()}
-if(m<0){y--;m+=12}return y<0?'0':y+'Y '+m+'M '+dd+'D';
-}
-
-function calcRow(lv){
-let v=k=>parseFloat(lv[k])||0;
-let cl_b=8-v('cl'),ml_b=10-v('ml'),rh_b=2-v('rh'),mat_b=180-v('mat'),pat_b=15-v('pat'),sl_b=15-v('sl'),sd_b=120-v('sd');
-let el_o=v('el_open'),el_t=el_o+15,el_b=el_t-v('el_u');
-let lc=v('lat'),ld=Math.floor(lc/6);
-let pb=Math.max(0,cl_b+el_b+ml_b+rh_b);
-let cov=Math.min(ld,pb),ovf=ld-cov;
-let tp=v('cl')+v('ml')+v('od')+v('el_u')+v('mat')+v('pat')+v('sl')+v('sd')+v('rh')+cov;
-let tu=v('lwp')+ovf,gt=tp+tu;
-return{cl_b,ml_b,rh_b,mat_b,pat_b,sl_b,sd_b,el_o,el_t,el_b,lc,ld,cov,ovf,tp,tu,gt};
-}
-
-function bc(v){return v>0?'bc bpos':v<0?'bc bneg':'bc bzr'}
-function dOpts(s){return DEPTS.map(d=>`<option value="${d.name}" ${d.name===s?'selected':''}>${d.name}</option>`).join('')}
-function dgOpts(s){return DESIGS.map(d=>`<option value="${d}" ${d===s?'selected':''}>${d}</option>`).join('')}
-function ltOpts(s){return LTYPES.map(l=>`<option value="${l.c}" ${l.c===s?'selected':''}>${l.c} - ${l.n}</option>`).join('')}
-
-function sortFac(arr){
-return[...arr].sort((a,b)=>{
-// First group by department
-let da=DEPTS.findIndex(d=>d.name===a.dept),db=DEPTS.findIndex(d=>d.name===b.dept);
-if(da===-1)da=99;if(db===-1)db=99;
-// Principal first
-if(a.desig==='Principal')return-1;if(b.desig==='Principal')return 1;
-// Then by dept
-if(da!==db)return da-db;
-// Then by rank within dept
-let ra=DRANK[(a.desig||'').toUpperCase()]||99,rb=DRANK[(b.desig||'').toUpperCase()]||99;
-if(ra!==rb)return ra-rb;
-let dta=a.doj?new Date(a.doj):new Date('9999-12-31'),dtb=b.doj?new Date(b.doj):new Date('9999-12-31');
-return dta-dtb;
-});
-}
-
-// ===== AUTH =====
 function doLogin(){
-let u=$('lu').value.trim(),p=$('lp').value.trim();
-if(!u||!p){$('lerr').textContent='Enter Username & Password';return}
-let found=DB.users.find(x=>x.u.toLowerCase()===u.toLowerCase()&&x.p===p);
-if(!found){$('lerr').textContent='Invalid Username or Password!';return}
-S.user=found;sessionStorage.setItem('damch_ss',JSON.stringify(found));showApp();
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value.trim();
+  if(!u||!p)return toast('Please enter username and password','error');
+  const users=DB.get('users')||[];
+  const user=users.find(x=>x.username===u&&x.password===p);
+  if(!user)return toast('Invalid username or password','error');
+  CU=user;
+  if(user.role==='faculty'){
+    const fac=(DB.get('faculty')||[]).find(f=>f.id===user.facultyId);
+    if(!fac||fac.status==='removed')return toast('Account deactivated. Contact Admin.','error');
+    CF=fac;
+  }
+  document.getElementById('loginPage').style.display='none';
+  document.getElementById('app').style.display='flex';
+  buildSidebar();
+  showPage('dashboard');
+  toast('Welcome, '+user.name+'!','success');
 }
-function doLogout(){S.user=null;sessionStorage.removeItem('damch_ss');$('app').style.display='none';$('loginPage').style.display='flex';$('lu').value='';$('lp').value='';$('lerr').textContent=''}
-function isAdmin(){return S.user&&S.user.role==='admin'}
-
-function showApp(){
-$('loginPage').style.display='none';$('app').style.display='block';
-$('navInfo').innerHTML='👤 '+S.user.name+' <span class="badge '+(isAdmin()?'bdd':'bds')+'">'+(isAdmin()?'ADMIN':'FACULTY')+'</span>';
-buildSidebar();nav('dash');
+function doLogout(){
+  CU=null;CF=null;
+  document.getElementById('app').style.display='none';
+  document.getElementById('loginPage').style.display='flex';
+  document.getElementById('loginUser').value='';
+  document.getElementById('loginPass').value='';
 }
-
+function showForgot(){document.getElementById('loginForm').style.display='none';document.getElementById('forgotForm').style.display='block'}
+function hideForgot(){document.getElementById('loginForm').style.display='block';document.getElementById('forgotForm').style.display='none'}
+function doForgotPassword(){
+  const u=document.getElementById('forgotUser').value.trim();
+  const a=document.getElementById('forgotAnswer').value.trim().toLowerCase();
+  if(!u||!a)return toast('Fill all fields','error');
+  const users=DB.get('users')||[];
+  const user=users.find(x=>x.username===u);
+  if(!user)return toast('Username not found','error');
+  if(a!=='cricket')return toast('Incorrect security answer','error');
+  alert('Your password is: '+user.password);
+  hideForgot();
+}
+</script>
+<script>
+/* ======== SIDEBAR & NAVIGATION ======== */
 function buildSidebar(){
-let h='<div class="msec">Main</div>';
-h+='<div class="mi act" data-pg="dash" onclick="nav(\'dash\')"><span class="ic">📊</span> Dashboard</div>';
-if(!isAdmin()){
-h+='<div class="mi" data-pg="myprof" onclick="nav(\'myprof\')"><span class="ic">👤</span> My Profile</div>';
-h+='<div class="mi" data-pg="myleav" onclick="nav(\'myleav\')"><span class="ic">📋</span> My Leave Record</div>';
-h+='<div class="mi" data-pg="apply" onclick="nav(\'apply\')"><span class="ic">✍️</span> Apply Leave</div>';
-h+='<div class="mi" data-pg="myapps" onclick="nav(\'myapps\')"><span class="ic">📑</span> My Applications</div>';
+  const nav=document.getElementById('sidebarNav');
+  const isAdmin=CU.role==='admin';
+  let html='';
+  html+='<div class="nav-section">Main</div>';
+  html+=navItem('dashboard','fa-th-large','Dashboard');
+  if(!isAdmin){
+    html+=navItem('myprofile','fa-user-circle','My Profile');
+    html+=navItem('myleave','fa-calendar-check','My Leave Record');
+    html+=navItem('applyleave','fa-paper-plane','Apply Leave');
+  }
+  html+='<div class="nav-section">Information</div>';
+  html+=navItem('holidays','fa-umbrella-beach','Holidays');
+  html+=navItem('policy','fa-book','Leave Policy');
+  if(isAdmin){
+    html+='<div class="nav-section">Administration</div>';
+    html+=navItem('facultylist','fa-users','All Faculty');
+    html+=navItem('managefaculty','fa-user-cog','Add / Edit / Delete Faculty');
+    html+=navItem('leavetable','fa-table','Leave Master Table');
+    html+=navItem('applications','fa-file-alt','Leave Applications');
+    html+=navItem('manageholidays','fa-calendar-plus','Manage Holidays');
+    html+=navItem('manageusers','fa-user-shield','User Management');
+    html+='<div class="nav-section">Reports</div>';
+    html+=navItem('reports','fa-chart-bar','Reports & Print');
+    html+=navItem('backup','fa-database','Backup & Restore');
+  }
+  nav.innerHTML=html;
+  // Update user info
+  document.getElementById('sidebarUserName').textContent=CU.name;
+  document.getElementById('sidebarUserRole').textContent=isAdmin?'Administrator':'Faculty';
+  document.getElementById('avatarInitial').textContent=CU.name.charAt(0).toUpperCase();
+  // Add click handlers
+  nav.querySelectorAll('.nav-item').forEach(el=>{
+    el.addEventListener('click',()=>showPage(el.dataset.page));
+  });
 }
-h+='<div class="mi" data-pg="policy" onclick="nav(\'policy\')"><span class="ic">📜</span> Leave Policy</div>';
-h+='<div class="mi" data-pg="hols" onclick="nav(\'hols\')"><span class="ic">🎉</span> Holidays</div>';
-if(isAdmin()){
-h+='<div class="msec">Admin Panel</div>';
-h+='<div class="mi" data-pg="atbl" onclick="nav(\'atbl\')"><span class="ic">📊</span> Leave Master Table</div>';
-h+='<div class="mi" data-pg="afac" onclick="nav(\'afac\')"><span class="ic">👥</span> Manage Faculty</div>';
-h+='<div class="mi" data-pg="adstat" onclick="nav(\'adstat\')"><span class="ic">📈</span> Dept Staff Status</div>';
-h+='<div class="mi" data-pg="aapps" onclick="nav(\'aapps\')"><span class="ic">📬</span> All Applications</div>';
-h+='<div class="mi" data-pg="ahol" onclick="nav(\'ahol\')"><span class="ic">📅</span> Manage Holidays</div>';
-h+='<div class="mi" data-pg="ausrs" onclick="nav(\'ausrs\')"><span class="ic">🔑</span> User Management</div>';
-h+='<div class="mi" data-pg="arpt" onclick="nav(\'arpt\')"><span class="ic">🖨️</span> Print Reports</div>';
-h+='<div class="mi" data-pg="aset" onclick="nav(\'aset\')"><span class="ic">⚙️</span> Settings & Backup</div>';
+function navItem(page,icon,label){
+  return `<div class="nav-item" data-page="${page}"><i class="fas ${icon}"></i><span>${label}</span></div>`;
 }
-$('sidebar').innerHTML=h;
+function showPage(page){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.dataset.page===page));
+  const titles={dashboard:'Dashboard',myprofile:'My Profile',myleave:'My Leave Record',
+    applyleave:'Apply Leave',holidays:'Holiday Calendar',policy:'Leave Policy',
+    facultylist:'All Faculty',managefaculty:'Manage Faculty',leavetable:'Leave Master Table',
+    applications:'Leave Applications',manageholidays:'Manage Holidays',manageusers:'User Management',
+    reports:'Reports & Print',backup:'Backup & Restore'};
+  document.getElementById('pageTitle').textContent=titles[page]||'Dashboard';
+  document.getElementById('breadcrumb').textContent='Home / '+(titles[page]||'Dashboard');
+  const content=document.getElementById('contentArea');
+  // Keep print header
+  const ph=content.querySelector('.print-header').outerHTML;
+  const pageRenderers={
+    dashboard:renderDashboard, myprofile:renderMyProfile, myleave:renderMyLeave,
+    applyleave:renderApplyLeave, holidays:renderHolidays, policy:renderPolicy,
+    facultylist:renderFacultyList, managefaculty:renderManageFaculty,
+    leavetable:renderLeaveTable, applications:renderApplications,
+    manageholidays:renderManageHolidays, manageusers:renderManageUsers,
+    reports:renderReports, backup:renderBackup
+  };
+  const renderer=pageRenderers[page];
+  if(renderer){
+    content.innerHTML=ph+'<div class="page active" id="pg_'+page+'"></div>';
+    renderer(document.getElementById('pg_'+page));
+  }
 }
 
-function nav(pg){
-S.pg=pg;
-document.querySelectorAll('.mi').forEach(e=>e.classList.toggle('act',e.dataset.pg===pg));
-let c=$('cnt');
-switch(pg){
-case'dash':pgDash(c);break;case'myprof':pgMyProf(c);break;case'myleav':pgMyLeav(c);break;
-case'apply':pgApply(c);break;case'myapps':pgMyApps(c);break;case'policy':pgPolicy(c);break;
-case'hols':pgHols(c);break;case'atbl':pgATbl(c);break;case'afac':pgAFac(c);break;
-case'adstat':pgDeptStat(c);break;case'aapps':pgAApps(c);break;case'ahol':pgAHol(c);break;
-case'ausrs':pgAUsrs(c);break;case'arpt':pgARpt(c);break;case'aset':pgASet(c);break;
-default:pgDash(c);
+/* ======== UTILITY FUNCTIONS ======== */
+function toast(msg,type='info'){
+  const c=document.getElementById('toastContainer');
+  const t=document.createElement('div');
+  t.className='toast toast-'+type;
+  t.innerHTML=`<i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle'}"></i>${msg}`;
+  c.appendChild(t);
+  setTimeout(()=>t.remove(),4000);
 }
+function openModal(html){
+  document.getElementById('modalContent').innerHTML=html;
+  document.getElementById('modalOverlay').classList.add('show');
 }
-
-function yrBtns(){return`<div class="flx nopr mb8"><div style="display:flex;gap:4px">${YEARS.map(y=>`<button class="yrb ${y===S.yr?'act':''}" onclick="S.yr='${y}';nav(S.pg)">${y}</button>`).join('')}</div></div>`}
-// ===== DASHBOARD =====
-function pgDash(c){
-let af=DB.faculty.filter(f=>f.status==='active');
-let yl=DB.leaves[S.yr]||{};
-let h=`<div class="ptitle">📊 Dashboard - ${S.yr}</div>`;h+=yrBtns();
-
-if(isAdmin()){
-let tp=0,tu=0;af.forEach(f=>{let r=calcRow(yl[f.id]||{});tp+=r.tp;tu+=r.tu});
-let hc=DB.holidays.filter(x=>x.yr===S.yr).length;
-// Dept-wise count
-let deptCount={};DEPTS.forEach(d=>{deptCount[d.name]=af.filter(f=>f.dept===d.name).length});
-let reqTotal=DEPTS.reduce((s,d)=>s+1+d.staff.assoc+d.staff.asst,0); // Prof+AP+Asst per dept
-
-h+=`<div class="srow">
-<div class="scard" style="border-left-color:var(--p)"><div class="sicon" style="background:#e8eaf6">👥</div><div class="sinfo"><h3>${af.length}</h3><p>Active Faculty</p></div></div>
-<div class="scard" style="border-left-color:var(--s)"><div class="sicon" style="background:#e8f5e9">📋</div><div class="sinfo"><h3>${tp}</h3><p>Total Paid Used</p></div></div>
-<div class="scard" style="border-left-color:var(--a)"><div class="sicon" style="background:#ffebee">⚠️</div><div class="sinfo"><h3>${tu}</h3><p>Total Unpaid</p></div></div>
-<div class="scard" style="border-left-color:var(--g)"><div class="sicon" style="background:#fff9c4">🎉</div><div class="sinfo"><h3>${hc}</h3><p>Holidays</p></div></div>
-</div>`;
-
-// Dept-wise summary mini table
-h+=`<div class="card"><div class="chdr">📈 Department-wise Staff Count (UG 100 Seats - NCISM Norms)</div><div class="cbody"><table style="width:100%;border-collapse:collapse;font-size:11px">
-<tr style="background:var(--p);color:#fff"><th style="padding:5px;text-align:left">Department</th><th style="padding:5px">Required</th><th style="padding:5px">Available</th><th style="padding:5px">Status</th></tr>`;
-DEPTS.forEach(d=>{
-let req=1+d.staff.assoc+d.staff.asst; // Prof+AP+Asst
-let avail=af.filter(f=>f.dept===d.name).length;
-let st=avail>=req?'✅':'❌ ('+( req-avail)+' deficit)';
-let bg=avail>=req?'':'background:#ffebee';
-h+=`<tr style="${bg}"><td style="padding:4px;border-bottom:1px solid var(--bd);font-size:10px">${d.short}</td><td style="text-align:center;padding:4px;border-bottom:1px solid var(--bd)">${req}</td><td style="text-align:center;padding:4px;border-bottom:1px solid var(--bd);font-weight:700">${avail}</td><td style="text-align:center;padding:4px;border-bottom:1px solid var(--bd)">${st}</td></tr>`;
+function closeModal(){document.getElementById('modalOverlay').classList.remove('show')}
+document.getElementById('modalOverlay').addEventListener('click',e=>{
+  if(e.target===document.getElementById('modalOverlay'))closeModal();
 });
-h+=`</table></div></div>`;
+function esc(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function fmtDate(d){if(!d)return '-';const dt=new Date(d);return dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}
+function calcExp(doj){
+  if(!doj)return '-';
+  const d=new Date(doj),now=new Date();
+  let y=now.getFullYear()-d.getFullYear(),m=now.getMonth()-d.getMonth();
+  if(m<0){y--;m+=12}
+  return y+'y '+m+'m';
+}
+function getActiveFaculty(){return (DB.get('faculty')||[]).filter(f=>f.status!=='removed')}
+function sortFaculty(list){
+  return list.sort((a,b)=>{
+    const ra=(a.isPrincipal?-1:DESIG_ORDER[a.designation]??9);
+    const rb=(b.isPrincipal?-1:DESIG_ORDER[b.designation]??9);
+    if(ra!==rb)return ra-rb;
+    // Same rank: sort by DOJ ascending (earlier = higher seniority)
+    return new Date(a.doj||'9999')-new Date(b.doj||'9999');
+  });
+}
+function deptColor(dept){const i=DEPTS.indexOf(dept);return DEPT_COLORS[i>=0?i:0]}
+function genId(){return 'F'+Date.now().toString(36)+Math.random().toString(36).substr(2,4)}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open')}
+</script>
+<script>
+/* ======== DASHBOARD ======== */
+function renderDashboard(el){
+  const fac=getActiveFaculty();
+  const apps=DB.get('leaveApplications')||[];
+  const pendingApps=apps.filter(a=>a.status==='Pending');
+  const isAdmin=CU.role==='admin';
+  const deptCounts={};
+  DEPTS.forEach(d=>deptCounts[d]=0);
+  fac.forEach(f=>{if(deptCounts[f.dept]!==undefined)deptCounts[f.dept]++});
+  const desigCounts={Professor:0,Reader:0,Lecturer:0};
+  fac.forEach(f=>{
+    if(f.isPrincipal){desigCounts['Professor']=(desigCounts['Professor']||0)}
+    if(desigCounts[f.designation]!==undefined)desigCounts[f.designation]++;
+  });
+  const principalCount=fac.filter(f=>f.isPrincipal).length;
 
-}else{
-let mf=DB.faculty.find(f=>f.id===S.user.fid);
-let ml=mf?(yl[mf.id]||{}):{};let r=calcRow(ml);
-h+=`<div class="srow">
-<div class="scard" style="border-left-color:var(--s)"><div class="sicon" style="background:#e8f5e9">📋</div><div class="sinfo"><h3>${r.tp}</h3><p>Paid Used</p></div></div>
-<div class="scard" style="border-left-color:var(--a)"><div class="sicon" style="background:#ffebee">⚠️</div><div class="sinfo"><h3>${r.tu}</h3><p>Unpaid</p></div></div>
-<div class="scard" style="border-left-color:var(--p)"><div class="sicon" style="background:#e8eaf6">📊</div><div class="sinfo"><h3>${r.gt}</h3><p>Grand Total</p></div></div>
-<div class="scard" style="border-left-color:var(--i)"><div class="sicon" style="background:#e1f5fe">📅</div><div class="sinfo"><h3>${r.cl_b}</h3><p>CL Balance</p></div></div>
-</div>`;
-if(mf)h+=`<div class="card"><div class="chdr">👤 Quick Info</div><div class="cbody" style="font-size:12px">
-<p><b>Name:</b> ${mf.name} | <b>Dept:</b> ${mf.dept} | <b>Desig:</b> ${mf.desig}</p>
-<p><b>Code:</b> ${mf.code} | <b>Experience:</b> <span class="exp">${calcExp(mf.doj)}</span> | <b>Univ.Approved:</b> ${mf.univApproved}</p>
-</div></div>`;
+  let html=`<div class="stats-grid">
+    <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div>
+      <div class="stat-value">${fac.length}</div><div class="stat-label">Total Faculty</div></div>
+    <div class="stat-card"><div class="stat-icon"><i class="fas fa-building"></i></div>
+      <div class="stat-value">${DEPTS.length}</div><div class="stat-label">Departments</div></div>
+    <div class="stat-card"><div class="stat-icon"><i class="fas fa-user-tie"></i></div>
+      <div class="stat-value">${desigCounts.Professor}</div><div class="stat-label">Professors</div></div>
+    <div class="stat-card"><div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
+      <div class="stat-value">${desigCounts.Reader}</div><div class="stat-label">Readers / Assoc. Prof.</div></div>
+    <div class="stat-card"><div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+      <div class="stat-value">${desigCounts.Lecturer}</div><div class="stat-label">Lecturers / Asst. Prof.</div></div>
+  </div>`;
+  if(isAdmin&&pendingApps.length>0){
+    html+=`<div style="background:#fef3c7;border:1px solid #fde68a;border-radius:var(--radius);padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:12px">
+      <i class="fas fa-bell" style="color:#d97706;font-size:20px"></i>
+      <span style="font-weight:600;color:#92400e">${pendingApps.length} pending leave application(s) awaiting review</span>
+    </div>`;
+  }
+  html+=`<div class="charts-grid">
+    <div class="chart-card"><h3><i class="fas fa-chart-bar" style="color:var(--primary);margin-right:8px"></i>Department-wise Faculty Count</h3>
+      <canvas id="chartDept" height="300"></canvas></div>
+    <div class="chart-card"><h3><i class="fas fa-chart-doughnut" style="color:var(--accent);margin-right:8px"></i>Designation Distribution</h3>
+      <canvas id="chartDesig" height="300"></canvas></div>
+  </div>`;
+  html+=`<div class="charts-grid">
+    <div class="chart-card"><h3><i class="fas fa-chart-pie" style="color:var(--success);margin-right:8px"></i>University Approval Status</h3>
+      <canvas id="chartApproval" height="250"></canvas></div>
+    <div class="chart-card"><h3><i class="fas fa-chart-line" style="color:var(--info);margin-right:8px"></i>Joining Year Trend</h3>
+      <canvas id="chartJoinYear" height="250"></canvas></div>
+  </div>`;
+  el.innerHTML=html;
+  // Charts
+  setTimeout(()=>{
+    // Dept chart
+    new Chart(document.getElementById('chartDept'),{type:'bar',
+      data:{labels:DEPTS.map(d=>d.length>15?d.substr(0,15)+'..':d),
+        datasets:[{label:'Faculty',data:DEPTS.map(d=>deptCounts[d]),
+          backgroundColor:DEPT_COLORS,borderRadius:6,borderSkipped:false}]},
+      options:{responsive:true,plugins:{legend:{display:false}},
+        scales:{y:{beginAtZero:true,ticks:{stepSize:1}},x:{ticks:{maxRotation:45,font:{size:10}}}}}
+    });
+    // Designation chart
+    new Chart(document.getElementById('chartDesig'),{type:'doughnut',
+      data:{labels:['Principal','Professor','Reader/Assoc.','Lecturer/Asst.'],
+        datasets:[{data:[principalCount,desigCounts.Professor-principalCount,desigCounts.Reader,desigCounts.Lecturer],
+          backgroundColor:['#f59e0b','#3b82f6','#10b981','#8b5cf6'],borderWidth:0}]},
+      options:{responsive:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{padding:16}}}}
+    });
+    // Approval chart
+    const approved=fac.filter(f=>f.approved==='Yes').length;
+    new Chart(document.getElementById('chartApproval'),{type:'pie',
+      data:{labels:['Approved','Pending'],datasets:[{data:[approved,fac.length-approved],
+        backgroundColor:['#10b981','#f59e0b'],borderWidth:0}]},
+      options:{responsive:true,plugins:{legend:{position:'bottom'}}}
+    });
+    // Join year trend
+    const joinYears={};
+    fac.forEach(f=>{if(f.doj){const y=new Date(f.doj).getFullYear();joinYears[y]=(joinYears[y]||0)+1}});
+    const yrs=Object.keys(joinYears).sort();
+    new Chart(document.getElementById('chartJoinYear'),{type:'line',
+      data:{labels:yrs,datasets:[{label:'Joinings',data:yrs.map(y=>joinYears[y]),
+        borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',fill:true,tension:0.4,
+        pointBackgroundColor:'#3b82f6',pointRadius:5}]},
+      options:{responsive:true,scales:{y:{beginAtZero:true,ticks:{stepSize:1}}},plugins:{legend:{display:false}}}
+    });
+  },100);
 }
 
-let today=new Date().toISOString().split('T')[0];
-let uh=DB.holidays.filter(x=>x.yr===S.yr&&x.dt>=today).sort((a,b)=>a.dt.localeCompare(b.dt)).slice(0,5);
-h+=`<div class="card"><div class="chdr">🎉 Upcoming Holidays</div><div class="cbody">`;
-h+=uh.length?uh.map(x=>`<div class="hrow"><span class="hdate">${x.dt}</span><span class="hname">${x.nm}</span><span class="badge bdi">${x.tp||'General'}</span></div>`).join(''):'<p style="color:var(--tl);font-size:11px">No upcoming holidays</p>';
-h+=`</div></div>`;
-h+=`<div class="tc" style="margin-top:10px;padding:8px;background:#fff3e0;border-radius:8px;font-size:9px">📌 Late marks added monthly from NCISM AEBS Portal by Admin. 6 Late = 1 Day Penalty.</div>`;
-c.innerHTML=h;
+/* ======== MY PROFILE (Faculty) ======== */
+function renderMyProfile(el){
+  if(!CF)return el.innerHTML='<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>No profile data</p></div>';
+  const f=CF;
+  el.innerHTML=`
+  <div class="profile-hero">
+    <div class="profile-info-grid">
+      <div class="profile-photo" id="profPhoto">${f.photoData?`<img src="${f.photoData}">`:'<i class="fas fa-user"></i>'}</div>
+      <div class="profile-details">
+        <h2>${esc(f.name)}</h2>
+        <div class="designation">${f.isPrincipal?'Principal & ':''}<span class="desig-badge desig-${f.designation.toLowerCase()}">${esc(f.designation)}</span></div>
+        <div class="dept" style="margin-top:8px"><i class="fas fa-building" style="margin-right:6px"></i>${esc(f.dept)}</div>
+        <div class="dept" style="margin-top:4px"><i class="fas fa-id-badge" style="margin-right:6px"></i>Teacher Code: ${esc(f.code)}</div>
+      </div>
+    </div>
+  </div>
+  <div class="profile-cards">
+    <div class="profile-card">
+      <h4><i class="fas fa-info-circle" style="margin-right:6px"></i>Personal Information</h4>
+      <div class="profile-field"><span class="label">Date of Birth</span><span class="value">${fmtDate(f.dob)}</span></div>
+      <div class="profile-field"><span class="label">Date of Joining</span><span class="value">${fmtDate(f.doj)}</span></div>
+      <div class="profile-field"><span class="label">Experience</span><span class="value">${calcExp(f.doj)}</span></div>
+      <div class="profile-field"><span class="label">Email</span><span class="value">${esc(f.email)}</span></div>
+      <div class="profile-field"><span class="label">Phone</span><span class="value">${esc(f.phone)}</span></div>
+      <div class="profile-field"><span class="label">University Approved</span><span class="value">${f.approved==='Yes'?'<span class="tag-approved">Approved</span>':'<span class="tag-pending">Pending</span>'}</span></div>
+    </div>
+    <div class="profile-card">
+      <h4><i class="fas fa-calendar-alt" style="margin-right:6px"></i>Leave Summary (2025)</h4>
+      ${renderLeaveSummaryCard(f.id,2025)}
+    </div>
+  </div>
+  <div style="margin-top:20px">
+    <button class="btn btn-primary no-print" onclick="uploadMyPhoto()"><i class="fas fa-camera"></i> Upload Photo</button>
+    <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)">
+  </div>`;
+}
+function renderLeaveSummaryCard(fid,year){
+  const leaves=DB.get('leaves')||{};
+  const data=(leaves[year]&&leaves[year][fid])||{};
+  let html='';
+  LEAVE_TYPES.forEach(lt=>{
+    const v=data[lt]||0;
+    if(v>0)html+=`<div class="profile-field"><span class="label">${lt}</span><span class="value" style="font-weight:700;color:${v>0?'var(--danger)':'var(--text)'};">${v}</span></div>`;
+  });
+  if(!html)html='<div class="profile-field"><span class="label">No leaves recorded yet</span><span class="value">✓</span></div>';
+  return html;
+}
+function uploadMyPhoto(){document.getElementById('photoInput').click()}
+function handlePhotoUpload(input){
+  const file=input.files[0];if(!file)return;
+  if(file.size>1048576)return toast('Photo must be under 1 MB','error');
+  if(!file.type.startsWith('image/'))return toast('Only image files allowed','error');
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const fac=DB.get('faculty')||[];
+    const idx=fac.findIndex(f=>f.id===CF.id);
+    if(idx>=0){fac[idx].photoData=e.target.result;DB.set('faculty',fac);CF=fac[idx];
+      showPage('myprofile');toast('Photo uploaded successfully','success');}
+  };reader.readAsDataURL(file);
 }
 
-// ===== DEPT STAFF STATUS (Admin Only - New Page) =====
-function pgDeptStat(c){
-let af=DB.faculty.filter(f=>f.status==='active');
-let h=`<div class="ptitle">📈 Department Staff Status (UG 100 Seats - NCISM/MUHS Schedule IV)</div>`;
+/* ======== MY LEAVE RECORD ======== */
+function renderMyLeave(el){
+  if(!CF)return;
+  let html=`<div class="tab-bar">`;
+  YEARS.forEach(y=>html+=`<button class="tab-btn ${y===2025?'active':''}" onclick="showLeaveYear(${y},this)">${y}</button>`);
+  html+=`</div><div id="leaveYearContent"></div>`;
+  el.innerHTML=html;
+  showLeaveYear(2025,el.querySelector('.tab-btn.active'));
+}
+function showLeaveYear(year,btn){
+  if(btn){btn.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+  const leaves=DB.get('leaves')||{};
+  const data=(leaves[year]&&leaves[year][CF.id])||{};
+  let total=0;Object.values(data).forEach(v=>total+=v);
+  let html=`<div class="table-container"><div class="table-header"><h3>Leave Record - ${year}</h3>
+    <button class="btn btn-sm btn-outline no-print" onclick="window.print()"><i class="fas fa-print"></i> Print</button></div>
+    <table><tr><th>Leave Type</th><th>Days</th></tr>`;
+  LEAVE_TYPES.forEach(lt=>{const v=data[lt]||0;
+    html+=`<tr><td>${lt}</td><td style="font-weight:${v>0?'700':'400'};color:${v>0?'var(--danger)':'var(--text)'}">${v}</td></tr>`});
+  html+=`<tr style="background:var(--bg)"><td style="font-weight:700">Total</td><td style="font-weight:700;color:var(--danger)">${total}</td></tr>`;
+  html+=`</table></div>`;
+  // Also show applications
+  const apps=(DB.get('leaveApplications')||[]).filter(a=>a.facultyId===CF.id&&new Date(a.fromDate).getFullYear()===year);
+  if(apps.length){
+    html+=`<h3 style="margin:24px 0 12px;font-size:16px">My Applications (${year})</h3>`;
+    apps.forEach(a=>{
+      html+=`<div class="leave-card ${a.status.toLowerCase()}">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div><strong>${a.leaveType}</strong> | ${fmtDate(a.fromDate)} to ${fmtDate(a.toDate)}</div>
+          <span class="desig-badge desig-${a.status==='Approved'?'professor':a.status==='Rejected'?'principal':'lecturer'}">${a.status}</span>
+        </div>
+        ${a.reason?'<p style="margin-top:8px;font-size:13px;color:var(--text-light)">'+esc(a.reason)+'</p>':''}
+      </div>`;
+    });
+  }
+  document.getElementById('leaveYearContent').innerHTML=html;
+}
 
-DEPTS.forEach(d=>{
-let dFac=af.filter(f=>f.dept===d.name);
-let profs=dFac.filter(f=>f.desig==='Professor'||f.desig==='Principal');
-let assocs=dFac.filter(f=>f.desig==='Associate Professor'||f.desig==='Reader');
-let assts=dFac.filter(f=>f.desig==='Assistant Professor'||f.desig==='Lecturer');
+/* ======== APPLY LEAVE ======== */
+function renderApplyLeave(el){
+  el.innerHTML=`<div class="table-container" style="max-width:600px">
+    <div class="table-header"><h3>Submit Leave Application</h3></div>
+    <div style="padding:24px">
+      <div class="form-row">
+        <div class="form-group"><label>Leave Type</label>
+          <select id="applyType" class="form-select" style="width:100%">${LEAVE_TYPES.map(lt=>'<option>'+lt+'</option>').join('')}</select></div>
+        <div class="form-group"><label>Status</label><input type="text" value="Pending" readonly style="background:var(--bg);padding:10px 14px"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>From Date</label><input type="date" id="applyFrom" style="padding:10px 14px"></div>
+        <div class="form-group"><label>To Date</label><input type="date" id="applyTo" style="padding:10px 14px"></div>
+      </div>
+      <div class="form-group"><label>Reason</label><textarea id="applyReason" placeholder="Reason for leave..."></textarea></div>
+      <div class="form-group"><label>Supporting Document (PDF, max 1MB)</label>
+        <input type="file" id="applyDoc" accept=".pdf" style="padding:8px"></div>
+      <button class="btn btn-primary btn-block" onclick="submitLeaveApp()"><i class="fas fa-paper-plane"></i> Submit Application</button>
+    </div></div>`;
+}
+function submitLeaveApp(){
+  const type=document.getElementById('applyType').value;
+  const from=document.getElementById('applyFrom').value;
+  const to=document.getElementById('applyTo').value;
+  const reason=document.getElementById('applyReason').value;
+  if(!from||!to)return toast('Select date range','error');
+  if(new Date(from)>new Date(to))return toast('From date must be before To date','error');
+  const apps=DB.get('leaveApplications')||[];
+  apps.push({id:'LA'+Date.now(),facultyId:CF.id,facultyName:CF.name,dept:CF.dept,
+    leaveType:type,fromDate:from,toDate:to,reason:reason,status:'Pending',
+    appliedOn:new Date().toISOString(),reviewedBy:null,reviewedOn:null});
+  DB.set('leaveApplications',apps);
+  toast('Leave application submitted successfully','success');
+  showPage('myleave');
+}
+</script>
+<script>
+/* ======== HOLIDAYS ======== */
+function renderHolidays(el){
+  const hols=DB.get('holidays')||[];
+  let html=`<div class="tab-bar">`;
+  YEARS.forEach(y=>html+=`<button class="tab-btn ${y===2025?'active':''}" onclick="showHolYear(${y},this)">${y}</button>`);
+  html+=`</div><div id="holContent"></div>`;
+  el.innerHTML=html;
+  showHolYear(2025,el.querySelector('.tab-btn.active'));
+}
+function showHolYear(y,btn){
+  if(btn){btn.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+  const hols=(DB.get('holidays')||[]).filter(h=>h.year===y).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  let html=`<div class="table-container"><table><tr><th>#</th><th>Date</th><th>Day</th><th>Holiday Name</th><th>Type</th></tr>`;
+  hols.forEach((h,i)=>{const d=new Date(h.date);
+    html+=`<tr><td>${i+1}</td><td>${fmtDate(h.date)}</td><td>${d.toLocaleDateString('en-IN',{weekday:'long'})}</td>
+      <td>${esc(h.name)}</td><td><span class="dept-badge" style="background:${h.type==='National'?'#dbeafe':h.type==='State'?'#d1fae5':'#fef3c7'};color:${h.type==='National'?'#1e40af':h.type==='State'?'#065f46':'#92400e'}">${h.type}</span></td></tr>`});
+  html+=`</table></div>`;
+  document.getElementById('holContent').innerHTML=html;
+}
 
-h+=`<div class="card"><div class="chdr" style="background:#e8eaf6">${d.name}</div><div class="cbody">
-<table style="width:100%;border-collapse:collapse;font-size:11px">
-<tr style="background:var(--p);color:#fff"><th style="padding:5px">Designation</th><th style="padding:5px">Required</th><th style="padding:5px">Available</th><th style="padding:5px">Names</th><th style="padding:5px">Status</th></tr>
-<tr><td style="padding:4px;border:1px solid var(--bd)">Professor</td><td style="text-align:center;border:1px solid var(--bd)">1</td><td style="text-align:center;border:1px solid var(--bd);font-weight:700">${profs.length}</td><td style="border:1px solid var(--bd);font-size:10px">${profs.map(f=>f.name).join(', ')||'-'}</td><td style="text-align:center;border:1px solid var(--bd)">${profs.length>=1?'✅':'❌'}</td></tr>
-<tr style="background:#f9f9f9"><td style="padding:4px;border:1px solid var(--bd)">Associate Prof</td><td style="text-align:center;border:1px solid var(--bd)">${d.staff.assoc}</td><td style="text-align:center;border:1px solid var(--bd);font-weight:700">${assocs.length}</td><td style="border:1px solid var(--bd);font-size:10px">${assocs.map(f=>f.name).join(', ')||'-'}</td><td style="text-align:center;border:1px solid var(--bd)">${assocs.length>=d.staff.assoc?'✅':'❌'}</td></tr>
-<tr><td style="padding:4px;border:1px solid var(--bd)">Assistant Prof</td><td style="text-align:center;border:1px solid var(--bd)">${d.staff.asst}</td><td style="text-align:center;border:1px solid var(--bd);font-weight:700">${assts.length}</td><td style="border:1px solid var(--bd);font-size:10px">${assts.map(f=>f.name).join(', ')||'-'}</td><td style="text-align:center;border:1px solid var(--bd)">${assts.length>=d.staff.asst?'✅':'❌'}</td></tr>
-</table></div></div>`;
+/* ======== LEAVE POLICY ======== */
+function renderPolicy(el){
+  el.innerHTML=`<div class="table-container"><div class="table-header"><h3>Leave Policy (As per MUHS / NCISM Guidelines)</h3></div>
+    <div style="padding:24px;line-height:2;font-size:14px">
+      <p><strong>1.</strong> Each faculty must maintain minimum <strong>75% attendance</strong> as per MUHS norms.</p>
+      <p><strong>2.</strong> <strong>Casual Leave (CL):</strong> 8 days per year (cannot be carried forward).</p>
+      <p><strong>3.</strong> <strong>Medical Leave (ML):</strong> As per requirement with medical certificate.</p>
+      <p><strong>4.</strong> <strong>Earned Leave (EL):</strong> 30 days per year, can be carried forward up to 300 days.</p>
+      <p><strong>5.</strong> <strong>Maternity Leave:</strong> 180 days (as per government norms).</p>
+      <p><strong>6.</strong> <strong>Paternity Leave:</strong> 15 days.</p>
+      <p><strong>7.</strong> <strong>Late Mark:</strong> 6 late marks = 1 day Casual Leave deduction (AEBS Portal).</p>
+      <p><strong>8.</strong> <strong>On Duty (OD):</strong> Conferences, workshops, university work with prior approval.</p>
+      <p><strong>9.</strong> <strong>Leave Without Pay (LWP):</strong> When all leave balances exhausted.</p>
+      <p><strong>10.</strong> <strong>Restricted Holiday (RH):</strong> 2 days per year from the RH list.</p>
+      <p style="margin-top:16px;color:var(--text-light);font-size:12px"><em>Note: This policy is effective from January 2025. Leave data is tracked from NCISM AEBs portal records.</em></p>
+    </div></div>`;
+}
+
+/* ======== ALL FACULTY LIST (Admin) ======== */
+function renderFacultyList(el){
+  const fac=sortFaculty(getActiveFaculty());
+  let html=`<div class="table-container">
+    <div class="table-header"><h3>All Teaching Faculty (${fac.length})</h3>
+      <div class="table-actions">
+        <div class="search-box"><i class="fas fa-search"></i>
+          <input type="text" placeholder="Search by name, dept, code..." onkeyup="filterFacTable(this.value)"></div>
+        <select class="form-select" onchange="filterFacDept(this.value)"><option value="">All Departments</option>
+          ${DEPTS.map(d=>'<option>'+d+'</option>').join('')}</select>
+        <button class="btn btn-sm btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+      </div></div>
+    <div style="overflow-x:auto"><table id="facListTable"><tr><th>#</th><th>Name</th><th>Code</th><th>Designation</th><th>Department</th><th>DOJ</th><th>Exp.</th><th>Approved</th><th>Actions</th></tr>`;
+  fac.forEach((f,i)=>{
+    html+=`<tr data-name="${esc(f.name.toLowerCase())}" data-dept="${esc(f.dept)}" data-code="${esc(f.code.toLowerCase())}">
+      <td>${i+1}</td><td style="font-weight:600">${esc(f.name)}${f.isPrincipal?' <span class="desig-badge desig-principal">Principal</span>':''}</td>
+      <td><code style="font-size:11px;background:var(--bg);padding:2px 6px;border-radius:4px">${esc(f.code)}</code></td>
+      <td><span class="desig-badge desig-${f.designation.toLowerCase()}">${esc(f.designation)}</span></td>
+      <td><span class="dept-badge" style="background:${deptColor(f.dept)}22;color:${deptColor(f.dept)}">${esc(f.dept)}</span></td>
+      <td>${fmtDate(f.doj)}</td><td>${calcExp(f.doj)}</td>
+      <td>${f.approved==='Yes'?'<span class="tag-approved">Yes</span>':'<span class="tag-pending">No</span>'}</td>
+      <td class="no-print"><button class="btn btn-sm btn-info" data-action="view" data-fid="${f.id}"><i class="fas fa-eye"></i></button></td></tr>`;
+  });
+  html+=`</table></div></div>`;
+  el.innerHTML=html;
+  el.querySelectorAll('[data-action="view"]').forEach(btn=>btn.addEventListener('click',()=>viewFacultyProfile(btn.dataset.fid)));
+}
+function filterFacTable(q){
+  q=q.toLowerCase();
+  document.querySelectorAll('#facListTable tr[data-name]').forEach(r=>{
+    r.style.display=(r.dataset.name.includes(q)||r.dataset.code.includes(q)||r.dataset.dept.toLowerCase().includes(q))?'':'none';
+  });
+}
+function filterFacDept(d){
+  document.querySelectorAll('#facListTable tr[data-name]').forEach(r=>{
+    r.style.display=(!d||r.dataset.dept===d)?'':'none';
+  });
+}
+function viewFacultyProfile(fid){
+  const f=(DB.get('faculty')||[]).find(x=>x.id===fid);if(!f)return;
+  const leaves=DB.get('leaves')||{};
+  openModal(`<div class="modal-header"><h3>${esc(f.name)}</h3><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:80px 1fr;gap:16px;margin-bottom:20px">
+        <div style="width:80px;height:80px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--primary);overflow:hidden">
+          ${f.photoData?'<img src="'+f.photoData+'" style="width:100%;height:100%;object-fit:cover">':'<i class="fas fa-user"></i>'}</div>
+        <div>
+          <h3 style="font-size:18px;margin-bottom:4px">${esc(f.name)}</h3>
+          <p style="color:var(--text-light);font-size:13px">${f.isPrincipal?'Principal & ':''}${esc(f.designation)} | ${esc(f.dept)}</p>
+          <p style="color:var(--text-light);font-size:12px;margin-top:4px">Code: ${esc(f.code)} | Phone: ${esc(f.phone)}</p>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px">
+        <div class="profile-field"><span class="label">DOB</span><span class="value">${fmtDate(f.dob)}</span></div>
+        <div class="profile-field"><span class="label">DOJ</span><span class="value">${fmtDate(f.doj)}</span></div>
+        <div class="profile-field"><span class="label">Experience</span><span class="value">${calcExp(f.doj)}</span></div>
+        <div class="profile-field"><span class="label">Email</span><span class="value">${esc(f.email)}</span></div>
+        <div class="profile-field"><span class="label">Approved</span><span class="value">${f.approved==='Yes'?'<span class="tag-approved">Yes</span>':'<span class="tag-pending">No</span>'}</span></div>
+      </div>
+      <h4 style="margin:20px 0 10px;font-size:14px;color:var(--primary)">Leave Summary</h4>
+      ${YEARS.map(y=>{const d=(leaves[y]&&leaves[y][fid])||{};
+        let total=0;Object.values(d).forEach(v=>total+=v);
+        return total?`<p style="font-size:12px;margin-bottom:4px"><strong>${y}:</strong> `+LEAVE_TYPES.filter(lt=>d[lt]>0).map(lt=>lt+':'+d[lt]).join(', ')+` (Total: ${total})</p>`:'';
+      }).join('')||'<p style="font-size:13px;color:var(--text-light)">No leaves recorded</p>'}
+    </div>`);
+}
+
+/* ======== MANAGE FACULTY (Add/Edit/Delete) ======== */
+function renderManageFaculty(el){
+  const fac=sortFaculty(getActiveFaculty());
+  let html=`<div class="table-container">
+    <div class="table-header"><h3>Manage Faculty</h3>
+      <div class="table-actions">
+        <div class="search-box"><i class="fas fa-search"></i>
+          <input type="text" placeholder="Search..." id="mfSearch" onkeyup="filterMF()"></div>
+        <button class="btn btn-sm btn-success" onclick="addFacultyModal()"><i class="fas fa-user-plus"></i> Add Faculty</button>
+      </div></div>
+    <div style="overflow-x:auto"><table id="mfTable"><tr><th>#</th><th>Name</th><th>Code</th><th>Designation</th><th>Department</th><th>Actions</th></tr>`;
+  fac.forEach((f,i)=>{
+    html+=`<tr data-search="${esc((f.name+' '+f.code+' '+f.dept).toLowerCase())}">
+      <td>${i+1}</td><td style="font-weight:600">${esc(f.name)}${f.isPrincipal?' <span class="desig-badge desig-principal">P</span>':''}</td>
+      <td><code style="font-size:11px">${esc(f.code)}</code></td>
+      <td><span class="desig-badge desig-${f.designation.toLowerCase()}">${esc(f.designation)}</span></td>
+      <td style="font-size:12px">${esc(f.dept)}</td>
+      <td class="no-print">
+        <button class="btn btn-sm btn-info" data-action="edit" data-fid="${f.id}" title="Edit"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-sm btn-danger" data-action="delete" data-fid="${f.id}" title="Delete"><i class="fas fa-trash"></i></button>
+      </td></tr>`;
+  });
+  html+=`</table></div></div>`;
+  el.innerHTML=html;
+  el.querySelectorAll('[data-action="edit"]').forEach(b=>b.addEventListener('click',()=>editFacultyModal(b.dataset.fid)));
+  el.querySelectorAll('[data-action="delete"]').forEach(b=>b.addEventListener('click',()=>deleteFaculty(b.dataset.fid)));
+}
+function filterMF(){
+  const q=document.getElementById('mfSearch').value.toLowerCase();
+  document.querySelectorAll('#mfTable tr[data-search]').forEach(r=>{
+    r.style.display=r.dataset.search.includes(q)?'':'none';
+  });
+}
+function addFacultyModal(){
+  openModal(`<div class="modal-header"><h3><i class="fas fa-user-plus" style="margin-right:8px"></i>Add New Faculty</h3>
+    <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <div class="form-row"><div class="form-group"><label>Full Name *</label><input type="text" id="af_name"></div>
+        <div class="form-group"><label>Teacher Code *</label><input type="text" id="af_code"></div></div>
+      <div class="form-row"><div class="form-group"><label>Designation</label>
+          <select id="af_desig" class="form-select" style="width:100%"><option>Professor</option><option>Reader</option><option>Lecturer</option></select></div>
+        <div class="form-group"><label>Department</label>
+          <select id="af_dept" class="form-select" style="width:100%">${DEPTS.map(d=>'<option>'+d+'</option>').join('')}</select></div></div>
+      <div class="form-row"><div class="form-group"><label>Date of Joining</label><input type="date" id="af_doj"></div>
+        <div class="form-group"><label>Date of Birth</label><input type="date" id="af_dob"></div></div>
+      <div class="form-row"><div class="form-group"><label>Email</label><input type="email" id="af_email"></div>
+        <div class="form-group"><label>Phone</label><input type="text" id="af_phone"></div></div>
+      <div class="form-row"><div class="form-group"><label>University Approved</label>
+          <select id="af_approved" class="form-select" style="width:100%"><option>No</option><option>Yes</option></select></div>
+        <div class="form-group"><label>Is Principal?</label>
+          <select id="af_principal" class="form-select" style="width:100%"><option value="false">No</option><option value="true">Yes</option></select></div></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-success" id="af_save"><i class="fas fa-save"></i> Save Faculty</button></div>`);
+  document.getElementById('af_save').addEventListener('click',saveNewFaculty);
+}
+function saveNewFaculty(){
+  const name=document.getElementById('af_name').value.trim();
+  const code=document.getElementById('af_code').value.trim();
+  if(!name||!code)return toast('Name and Teacher Code are required','error');
+  const fac=DB.get('faculty')||[];
+  if(fac.find(f=>f.code===code&&f.status!=='removed'))return toast('Teacher Code already exists','error');
+  const id=genId();
+  const newF={id,name,code,
+    designation:document.getElementById('af_desig').value,
+    dept:document.getElementById('af_dept').value,
+    doj:document.getElementById('af_doj').value,
+    dob:document.getElementById('af_dob').value,
+    email:document.getElementById('af_email').value,
+    phone:document.getElementById('af_phone').value,
+    approved:document.getElementById('af_approved').value,
+    isPrincipal:document.getElementById('af_principal').value==='true',
+    status:'active'};
+  fac.push(newF);DB.set('faculty',fac);
+  // Create user
+  const users=DB.get('users')||[];
+  users.push({username:code,password:'damch@'+code,role:'faculty',facultyId:id,name:name,securityAnswer:'cricket'});
+  DB.set('users',users);
+  // Init leaves
+  const leaves=DB.get('leaves')||{};
+  YEARS.forEach(y=>{if(!leaves[y])leaves[y]={};leaves[y][id]={CL:0,ML:0,OD:0,EL:0,Maternity:0,Paternity:0,'Study Leave':0,Sabbatical:0,RH:0,LWP:0,'Late Mark':0}});
+  DB.set('leaves',leaves);
+  closeModal();toast('Faculty added: '+name,'success');showPage('managefaculty');
+}
+function editFacultyModal(fid){
+  const fac=DB.get('faculty')||[];
+  const f=fac.find(x=>x.id===fid);if(!f)return;
+  openModal(`<div class="modal-header"><h3><i class="fas fa-edit" style="margin-right:8px"></i>Edit Faculty</h3>
+    <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <div class="form-row"><div class="form-group"><label>Full Name</label><input type="text" id="ef_name" value="${esc(f.name)}"></div>
+        <div class="form-group"><label>Teacher Code</label><input type="text" id="ef_code" value="${esc(f.code)}"></div></div>
+      <div class="form-row"><div class="form-group"><label>Designation</label>
+          <select id="ef_desig" class="form-select" style="width:100%">${['Professor','Reader','Lecturer'].map(d=>'<option'+(d===f.designation?' selected':'')+'>'+d+'</option>').join('')}</select></div>
+        <div class="form-group"><label>Department</label>
+          <select id="ef_dept" class="form-select" style="width:100%">${DEPTS.map(d=>'<option'+(d===f.dept?' selected':'')+'>'+d+'</option>').join('')}</select></div></div>
+      <div class="form-row"><div class="form-group"><label>Date of Joining</label><input type="date" id="ef_doj" value="${f.doj||''}"></div>
+        <div class="form-group"><label>Date of Birth</label><input type="date" id="ef_dob" value="${f.dob||''}"></div></div>
+      <div class="form-row"><div class="form-group"><label>Email</label><input type="email" id="ef_email" value="${esc(f.email||'')}"></div>
+        <div class="form-group"><label>Phone</label><input type="text" id="ef_phone" value="${esc(f.phone||'')}"></div></div>
+      <div class="form-row"><div class="form-group"><label>University Approved</label>
+          <select id="ef_approved" class="form-select" style="width:100%"><option${f.approved==='Yes'?' selected':''}>Yes</option><option${f.approved!=='Yes'?' selected':''}>No</option></select></div>
+        <div class="form-group"><label>Is Principal?</label>
+          <select id="ef_principal" class="form-select" style="width:100%"><option value="true"${f.isPrincipal?' selected':''}>Yes</option><option value="false"${!f.isPrincipal?' selected':''}>No</option></select></div></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="ef_save"><i class="fas fa-save"></i> Update</button></div>`);
+  document.getElementById('ef_save').addEventListener('click',()=>{
+    const facs=DB.get('faculty')||[];
+    const idx=facs.findIndex(x=>x.id===fid);if(idx<0)return;
+    facs[idx].name=document.getElementById('ef_name').value.trim();
+    facs[idx].code=document.getElementById('ef_code').value.trim();
+    facs[idx].designation=document.getElementById('ef_desig').value;
+    facs[idx].dept=document.getElementById('ef_dept').value;
+    facs[idx].doj=document.getElementById('ef_doj').value;
+    facs[idx].dob=document.getElementById('ef_dob').value;
+    facs[idx].email=document.getElementById('ef_email').value;
+    facs[idx].phone=document.getElementById('ef_phone').value;
+    facs[idx].approved=document.getElementById('ef_approved').value;
+    facs[idx].isPrincipal=document.getElementById('ef_principal').value==='true';
+    DB.set('faculty',facs);
+    // Update user name
+    const users=DB.get('users')||[];
+    const ui=users.findIndex(u=>u.facultyId===fid);
+    if(ui>=0){users[ui].name=facs[idx].name;users[ui].username=facs[idx].code;DB.set('users',users)}
+    closeModal();toast('Faculty updated','success');showPage('managefaculty');
+  });
+}
+function deleteFaculty(fid){
+  const fac=DB.get('faculty')||[];
+  const f=fac.find(x=>x.id===fid);if(!f)return;
+  if(!confirm('Delete '+f.name+'?\n\nThis will mark the faculty as removed and deactivate their login.'))return;
+  const idx=fac.findIndex(x=>x.id===fid);
+  fac[idx].status='removed';DB.set('faculty',fac);
+  // Deactivate user
+  const users=DB.get('users')||[];
+  const ui=users.findIndex(u=>u.facultyId===fid);
+  if(ui>=0){users.splice(ui,1);DB.set('users',users)}
+  toast(f.name+' removed','success');showPage('managefaculty');
+}
+
+/* ======== LEAVE MASTER TABLE ======== */
+function renderLeaveTable(el){
+  const fac=sortFaculty(getActiveFaculty());
+  let html=`<div class="tab-bar">`;
+  YEARS.forEach(y=>html+=`<button class="tab-btn ${y===2025?'active':''}" onclick="showLT(${y},this)">${y}</button>`);
+  html+=`</div><div id="ltContent"></div>`;
+  el.innerHTML=html;
+  showLT(2025,el.querySelector('.tab-btn.active'));
+}
+function showLT(year,btn){
+  if(btn){btn.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active')}
+  const fac=sortFaculty(getActiveFaculty());
+  const leaves=DB.get('leaves')||{};
+  if(!leaves[year])leaves[year]={};
+  let html=`<div class="table-container">
+    <div class="table-header"><h3>Leave Master Table - ${year}</h3>
+      <div class="table-actions">
+        <select class="form-select" id="ltDeptFilter" onchange="filterLT()"><option value="">All Departments</option>${DEPTS.map(d=>'<option>'+d+'</option>').join('')}</select>
+        <button class="btn btn-sm btn-success" onclick="saveLT(${year})"><i class="fas fa-save"></i> Save All</button>
+        <button class="btn btn-sm btn-outline" onclick="window.print()"><i class="fas fa-print"></i></button>
+      </div></div>
+    <div style="overflow-x:auto"><table id="ltTable"><tr><th>#</th><th>Name</th><th>Dept</th>`;
+  LEAVE_TYPES.forEach(lt=>html+=`<th style="font-size:10px">${lt}</th>`);
+  html+=`<th>Total</th></tr>`;
+  fac.forEach((f,i)=>{
+    const d=(leaves[year]&&leaves[year][f.id])||{};
+    let total=0;LEAVE_TYPES.forEach(lt=>total+=(d[lt]||0));
+    html+=`<tr data-dept="${esc(f.dept)}" data-fid="${f.id}"><td>${i+1}</td><td style="font-weight:600;font-size:12px;white-space:nowrap">${esc(f.name)}</td>
+      <td style="font-size:11px">${esc(f.dept)}</td>`;
+    LEAVE_TYPES.forEach(lt=>{
+      html+=`<td><input type="number" min="0" value="${d[lt]||0}" data-lt="${lt}" data-fid="${f.id}"
+        style="width:48px;padding:4px;border:1px solid var(--border);border-radius:4px;text-align:center;font-size:12px"></td>`;
+    });
+    html+=`<td style="font-weight:700">${total}</td></tr>`;
+  });
+  html+=`</table></div></div>`;
+  document.getElementById('ltContent').innerHTML=html;
+}
+function filterLT(){
+  const d=document.getElementById('ltDeptFilter').value;
+  document.querySelectorAll('#ltTable tr[data-dept]').forEach(r=>{
+    r.style.display=(!d||r.dataset.dept===d)?'':'none';
+  });
+}
+function saveLT(year){
+  const leaves=DB.get('leaves')||{};
+  if(!leaves[year])leaves[year]={};
+  document.querySelectorAll('#ltTable input[data-lt]').forEach(inp=>{
+    const fid=inp.dataset.fid,lt=inp.dataset.lt;
+    if(!leaves[year][fid])leaves[year][fid]={};
+    leaves[year][fid][lt]=parseInt(inp.value)||0;
+  });
+  DB.set('leaves',leaves);toast('Leave data saved for '+year,'success');
+}
+
+/* ======== LEAVE APPLICATIONS (Admin) ======== */
+function renderApplications(el){
+  const apps=(DB.get('leaveApplications')||[]).sort((a,b)=>new Date(b.appliedOn)-new Date(a.appliedOn));
+  let html=`<div class="table-container"><div class="table-header"><h3>Leave Applications (${apps.length})</h3></div>
+    <div style="overflow-x:auto"><table><tr><th>#</th><th>Faculty</th><th>Dept</th><th>Type</th><th>From</th><th>To</th><th>Applied</th><th>Status</th><th>Actions</th></tr>`;
+  apps.forEach((a,i)=>{
+    html+=`<tr><td>${i+1}</td><td style="font-weight:600">${esc(a.facultyName)}</td><td style="font-size:12px">${esc(a.dept)}</td>
+      <td>${esc(a.leaveType)}</td><td>${fmtDate(a.fromDate)}</td><td>${fmtDate(a.toDate)}</td>
+      <td style="font-size:12px">${fmtDate(a.appliedOn)}</td>
+      <td><span class="desig-badge desig-${a.status==='Approved'?'professor':a.status==='Rejected'?'principal':'lecturer'}">${a.status}</span></td>
+      <td class="no-print">${a.status==='Pending'?
+        `<button class="btn btn-sm btn-success" data-action="approve" data-aid="${a.id}"><i class="fas fa-check"></i></button>
+         <button class="btn btn-sm btn-danger" data-action="reject" data-aid="${a.id}"><i class="fas fa-times"></i></button>`
+        :'-'}</td></tr>`;
+  });
+  html+=`</table></div></div>`;
+  if(!apps.length)html=`<div class="empty-state"><i class="fas fa-inbox"></i><p>No leave applications yet</p></div>`;
+  el.innerHTML=html;
+  el.querySelectorAll('[data-action="approve"]').forEach(b=>b.addEventListener('click',()=>reviewApp(b.dataset.aid,'Approved')));
+  el.querySelectorAll('[data-action="reject"]').forEach(b=>b.addEventListener('click',()=>reviewApp(b.dataset.aid,'Rejected')));
+}
+function reviewApp(aid,status){
+  const apps=DB.get('leaveApplications')||[];
+  const idx=apps.findIndex(a=>a.id===aid);if(idx<0)return;
+  apps[idx].status=status;apps[idx].reviewedBy=CU.name;apps[idx].reviewedOn=new Date().toISOString();
+  DB.set('leaveApplications',apps);toast('Application '+status,'success');showPage('applications');
+}
+
+/* ======== MANAGE HOLIDAYS (Admin) ======== */
+function renderManageHolidays(el){
+  const hols=(DB.get('holidays')||[]).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  let html=`<div class="table-container"><div class="table-header"><h3>Manage Holidays</h3>
+      <button class="btn btn-sm btn-success" onclick="addHolidayModal()"><i class="fas fa-plus"></i> Add Holiday</button></div>
+    <div style="overflow-x:auto"><table id="holTable"><tr><th>#</th><th>Date</th><th>Name</th><th>Year</th><th>Type</th><th>Actions</th></tr>`;
+  hols.forEach((h,i)=>{
+    html+=`<tr><td>${i+1}</td><td>${fmtDate(h.date)}</td><td>${esc(h.name)}</td><td>${h.year}</td>
+      <td>${esc(h.type)}</td><td class="no-print"><button class="btn btn-sm btn-danger" data-action="delHol" data-hid="${h.id}"><i class="fas fa-trash"></i></button></td></tr>`;
+  });
+  html+=`</table></div></div>`;
+  el.innerHTML=html;
+  el.querySelectorAll('[data-action="delHol"]').forEach(b=>b.addEventListener('click',()=>{
+    if(!confirm('Delete this holiday?'))return;
+    let h=DB.get('holidays')||[];h=h.filter(x=>x.id!==b.dataset.hid);DB.set('holidays',h);
+    toast('Holiday removed','success');showPage('manageholidays');
+  }));
+}
+function addHolidayModal(){
+  openModal(`<div class="modal-header"><h3>Add Holiday</h3><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <div class="form-row"><div class="form-group"><label>Date</label><input type="date" id="ah_date"></div>
+        <div class="form-group"><label>Holiday Name</label><input type="text" id="ah_name"></div></div>
+      <div class="form-row"><div class="form-group"><label>Year</label>
+          <select id="ah_year" class="form-select" style="width:100%">${YEARS.map(y=>'<option>'+y+'</option>').join('')}</select></div>
+        <div class="form-group"><label>Type</label>
+          <select id="ah_type" class="form-select" style="width:100%"><option>National</option><option>State</option><option>Gazetted</option><option>Restricted</option></select></div></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-success" id="ah_save"><i class="fas fa-save"></i> Add</button></div>`);
+  document.getElementById('ah_save').addEventListener('click',()=>{
+    const d=document.getElementById('ah_date').value;
+    const n=document.getElementById('ah_name').value.trim();
+    if(!d||!n)return toast('Fill date and name','error');
+    const hols=DB.get('holidays')||[];
+    hols.push({id:'H'+Date.now(),date:d,name:n,year:parseInt(document.getElementById('ah_year').value),type:document.getElementById('ah_type').value});
+    DB.set('holidays',hols);closeModal();toast('Holiday added','success');showPage('manageholidays');
+  });
+}
+
+/* ======== USER MANAGEMENT ======== */
+function renderManageUsers(el){
+  const users=(DB.get('users')||[]).sort((a,b)=>a.role==='admin'?-1:b.role==='admin'?1:a.name.localeCompare(b.name));
+  let html=`<div class="table-container"><div class="table-header"><h3>User Accounts (${users.length})</h3>
+    <div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Search..." onkeyup="filterUsers(this.value)"></div></div>
+    <div style="overflow-x:auto"><table id="usrTable"><tr><th>#</th><th>Username</th><th>Name</th><th>Role</th><th>Password</th><th>Actions</th></tr>`;
+  users.forEach((u,i)=>{
+    html+=`<tr data-search="${esc((u.username+' '+u.name).toLowerCase())}">
+      <td>${i+1}</td><td><code>${esc(u.username)}</code></td><td>${esc(u.name)}</td>
+      <td><span class="desig-badge ${u.role==='admin'?'desig-principal':'desig-lecturer'}">${u.role}</span></td>
+      <td style="font-family:monospace;font-size:12px">${esc(u.password)}</td>
+      <td class="no-print">
+        <button class="btn btn-sm btn-warning" data-action="chpwd" data-uid="${esc(u.username)}"><i class="fas fa-key"></i> Change Password</button>
+        ${u.role!=='admin'?`<button class="btn btn-sm btn-danger" data-action="deluser" data-uid="${esc(u.username)}"><i class="fas fa-trash"></i></button>`:''}
+      </td></tr>`;
+  });
+  html+=`</table></div></div>`;
+  el.innerHTML=html;
+  el.querySelectorAll('[data-action="chpwd"]').forEach(b=>b.addEventListener('click',()=>changePasswordModal(b.dataset.uid)));
+  el.querySelectorAll('[data-action="deluser"]').forEach(b=>b.addEventListener('click',()=>{
+    if(!confirm('Delete user '+b.dataset.uid+'?'))return;
+    let users=DB.get('users')||[];users=users.filter(u=>u.username!==b.dataset.uid);DB.set('users',users);
+    toast('User deleted','success');showPage('manageusers');
+  }));
+}
+function filterUsers(q){
+  q=q.toLowerCase();document.querySelectorAll('#usrTable tr[data-search]').forEach(r=>{
+    r.style.display=r.dataset.search.includes(q)?'':'none';
+  });
+}
+function changePasswordModal(uid){
+  openModal(`<div class="modal-header"><h3>Change Password: ${esc(uid)}</h3><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Security Answer (favourite sport)</label><input type="text" id="cp_ans" placeholder="Answer"></div>
+      <div class="form-group"><label>New Password (min 6 chars)</label><input type="text" id="cp_pwd" placeholder="New password"></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="cp_save"><i class="fas fa-save"></i> Change</button></div>`);
+  document.getElementById('cp_save').addEventListener('click',()=>{
+    const ans=document.getElementById('cp_ans').value.trim().toLowerCase();
+    const pwd=document.getElementById('cp_pwd').value.trim();
+    if(ans!=='cricket')return toast('Wrong security answer','error');
+    if(pwd.length<6)return toast('Password must be at least 6 characters','error');
+    const users=DB.get('users
+  <script>
+/* ======== CHANGE PASSWORD (continued) ======== */
+    const users=DB.get('users')||[];
+    const idx=users.findIndex(u=>u.username===uid);
+    if(idx<0)return toast('User not found','error');
+    users[idx].password=pwd;
+    DB.set('users',users);
+    closeModal();toast('Password changed for '+uid,'success');showPage('manageusers');
+  });
+}
+
+/* ======== REPORTS & PRINT ======== */
+function renderReports(el){
+  el.innerHTML=`
+  <div class="stats-grid" style="margin-bottom:28px">
+    <div class="stat-card" style="cursor:pointer" onclick="reportIndividual()">
+      <div class="stat-icon"><i class="fas fa-user"></i></div>
+      <div class="stat-value" style="font-size:18px">Individual</div>
+      <div class="stat-label">Print single faculty report</div>
+    </div>
+    <div class="stat-card" style="cursor:pointer" onclick="reportDeptWise()">
+      <div class="stat-icon"><i class="fas fa-building"></i></div>
+      <div class="stat-value" style="font-size:18px">Department</div>
+      <div class="stat-label">Department-wise leave report</div>
+    </div>
+    <div class="stat-card" style="cursor:pointer" onclick="reportMaster()">
+      <div class="stat-icon"><i class="fas fa-table"></i></div>
+      <div class="stat-value" style="font-size:18px">Master</div>
+      <div class="stat-label">Combined all-faculty report</div>
+    </div>
+    <div class="stat-card" style="cursor:pointer" onclick="reportDeptStaff()">
+      <div class="stat-icon"><i class="fas fa-sitemap"></i></div>
+      <div class="stat-value" style="font-size:18px">Staff Status</div>
+      <div class="stat-label">Department-wise staff count</div>
+    </div>
+    <div class="stat-card" style="cursor:pointer" onclick="exportCSV()">
+      <div class="stat-icon"><i class="fas fa-file-csv"></i></div>
+      <div class="stat-value" style="font-size:18px">Export CSV</div>
+      <div class="stat-label">Download faculty data as CSV</div>
+    </div>
+  </div>
+  <div id="reportOutput"></div>`;
+}
+
+function reportIndividual(){
+  const fac=sortFaculty(getActiveFaculty());
+  let opts=fac.map(f=>`<option value="${f.id}">${esc(f.name)} (${esc(f.dept)})</option>`).join('');
+  openModal(`<div class="modal-header"><h3>Individual Faculty Report</h3><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Select Faculty</label><select id="ri_fac" class="form-select" style="width:100%">${opts}</select></div>
+        <div class="form-group"><label>Year</label><select id="ri_year" class="form-select" style="width:100%">${YEARS.map(y=>'<option>'+y+'</option>').join('')}</select></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="ri_gen"><i class="fas fa-file-alt"></i> Generate</button></div>`);
+  document.getElementById('ri_gen').addEventListener('click',()=>{
+    const fid=document.getElementById('ri_fac').value;
+    const year=parseInt(document.getElementById('ri_year').value);
+    closeModal();
+    genIndividualReport(fid,year);
+  });
+}
+
+function genIndividualReport(fid,year){
+  const fac=(DB.get('faculty')||[]).find(f=>f.id===fid);if(!fac)return;
+  const leaves=DB.get('leaves')||{};
+  const data=(leaves[year]&&leaves[year][fid])||{};
+  let total=0;Object.values(data).forEach(v=>total+=v);
+  let html=`
+  <div class="table-container" style="margin-top:0">
+    <div class="table-header"><h3>Leave Report: ${esc(fac.name)} (${year})</h3>
+      <button class="btn btn-sm btn-outline no-print" onclick="window.print()"><i class="fas fa-print"></i> Print</button></div>
+    <div style="padding:24px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;font-size:13px">
+        <div class="profile-field"><span class="label">Name</span><span class="value">${esc(fac.name)}</span></div>
+        <div class="profile-field"><span class="label">Teacher Code</span><span class="value">${esc(fac.code)}</span></div>
+        <div class="profile-field"><span class="label">Designation</span><span class="value">${fac.isPrincipal?'Principal & ':''}${esc(fac.designation)}</span></div>
+        <div class="profile-field"><span class="label">Department</span><span class="value">${esc(fac.dept)}</span></div>
+        <div class="profile-field"><span class="label">DOJ</span><span class="value">${fmtDate(fac.doj)}</span></div>
+        <div class="profile-field"><span class="label">Experience</span><span class="value">${calcExp(fac.doj)}</span></div>
+      </div>
+      <table><tr><th>Leave Type</th><th>Days Taken</th></tr>`;
+  LEAVE_TYPES.forEach(lt=>{const v=data[lt]||0;
+    html+=`<tr><td>${lt}</td><td style="font-weight:${v>0?'700':'400'};color:${v>0?'var(--danger)':'var(--text)'}">${v}</td></tr>`});
+  html+=`<tr style="background:var(--bg);font-weight:700"><td>Total Leave Days</td><td style="color:var(--danger)">${total}</td></tr>`;
+  html+=`</table></div></div>`;
+  document.getElementById('reportOutput').innerHTML=html;
+}
+
+function reportDeptWise(){
+  let opts=DEPTS.map(d=>`<option>${d}</option>`).join('');
+  openModal(`<div class="modal-header"><h3>Department-wise Report</h3><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Department</label><select id="rd_dept" class="form-select" style="width:100%">${opts}</select></div>
+        <div class="form-group"><label>Year</label><select id="rd_year" class="form-select" style="width:100%">${YEARS.map(y=>'<option>'+y+'</option>').join('')}</select></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="rd_gen"><i class="fas fa-file-alt"></i> Generate</button></div>`);
+  document.getElementById('rd_gen').addEventListener('click',()=>{
+    const dept=document.getElementById('rd_dept').value;
+    const year=parseInt(document.getElementById('rd_year').value);
+    closeModal();
+    genDeptReport(dept,year);
+  });
+}
+
+function genDeptReport(dept,year){
+  const fac=sortFaculty(getActiveFaculty().filter(f=>f.dept===dept));
+  const leaves=DB.get('leaves')||{};
+  let html=`<div class="table-container" style="margin-top:0">
+    <div class="table-header"><h3>Department: ${esc(dept)} — Leave Report (${year})</h3>
+      <button class="btn btn-sm btn-outline no-print" onclick="window.print()"><i class="fas fa-print"></i> Print</button></div>
+    <div style="overflow-x:auto"><table><tr><th>#</th><th>Name</th><th>Designation</th>`;
+  LEAVE_TYPES.forEach(lt=>html+=`<th style="font-size:10px">${lt}</th>`);
+  html+=`<th>Total</th></tr>`;
+  fac.forEach((f,i)=>{
+    const d=(leaves[year]&&leaves[year][f.id])||{};
+    let total=0;LEAVE_TYPES.forEach(lt=>total+=(d[lt]||0));
+    html+=`<tr><td>${i+1}</td><td style="font-weight:600;font-size:12px">${esc(f.name)}</td>
+      <td><span class="desig-badge desig-${f.designation.toLowerCase()}">${f.isPrincipal?'Principal':esc(f.designation)}</span></td>`;
+    LEAVE_TYPES.forEach(lt=>{const v=d[lt]||0;html+=`<td style="text-align:center;font-weight:${v>0?'700':'400'};color:${v>0?'var(--danger)':'var(--text)'}">${v}</td>`});
+    html+=`<td style="font-weight:700">${total}</td></tr>`;
+  });
+  html+=`</table></div></div>`;
+  if(!fac.length)html=`<div class="empty-state"><i class="fas fa-users-slash"></i><p>No faculty in this department</p></div>`;
+  document.getElementById('reportOutput').innerHTML=html;
+}
+
+function reportMaster(){
+  let yearSel=`<select id="rm_year" class="form-select">${YEARS.map(y=>'<option>'+y+'</option>').join('')}</select>`;
+  openModal(`<div class="modal-header"><h3>Master Report</h3><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
+    <div class="modal-body"><div class="form-group"><label>Year</label>${yearSel}</div></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="rm_gen"><i class="fas fa-file-alt"></i> Generate</button></div>`);
+  document.getElementById('rm_gen').addEventListener('click',()=>{
+    const year=parseInt(document.getElementById('rm_year').value);
+    closeModal();genMasterReport(year);
+  });
+}
+
+function genMasterReport(year){
+  const fac=sortFaculty(getActiveFaculty());
+  const leaves=DB.get('leaves')||{};
+  let html=`<div class="table-container" style="margin-top:0">
+    <div class="table-header"><h3>Master Leave Report — All Faculty (${year})</h3>
+      <button class="btn btn-sm btn-outline no-print" onclick="window.print()"><i class="fas fa-print"></i> Print</button></div>
+    <div style="overflow-x:auto"><table><tr><th>#</th><th>Name</th><th>Dept</th><th>Desig.</th>`;
+  LEAVE_TYPES.forEach(lt=>html+=`<th style="font-size:9px">${lt}</th>`);
+  html+=`<th>Total</th></tr>`;
+  let grandTotal=0;
+  fac.forEach((f,i)=>{
+    const d=(leaves[year]&&leaves[year][f.id])||{};
+    let total=0;LEAVE_TYPES.forEach(lt=>total+=(d[lt]||0));
+    grandTotal+=total;
+    html+=`<tr><td>${i+1}</td><td style="font-weight:600;font-size:11px;white-space:nowrap">${esc(f.name)}</td>
+      <td style="font-size:10px">${esc(f.dept)}</td>
+      <td><span class="desig-badge desig-${f.designation.toLowerCase()}" style="font-size:10px">${f.isPrincipal?'P':f.designation.charAt(0)}</span></td>`;
+    LEAVE_TYPES.forEach(lt=>{const v=d[lt]||0;html+=`<td style="text-align:center;font-size:11px;font-weight:${v>0?'700':'400'};color:${v>0?'var(--danger)':'inherit'}">${v||'-'}</td>`});
+    html+=`<td style="font-weight:700;text-align:center">${total||'-'}</td></tr>`;
+  });
+  html+=`<tr style="background:var(--bg);font-weight:700"><td colspan="4">Grand Total</td>`;
+  LEAVE_TYPES.forEach(lt=>{
+    let sum=0;fac.forEach(f=>{const d=(leaves[year]&&leaves[year][f.id])||{};sum+=(d[lt]||0)});
+    html+=`<td style="text-align:center">${sum||'-'}</td>`;
+  });
+  html+=`<td style="text-align:center;color:var(--danger)">${grandTotal}</td></tr>`;
+  html+=`</table></div></div>`;
+  document.getElementById('reportOutput').innerHTML=html;
+}
+
+function reportDeptStaff(){
+  const fac=getActiveFaculty();
+  let html=`<div class="table-container" style="margin-top:0">
+    <div class="table-header"><h3>Department-wise Staff Status (MUHS LIC — 100 UG Seats)</h3>
+      <button class="btn btn-sm btn-outline no-print" onclick="window.print()"><i class="fas fa-print"></i> Print</button></div>
+    <div style="overflow-x:auto"><table>
+      <tr><th>#</th><th>Department</th><th>Professor</th><th>Reader/Assoc.</th><th>Lecturer/Asst.</th><th>Total</th><th>Principal</th></tr>`;
+  let tProf=0,tRead=0,tLect=0,tAll=0,tPrin=0;
+  DEPTS.forEach((d,i)=>{
+    const df=fac.filter(f=>f.dept===d);
+    const prof=df.filter(f=>f.designation==='Professor').length;
+    const read=df.filter(f=>f.designation==='Reader').length;
+    const lect=df.filter(f=>f.designation==='Lecturer').length;
+    const prin=df.filter(f=>f.isPrincipal).length;
+    tProf+=prof;tRead+=read;tLect+=lect;tAll+=df.length;tPrin+=prin;
+    html+=`<tr><td>${i+1}</td><td style="font-weight:600"><span class="dept-badge" style="background:${deptColor(d)}22;color:${deptColor(d)}">${esc(d)}</span></td>
+      <td style="text-align:center">${prof}</td><td style="text-align:center">${read}</td>
+      <td style="text-align:center">${lect}</td><td style="text-align:center;font-weight:700">${df.length}</td>
+      <td style="text-align:center">${prin?'<span class="desig-badge desig-principal">Yes</span>':'-'}</td></tr>`;
+  });
+  html+=`<tr style="background:var(--bg);font-weight:700"><td colspan="2">Total</td>
+    <td style="text-align:center">${tProf}</td><td style="text-align:center">${tRead}</td>
+    <td style="text-align:center">${tLect}</td><td style="text-align:center">${tAll}</td>
+    <td style="text-align:center">${tPrin}</td></tr>`;
+  html+=`</table></div></div>`;
+  document.getElementById('reportOutput').innerHTML=html;
+}
+
+function exportCSV(){
+  const fac=sortFaculty(getActiveFaculty());
+  const leaves=DB.get('leaves')||{};
+  let csv='Sr,Name,Code,Designation,Department,DOJ,DOB,Email,Phone,Approved,Principal';
+  YEARS.forEach(y=>{LEAVE_TYPES.forEach(lt=>csv+=','+y+'_'+lt);csv+=','+y+'_Total'});
+  csv+='\n';
+  fac.forEach((f,i)=>{
+    csv+=`${i+1},"${f.name}","${f.code}","${f.designation}","${f.dept}","${f.doj||''}","${f.dob||''}","${f.email||''}","${f.phone||''}","${f.approved}","${f.isPrincipal?'Yes':'No'}"`;
+    YEARS.forEach(y=>{
+      const d=(leaves[y]&&leaves[y][f.id])||{};
+      let total=0;
+      LEAVE_TYPES.forEach(lt=>{const v=d[lt]||0;csv+=','+v;total+=v});
+      csv+=','+total;
+    });
+    csv+='\n';
+  });
+  const blob=new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='DAMCH_Faculty_Data_'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click();toast('CSV exported','success');
+}
+
+/* ======== BACKUP & RESTORE ======== */
+function renderBackup(el){
+  el.innerHTML=`
+  <div class="stats-grid">
+    <div class="stat-card" style="cursor:pointer" onclick="downloadBackup()">
+      <div class="stat-icon"><i class="fas fa-download"></i></div>
+      <div class="stat-value" style="font-size:18px">Download</div>
+      <div class="stat-label">Full JSON backup of all data</div>
+    </div>
+    <div class="stat-card" style="cursor:pointer" onclick="document.getElementById('restoreInput').click()">
+      <div class="stat-icon"><i class="fas fa-upload"></i></div>
+      <div class="stat-value" style="font-size:18px">Restore</div>
+      <div class="stat-label">Upload JSON backup file</div>
+    </div>
+    <div class="stat-card" style="cursor:pointer" onclick="resetAll()">
+      <div class="stat-icon"><i class="fas fa-redo"></i></div>
+      <div class="stat-value" style="font-size:18px">Reset</div>
+      <div class="stat-label">Reset to default data</div>
+    </div>
+  </div>
+  <input type="file" id="restoreInput" accept=".json" style="display:none" onchange="restoreBackup(this)">
+  <div class="table-container" style="margin-top:20px">
+    <div class="table-header"><h3><i class="fas fa-info-circle" style="color:var(--info);margin-right:8px"></i>Backup Information</h3></div>
+    <div style="padding:24px;line-height:2;font-size:14px">
+      <p><strong>Data Storage:</strong> All data is stored in your browser's localStorage. Clearing browser data will erase everything.</p>
+      <p><strong>Weekly Backup:</strong> Download a JSON backup weekly and save it to Google Drive, USB, or another safe location.</p>
+      <p><strong>Restore:</strong> Upload a previously downloaded JSON file to restore all faculty, leaves, holidays, and user data.</p>
+      <p><strong>Reset:</strong> Resets the entire database to the original 50 faculty members with default passwords.</p>
+      <p style="margin-top:12px"><strong>Last backup keys in storage:</strong></p>
+      <p style="font-family:monospace;font-size:12px;color:var(--text-light)">
+        users (${(DB.get('users')||[]).length} records) | 
+        faculty (${(DB.get('faculty')||[]).length} records) | 
+        leaves (${YEARS.length} years) | 
+        holidays (${(DB.get('holidays')||[]).length} records) |
+        applications (${(DB.get('leaveApplications')||[]).length} records)
+      </p>
+    </div>
+  </div>`;
+}
+
+function downloadBackup(){
+  const backup={
+    version:'DAMCH_v7',
+    date:new Date().toISOString(),
+    users:DB.get('users'),
+    faculty:DB.get('faculty'),
+    leaves:DB.get('leaves'),
+    leaveApplications:DB.get('leaveApplications'),
+    holidays:DB.get('holidays')
+  };
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='DAMCH_Backup_'+new Date().toISOString().split('T')[0]+'.json';
+  a.click();
+  toast('Backup downloaded successfully','success');
+}
+
+function restoreBackup(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.version||!data.users||!data.faculty)throw new Error('Invalid backup file');
+      if(!confirm('This will REPLACE all current data with the backup. Continue?'))return;
+      DB.set('users',data.users);
+      DB.set('faculty',data.faculty);
+      DB.set('leaves',data.leaves||{});
+      DB.set('leaveApplications',data.leaveApplications||[]);
+      DB.set('holidays',data.holidays||[]);
+      toast('Data restored successfully! Refreshing...','success');
+      setTimeout(()=>location.reload(),1500);
+    }catch(err){
+      toast('Invalid backup file: '+err.message,'error');
+    }
+  };
+  reader.readAsText(file);
+  input.value='';
+}
+
+function resetAll(){
+  if(!confirm('⚠️ RESET ALL DATA?\n\nThis will delete all current data and restore the original 50 faculty members with default passwords.\n\nDownload a backup first if needed!'))return;
+  if(!confirm('Are you absolutely sure? This cannot be undone.'))return;
+  // Clear all
+  ['users','faculty','leaves','leaveApplications','holidays','db_initialized_v7'].forEach(k=>DB.del(k));
+  toast('Database reset! Refreshing...','success');
+  setTimeout(()=>location.reload(),1500);
+}
+
+/* ======== INITIALIZATION ======== */
+initDB();
+
+// Check if on mobile
+if(window.innerWidth<=768){
+  document.getElementById('menuBtn').style.display='flex';
+}
+window.addEventListener('resize',()=>{
+  document.getElementById('menuBtn').style.display=window.innerWidth<=768?'flex':'none';
+  if(window.innerWidth>768)document.getElementById('sidebar').classList.remove('open');
 });
-c.innerHTML=h;
-}
 
-// ===== MY PROFILE =====
-function pgMyProf(c){
-let f=DB.faculty.find(x=>x.id===S.user.fid);
-if(!f){c.innerHTML='<div class="ptitle">Profile not found</div>';return}
-let ph=f.photo?`<img src="${f.photo}">`:'👤';
-c.innerHTML=`<div class="ptitle">👤 My Profile</div>
-<div class="card"><div class="cbody"><div class="pgrid">
-<div class="pharea"><div class="photo">${ph}</div>
-<input type="file" id="phUp" accept="image/jpeg,image/png" style="display:none" onchange="upPhoto(this)">
-<button class="btn btn-s bp" onclick="$('phUp').click()">📷 Photo</button>
-<p style="font-size:8px;color:var(--tl);margin-top:3px">Max 1MB, JPG/PNG</p></div>
-<div class="pdet">
-<div class="pf"><label>Name</label><div class="val">${f.name}</div></div>
-<div class="pf"><label>Code</label><div class="val">${f.code}</div></div>
-<div class="pf"><label>Designation</label><div class="val">${f.desig}</div></div>
-<div class="pf"><label>Department</label><div class="val" style="font-size:10px">${f.dept}</div></div>
-<div class="pf"><label>Date of Joining</label><div class="val">${f.doj||'-'}</div></div>
-<div class="pf"><label>Experience</label><div class="val"><span class="exp">${calcExp(f.doj)}</span></div></div>
-<div class="pf"><label>University Approved</label><div class="val">${f.univApproved||'No'}</div></div>
-<div class="pf"><label>Status</label><div class="val"><span class="badge bds">${f.status||'active'}</span></div></div>
-<div class="pfull" style="border-top:2px solid var(--bd);padding-top:10px;margin-top:6px"><h4 style="color:var(--p);margin-bottom:6px">✏️ Editable Fields</h4></div>
-<div class="pf"><label>Date of Birth</label><input type="date" id="pf_dob" value="${f.dob||''}"></div>
-<div class="pf"><label>Phone</label><input type="text" id="pf_ph" value="${f.phone||''}"></div>
-<div class="pf pfull"><label>Email</label><input type="email" id="pf_em" value="${f.email||''}"></div>
-<div class="pf pfull tr"><button class="btn bs" onclick="savProf()">💾 Save Changes</button></div>
-</div></div></div></div>`;
-}
-function savProf(){let f=DB.faculty.find(x=>x.id===S.user.fid);if(!f)return;f.dob=$('pf_dob').value;f.phone=$('pf_ph').value;f.email=$('pf_em').value;save();toast('Profile updated!');pgMyProf($('cnt'))}
-function upPhoto(inp){let file=inp.files[0];if(!file)return;if(file.size>1048576){toast('Max 1MB!','te');return}if(!file.type.match('image/(jpeg|png)')){toast('JPG/PNG only!','te');return}let r=new FileReader();r.onload=e=>{let f=DB.faculty.find(x=>x.id===S.user.fid);if(f){f.photo=e.target.result;save();toast('Photo uploaded!');pgMyProf($('cnt'))}};r.readAsDataURL(file)}
-
-// ===== MY LEAVES =====
-function pgMyLeav(c){let fid=S.user.fid;let yl=DB.leaves[S.yr]||{};let lv=yl[fid]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
-c.innerHTML=`<div class="ptitle">📋 My Leave Record - ${S.yr}</div>${yrBtns()}<div class="flx nopr mb8"><div></div><button class="btn bi btn-s" onclick="printMyRec()">🖨️ Print</button></div>
-<div class="card"><div class="chdr">Leave Summary</div><div class="cbody">
-<table style="width:100%;border-collapse:collapse;font-size:11px">
-<tr style="background:var(--p);color:#fff"><th style="padding:6px;text-align:left">Leave Type</th><th style="padding:6px">Limit</th><th style="padding:6px">Used</th><th style="padding:6px">Balance</th></tr>
-${[['CL',8,v('cl'),r.cl_b],['ML',10,v('ml'),r.ml_b],[`EL (Open:${r.el_o}+15)`,r.el_t,v('el_u'),r.el_b],['OD','-',v('od'),'-'],['RH',2,v('rh'),r.rh_b],['SL',15,v('sl'),r.sl_b],['Mat',180,v('mat'),r.mat_b],['Pat',15,v('pat'),r.pat_b],['SD',120,v('sd'),r.sd_b]].map((x,i)=>`<tr style="background:${i%2?'#f9f9f9':'#fff'}"><td style="padding:6px;border-bottom:1px solid var(--bd);font-weight:600">${x[0]}</td><td style="text-align:center;padding:6px;border-bottom:1px solid var(--bd)">${x[1]}</td><td style="text-align:center;padding:6px;border-bottom:1px solid var(--bd)">${x[2]}</td><td style="text-align:center;padding:6px;border-bottom:1px solid var(--bd)" class="${typeof x[3]==='number'?bc(x[3]):''}">${x[3]}</td></tr>`).join('')}
-<tr style="background:#fff3e0"><td style="padding:6px;font-weight:700">Late → Penalty (1/6)</td><td style="text-align:center;padding:6px">${r.lc}</td><td colspan="2" style="text-align:center;padding:6px;color:var(--a);font-weight:800">${r.ld} day(s) ${r.ovf>0?'('+r.ovf+' LWP)':''}</td></tr>
-<tr style="background:#ffebee"><td style="padding:6px;font-weight:700">LWP</td><td style="text-align:center;padding:6px">-</td><td style="text-align:center;padding:6px">${v('lwp')}</td><td style="text-align:center;padding:6px;color:var(--a);font-weight:800">${r.tu}</td></tr>
-</table>
-<div style="display:flex;justify-content:flex-end;gap:12px;margin-top:10px;padding:8px;background:#f5f5f5;border-radius:6px">
-<span style="font-weight:700;color:var(--s)">PAID: ${r.tp}</span><span style="font-weight:700;color:var(--a)">UNPAID: ${r.tu}</span>
-<span style="font-weight:900;background:yellow;padding:1px 6px;border-radius:3px">TOTAL: ${r.gt}</span></div></div></div>`}
-
-function printMyRec(){let f=DB.faculty.find(x=>x.id===S.user.fid);if(!f)return;let yl=DB.leaves[S.yr]||{};let lv=yl[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;let ps=$('printSec');
-ps.innerHTML=getPH()+`<div class="ic2"><div style="display:flex;justify-content:space-between;border-bottom:1px solid #000;padding-bottom:2px;margin-bottom:4px"><span style="font-size:12px;font-weight:bold">${f.name}</span><span style="font-weight:bold">${S.yr}</span></div>
-<div style="font-size:9px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:2px;margin-bottom:4px"><div><b>Desig:</b> ${f.desig}</div><div><b>Dept:</b> ${f.dept.split('(')[0]}</div><div><b>Code:</b> ${f.code}</div><div><b>Exp:</b> ${calcExp(f.doj)}</div></div>
-<table class="rt"><tr><th>Type</th><th>Limit</th><th>Used</th><th>Bal</th><th>Type</th><th>Limit</th><th>Used</th><th>Bal</th></tr>
-<tr><td>CL</td><td>8</td><td>${v('cl')}</td><td>${r.cl_b}</td><td>ML</td><td>10</td><td>${v('ml')}</td><td>${r.ml_b}</td></tr>
-<tr><td>EL(${r.el_o}+15)</td><td>${r.el_t}</td><td>${v('el_u')}</td><td>${r.el_b}</td><td>SL</td><td>15</td><td>${v('sl')}</td><td>${r.sl_b}</td></tr>
-<tr><td>Mat</td><td>180</td><td>${v('mat')}</td><td>${r.mat_b}</td><td>Pat</td><td>15</td><td>${v('pat')}</td><td>${r.pat_b}</td></tr>
-<tr><td>RH</td><td>2</td><td>${v('rh')}</td><td>${r.rh_b}</td><td>OD</td><td>-</td><td>${v('od')}</td><td>-</td></tr></table>
-<div style="font-size:9px;margin-top:2px"><b>Late:</b> ${r.lc} → Ded: ${r.ld} | LWP: ${v('lwp')} | Overflow: ${r.ovf}</div>
-<div style="display:flex;justify-content:flex-end;gap:8px;font-weight:bold;font-size:10px;margin-top:3px;border-top:1px solid #000;padding-top:2px">
-<span>PAID:${r.tp}</span><span style="color:red">UNPD:${r.tu}</span><span style="background:yellow;padding:0 4px">TOT:${r.gt}</span></div></div>`;
-ps.style.display='block';window.print();setTimeout(()=>ps.style.display='none',500)}
-
-// ===== APPLY LEAVE =====
-function pgApply(c){c.innerHTML=`<div class="ptitle">✍️ Apply for Leave</div><div class="card"><div class="chdr">New Application</div><div class="cbody">
-<div class="pdet"><div class="pf"><label>From Date *</label><input type="date" id="la_f"></div><div class="pf"><label>To Date *</label><input type="date" id="la_t"></div>
-<div class="pf"><label>Leave Type *</label><select id="la_tp"><option value="">-- Select --</option>${ltOpts()}</select></div>
-<div class="pf"><label>Document (PDF, Max 1MB)</label><input type="file" id="la_doc" accept="application/pdf"></div>
-<div class="pf pfull"><label>Reason</label><input type="text" id="la_rs" placeholder="Reason (optional)"></div>
-<div class="pf pfull tr"><button class="btn bs" onclick="subApp()">📤 Submit</button></div></div>
-<div style="margin-top:10px;padding:8px;background:#e1f5fe;border-radius:6px;font-size:10px">📌 Upload scanned leave application (PDF, max 1MB). Admin will review.</div></div></div>`}
-
-function subApp(){let f=$('la_f').value,t=$('la_t').value,tp=$('la_tp').value,rs=$('la_rs').value;
-if(!f||!t||!tp){toast('Fill From, To & Type','tw2');return}
-let docIn=$('la_doc');
-let finish=(docData)=>{DB.apps.push({id:'A'+Date.now(),fid:S.user.fid,from:f,to:t,type:tp,reason:rs,doc:docData||'',status:'Pending',dt:new Date().toISOString().split('T')[0],by:'',rdt:''});save();toast('Submitted!');nav('myapps')};
-if(docIn.files.length>0){let file=docIn.files[0];if(file.size>1048576){toast('Max 1MB!','te');return}if(file.type!=='application/pdf'){toast('PDF only!','te');return}let r=new FileReader();r.onload=e=>finish(e.target.result);r.readAsDataURL(file)}else finish('')}
-
-// ===== MY APPLICATIONS =====
-function pgMyApps(c){let apps=DB.apps.filter(a=>a.fid===S.user.fid).reverse();
-c.innerHTML=`<div class="ptitle">📑 My Applications</div><div class="card"><div class="chdr">History</div><div class="cbody">`+
-(apps.length===0?'<p style="color:var(--tl);font-size:11px">No applications.</p>':apps.map(a=>{let cls=a.status==='Approved'?'appr':a.status==='Rejected'?'rej':'pend';let bdg=a.status==='Approved'?'bds':a.status==='Rejected'?'bdd':'bdw';
-return`<div class="lacard ${cls}"><div><b>${a.type}</b><br><span style="font-size:10px">${a.reason||'-'}</span></div><div>📅 ${a.from} → ${a.to}</div><div><span class="badge ${bdg}">${a.status}</span></div><div>${a.doc?`<a href="${a.doc}" target="_blank" class="btn btn-s bi">📄</a>`:''}</div></div>`}).join(''))+`</div></div>`}
-
-// ===== POLICY =====
-function pgPolicy(c){c.innerHTML=`<div class="ptitle">📜 Leave Policy</div><div class="card"><div class="chdr">DAMCH Teaching Faculty Leave Policy (Effective 2025)</div><div class="cbody">
-<table class="ptbl"><thead><tr><th>Sr</th><th>Type</th><th>Code</th><th>Limit/Year</th><th>Paid/Unpaid</th><th>Details</th></tr></thead><tbody>
-<tr><td>1</td><td>Casual Leave</td><td>CL</td><td>8</td><td>Paid</td><td>Non-accumulative. Max 3 days stretch.</td></tr>
-<tr><td>2</td><td>Medical Leave</td><td>ML</td><td>10</td><td>Paid</td><td>Certificate >2 days. Non-accumulative.</td></tr>
-<tr class="hl"><td>3</td><td>Earned Leave</td><td>EL</td><td>15+CF</td><td>Paid</td><td>15 new/year + carry forward. Accumulative. Encashable.</td></tr>
-<tr><td>4</td><td>On Duty</td><td>OD</td><td>As needed</td><td>Paid</td><td>Seminars, conferences. Prior approval.</td></tr>
-<tr><td>5</td><td>Restricted Holiday</td><td>RH</td><td>2</td><td>Paid</td><td>Gazetted holidays not in list.</td></tr>
-<tr><td>6</td><td>Study Leave</td><td>SL</td><td>15</td><td>Paid</td><td>Academic, research, paper presentation.</td></tr>
-<tr><td>7</td><td>Maternity</td><td>Mat</td><td>180</td><td>Paid</td><td>As per govt norms.</td></tr>
-<tr><td>8</td><td>Paternity</td><td>Pat</td><td>15</td><td>Paid</td><td>Within 6 months of birth.</td></tr>
-<tr><td>9</td><td>Special Disability</td><td>SD</td><td>120</td><td>Paid</td><td>Medical board cert required.</td></tr>
-<tr class="hl"><td>10</td><td>Leave Without Pay</td><td>LWP</td><td>∞</td><td>Unpaid</td><td>When paid leave exhausted.</td></tr>
-</tbody></table>
-<h4 style="color:var(--a);margin:12px 0 6px">⚠️ Late Penalty (1/6 Rule)</h4>
-<div style="background:#fff3e0;padding:10px;border-radius:6px;border-left:3px solid var(--w);font-size:11px;margin-bottom:10px">
-<b>6 Late marks = 1 day deduction from paid leave.</b><br>Late marks from NCISM AEBS Portal added monthly by Admin. Adjusted against CL,ML,RH & EL. If exhausted → LWP.</div>
-<h4 style="color:var(--i);margin:12px 0 6px">📋 EL Carry Forward</h4>
-<div style="background:#e1f5fe;padding:10px;border-radius:6px;border-left:3px solid var(--i);font-size:11px"><b>Next Year EL = Opening (CF) + 15 (New)</b></div>
-<h4 style="color:var(--p);margin:12px 0 6px">📌 Attendance Requirement (MUHS LIC Norms)</h4>
-<div style="background:#e8eaf6;padding:10px;border-radius:6px;border-left:3px solid var(--p);font-size:11px">As per MUHS LIC Proforma Chapter IV, minimum 75% attendance is required for all teaching faculty. Faculty below 75% attendance will be flagged in the annual report.</div>
-</div></div>`}
-
-// ===== HOLIDAYS =====
-function pgHols(c){let yh=DB.holidays.filter(x=>x.yr===S.yr).sort((a,b)=>a.dt.localeCompare(b.dt));
-c.innerHTML=`<div class="ptitle">🎉 Holidays - ${S.yr}</div>${yrBtns()}<div class="card"><div class="chdr">Holiday List</div><div class="cbody">`+
-(yh.length?yh.map(h=>`<div class="hrow"><span class="hdate">${h.dt}</span><span class="hname">${h.nm}</span><span class="badge bdi">${h.tp||'General'}</span></div>`).join(''):'<p style="color:var(--tl);font-size:11px">No holidays.</p>')+`</div></div>`}
-
-// ===== ADMIN: LEAVE TABLE =====
-function pgATbl(c){let yl=DB.leaves[S.yr]||{};let sf=sortFac(DB.faculty.filter(f=>f.status==='active'));
-let rows=sf.map((f,i)=>{let lv=yl[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
-return`<tr><td>${i+1}</td><td class="nc"><b>${f.name}</b><br><span style="font-size:9px">${f.desig||''} | ${(f.dept||'').split('(')[0].trim()}</span><br><span class="exp">${calcExp(f.doj)}</span></td>
-<td><input class="ci" type="number" value="${v('cl')}" onchange="uL('${f.id}','cl',this.value)"></td><td class="${bc(r.cl_b)}">${r.cl_b}</td>
-<td><input class="ci" type="number" value="${v('ml')}" onchange="uL('${f.id}','ml',this.value)"></td><td class="${bc(r.ml_b)}">${r.ml_b}</td>
-<td><input class="ci" type="number" value="${v('od')}" onchange="uL('${f.id}','od',this.value)"></td>
-<td><input class="ci" type="number" value="${v('el_open')}" onchange="uL('${f.id}','el_open',this.value)" style="background:#e1f5fe;width:32px"></td><td class="bc">15</td><td class="bc">${r.el_t}</td>
-<td><input class="ci" type="number" value="${v('el_u')}" onchange="uL('${f.id}','el_u',this.value)"></td><td style="color:#1565c0;font-weight:800">${r.el_b}</td>
-<td><input class="ci" type="number" value="${v('lat')}" onchange="uL('${f.id}','lat',this.value)"></td><td class="bc bneg">${r.ld}</td>
-<td><input class="ci" type="number" value="${v('mat')}" onchange="uL('${f.id}','mat',this.value)"></td><td class="${bc(r.mat_b)}">${r.mat_b}</td>
-<td><input class="ci" type="number" value="${v('pat')}" onchange="uL('${f.id}','pat',this.value)"></td><td class="${bc(r.pat_b)}">${r.pat_b}</td>
-<td><input class="ci" type="number" value="${v('sl')}" onchange="uL('${f.id}','sl',this.value)"></td><td class="${bc(r.sl_b)}">${r.sl_b}</td>
-<td><input class="ci" type="number" value="${v('sd')}" onchange="uL('${f.id}','sd',this.value)"></td><td class="${bc(r.sd_b)}">${r.sd_b}</td>
-<td><input class="ci" type="number" value="${v('rh')}" onchange="uL('${f.id}','rh',this.value)"></td><td class="${bc(r.rh_b)}">${r.rh_b}</td>
-<td class="tp">${r.tp}</td>
-<td><input class="ci" type="number" value="${v('lwp')}" onchange="uL('${f.id}','lwp',this.value)">${r.ovf>0?`<div style="font-size:7px;color:var(--a);font-weight:700">(+${r.ovf})</div>`:''}</td>
-<td class="tu">${r.tu}</td><td class="tg">${r.gt}</td></tr>`}).join('');
-c.innerHTML=`<div class="ptitle">📊 Leave Master Table - ${S.yr}</div>
-<div class="flx nopr mb8"><div style="display:flex;gap:4px">${YEARS.map(y=>`<button class="yrb ${y===S.yr?'act':''}" onclick="S.yr='${y}';nav('atbl')">${y}</button>`).join('')}</div>
-<div style="display:flex;gap:4px"><button class="btn bg2 btn-s" onclick="doCF()">⚡ EL Carry Forward</button><button class="btn bi btn-s" onclick="nav('arpt')">🖨️ Reports</button></div></div>
-<div class="card"><div class="chdr">Record: ${S.yr} <span class="badge bdp">${sf.length} Faculty</span></div><div class="tw"><table class="dt"><thead>
-<tr><th rowspan="3" style="width:28px">Sr</th><th rowspan="3" style="min-width:200px;text-align:left">Faculty</th>
-<th colspan="23" class="thp">PAID LEAVE</th><th colspan="2" class="thu">UNPAID</th><th rowspan="3" style="background:#333">GRAND<br>TOT</th></tr>
-<tr><th colspan="2" class="thp">CL(8)</th><th colspan="2" class="thp">ML(10)</th><th class="thp">OD</th><th colspan="5" class="thel">EL(Earned)</th><th colspan="2" class="thlt">Late(1/6)</th>
-<th colspan="2" class="thp">Mat(180)</th><th colspan="2" class="thp" style="background:#004d40!important">Pat(15)</th><th colspan="2" class="thp">SL(15)</th><th colspan="2" class="thp">SD(120)</th><th colspan="2" class="thp">RH(2)</th>
-<th rowspan="2" style="background:#333">PAID<br>TOT</th><th class="thu">LWP</th><th rowspan="2" class="thu">UNPD<br>TOT</th></tr>
-<tr class="thsub"><th>U</th><th>B</th><th>U</th><th>B</th><th>U</th><th>Op</th><th>Nw</th><th>Tot</th><th>U</th><th>B</th><th>Cnt</th><th>Ded</th><th>U</th><th>B</th><th>U</th><th>B</th><th>U</th><th>B</th><th>U</th><th>B</th><th>U</th><th>B</th><th>U</th></tr>
-</thead><tbody>${rows}</tbody></table></div></div>
-<div class="tc" style="margin-top:8px;padding:6px;background:#fff3e0;border-radius:6px;font-size:9px">📌 Late marks from NCISM AEBS Portal monthly | 6 Late = 1 Penalty Day | Attendance ≥75% required (MUHS LIC)</div>`}
-
-function uL(fid,k,v){if(!DB.leaves[S.yr])DB.leaves[S.yr]={};if(!DB.leaves[S.yr][fid])DB.leaves[S.yr][fid]={cl:0,ml:0,od:0,el_open:0,el_u:0,lat:0,mat:0,pat:0,sl:0,sd:0,rh:0,lwp:0};DB.leaves[S.yr][fid][k]=parseFloat(v)||0;save();pgATbl($('cnt'))}
-
-function doCF(){let fy=prompt('FROM year:','2025');if(!fy)return;let ty=prompt('TO year:','2026');if(!ty)return;
-if(!confirm(`EL Carry Forward ${fy} → ${ty}?`))return;
-DB.faculty.filter(f=>f.status==='active').forEach(f=>{let lv=(DB.leaves[fy]||{})[f.id]||{};let r=calcRow(lv);let pen=r.ld;let oa=Math.max(0,r.cl_b+r.ml_b+r.rh_b);let pel=pen>oa?pen-oa:0;let ael=Math.max(0,r.el_b-pel);
-if(!DB.leaves[ty])DB.leaves[ty]={};if(!DB.leaves[ty][f.id])DB.leaves[ty][f.id]={cl:0,ml:0,od:0,el_open:0,el_u:0,lat:0,mat:0,pat:0,sl:0,sd:0,rh:0,lwp:0};DB.leaves[ty][f.id].el_open=ael});
-save();S.yr=ty;toast('Done! Showing '+ty);nav('atbl')}
-
-// ===== ADMIN: MANAGE FACULTY =====
-function pgAFac(c){let sf=sortFac(DB.faculty.filter(f=>f.status==='active'));
-let rows=sf.map((f,i)=>`<tr><td>${i+1}</td><td class="nc"><b>${f.name}</b><br><span style="font-size:9px">${f.code||'-'}</span></td>
-<td style="font-size:10px">${f.desig||'-'}</td><td style="font-size:9px">${(f.dept||'-').split('(')[0].trim()}</td><td>${f.doj||'-'}</td><td><span class="exp">${calcExp(f.doj)}</span></td><td>${f.univApproved||'No'}</td>
-<td><button class="btn btn-s bp" onclick="editFac('${f.id}')">✏️</button> <button class="btn btn-s ba" onclick="remFac('${f.id}','${f.name.replace(/'/g,"\\'")}')">🗑️</button></td></tr>`).join('');
-c.innerHTML=`<div class="ptitle">👥 Manage Faculty (${sf.length} Active)</div>
-<div class="flx nopr mb8"><span class="badge bdp">${sf.length} Active | Required: ~${DEPTS.reduce((s,d)=>s+1+d.staff.assoc+d.staff.asst,0)+1} (incl. Principal)</span><button class="btn bs" onclick="addFac()">➕ Add Faculty</button></div>
-<div class="card"><div class="tw"><table class="dt"><thead><tr><th>Sr</th><th style="text-align:left">Name/Code</th><th>Designation</th><th>Department</th><th>DOJ</th><th>Exp</th><th>Univ</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table></div></div>`}
-
-function addFac(){opMod(`<div class="mhdr"><h3>➕ Add Faculty</h3><button class="mcls" onclick="clsMod()">✕</button></div><div class="mbody"><div class="pdet">
-<div class="pf pfull"><label>Full Name *</label><input type="text" id="nf_nm"></div>
-<div class="pf"><label>Designation</label><select id="nf_dg"><option value="">--</option>${dgOpts()}</select></div>
-<div class="pf"><label>Department</label><select id="nf_dp"><option value="">--</option>${dOpts()}</select></div>
-<div class="pf"><label>Teacher Code</label><input type="text" id="nf_cd" placeholder="TC051"></div>
-<div class="pf"><label>DOJ</label><input type="date" id="nf_dj"></div><div class="pf"><label>DOB</label><input type="date" id="nf_db"></div>
-<div class="pf"><label>Phone</label><input type="text" id="nf_ph"></div><div class="pf"><label>Email</label><input type="email" id="nf_em"></div>
-<div class="pf"><label>Univ Approved</label><select id="nf_ua"><option>No</option><option>Yes</option><option>Applied</option></select></div>
-</div></div><div class="mft"><button class="btn bgh" onclick="clsMod()">Cancel</button><button class="btn bs" onclick="savNewFac()">💾 Save</button></div>`)}
-
-function savNewFac(){let nm=$('nf_nm').value.trim();if(!nm){toast('Name required','tw2');return}
-let cd=$('nf_cd').value.trim()||('TC'+Date.now().toString().slice(-4));let fid='F'+Date.now();
-DB.faculty.push({id:fid,name:nm,desig:$('nf_dg').value,dept:$('nf_dp').value,code:cd,doj:$('nf_dj').value,dob:$('nf_db').value,phone:$('nf_ph').value,email:$('nf_em').value,photo:'',univApproved:$('nf_ua').value,status:'active'});
-let pwd='damch@'+cd;DB.users.push({u:cd,p:pwd,role:'faculty',fid:fid,name:nm});
-YEARS.forEach(y=>{if(!DB.leaves[y])DB.leaves[y]={};DB.leaves[y][fid]={cl:0,ml:0,od:0,el_open:0,el_u:0,lat:0,mat:0,pat:0,sl:0,sd:0,rh:0,lwp:0}});
-save();clsMod();toast('Added! User:'+cd+' Pass:'+pwd);alert('New Account:\nUsername: '+cd+'\nPassword: '+pwd);pgAFac($('cnt'))}
-
-function editFac(fid){let f=DB.faculty.find(x=>x.id===fid);if(!f)return;
-opMod(`<div class="mhdr"><h3>✏️ Edit: ${f.name}</h3><button class="mcls" onclick="clsMod()">✕</button></div><div class="mbody"><div class="pdet">
-<div class="pf pfull"><label>Name</label><input type="text" id="ef_nm" value="${f.name}"></div>
-<div class="pf"><label>Designation</label><select id="ef_dg">${dgOpts(f.desig)}</select></div>
-<div class="pf"><label>Department</label><select id="ef_dp">${dOpts(f.dept)}</select></div>
-<div class="pf"><label>Code</label><input type="text" id="ef_cd" value="${f.code||''}"></div>
-<div class="pf"><label>DOJ</label><input type="date" id="ef_dj" value="${f.doj||''}"></div>
-<div class="pf"><label>DOB</label><input type="date" id="ef_db" value="${f.dob||''}"></div>
-<div class="pf"><label>Phone</label><input type="text" id="ef_ph" value="${f.phone||''}"></div>
-<div class="pf"><label>Email</label><input type="email" id="ef_em" value="${f.email||''}"></div>
-<div class="pf"><label>Univ Approved</label><select id="ef_ua"><option ${f.univApproved==='No'?'selected':''}>No</option><option ${f.univApproved==='Yes'?'selected':''}>Yes</option><option ${f.univApproved==='Applied'?'selected':''}>Applied</option></select></div>
-</div></div><div class="mft"><button class="btn bgh" onclick="clsMod()">Cancel</button><button class="btn bs" onclick="savEditFac('${fid}')">💾 Save</button></div>`)}
-
-function savEditFac(fid){let f=DB.faculty.find(x=>x.id===fid);if(!f)return;f.name=$('ef_nm').value;f.desig=$('ef_dg').value;f.dept=$('ef_dp').value;f.code=$('ef_cd').value;f.doj=$('ef_dj').value;f.dob=$('ef_db').value;f.phone=$('ef_ph').value;f.email=$('ef_em').value;f.univApproved=$('ef_ua').value;
-let usr=DB.users.find(u=>u.fid===fid);if(usr)usr.name=f.name;save();clsMod();toast('Updated!');pgAFac($('cnt'))}
-
-function remFac(fid,nm){if(!confirm('Remove "'+nm+'"?'))return;let f=DB.faculty.find(x=>x.id===fid);if(f)f.status='removed';save();toast('Removed');pgAFac($('cnt'))}
-
-// ===== ADMIN: APPLICATIONS =====
-function pgAApps(c){let apps=[...DB.apps].reverse();
-c.innerHTML=`<div class="ptitle">📬 All Applications (${apps.length})</div><div class="card"><div class="cbody">`+
-(apps.length===0?'<p style="color:var(--tl)">No applications.</p>':apps.map(a=>{let f=DB.faculty.find(x=>x.id===a.fid);let cls=a.status==='Approved'?'appr':a.status==='Rejected'?'rej':'pend';let bdg=a.status==='Approved'?'bds':a.status==='Rejected'?'bdd':'bdw';
-return`<div class="lacard ${cls}"><div><b>${f?f.name:a.fid}</b><br><span style="font-size:10px">${a.type} | ${a.reason||'-'}</span></div><div>📅 ${a.from} → ${a.to}</div><div><span class="badge ${bdg}">${a.status}</span></div>
-<div style="display:flex;gap:3px;flex-wrap:wrap">${a.doc?`<a href="${a.doc}" target="_blank" class="btn btn-s bi">📄</a>`:''}${a.status==='Pending'?`<button class="btn btn-s bs" onclick="rvApp('${a.id}','Approved')">✅</button><button class="btn btn-s ba" onclick="rvApp('${a.id}','Rejected')">❌</button>`:''}</div></div>`}).join(''))+`</div></div>`}
-function rvApp(aid,st){if(!confirm(st+'?'))return;let a=DB.apps.find(x=>x.id===aid);if(a){a.status=st;a.by=S.user.name;a.rdt=new Date().toISOString().split('T')[0]}save();toast(st+'!');pgAApps($('cnt'))}
-
-// ===== ADMIN: HOLIDAYS =====
-function pgAHol(c){let yh=DB.holidays.filter(x=>x.yr===S.yr).sort((a,b)=>a.dt.localeCompare(b.dt));
-c.innerHTML=`<div class="ptitle">📅 Manage Holidays - ${S.yr}</div>${yrBtns()}<div class="card"><div class="chdr">Holidays <button class="btn btn-s bs" onclick="addHol()">➕</button></div><div class="cbody">`+
-(yh.length?yh.map(h=>`<div class="hrow"><span class="hdate">${h.dt}</span><span class="hname">${h.nm}</span><span class="badge bdi">${h.tp||'General'}</span><button class="btn btn-s ba" onclick="remHol('${h.id}')" style="margin-left:auto">✕</button></div>`).join(''):'<p style="color:var(--tl);font-size:11px">No holidays. Click ➕</p>')+`</div></div>`}
-function addHol(){opMod(`<div class="mhdr"><h3>➕ Add Holiday</h3><button class="mcls" onclick="clsMod()">✕</button></div><div class="mbody"><div class="pdet">
-<div class="pf"><label>Date</label><input type="date" id="h_dt"></div><div class="pf"><label>Year</label><select id="h_yr">${YEARS.map(y=>`<option ${y===S.yr?'selected':''}>${y}</option>`).join('')}</select></div>
-<div class="pf pfull"><label>Name</label><input type="text" id="h_nm" placeholder="e.g. Republic Day"></div>
-<div class="pf"><label>Type</label><select id="h_tp"><option>General</option><option>National</option><option>State</option><option>Restricted</option><option>College</option></select></div>
-</div></div><div class="mft"><button class="btn bgh" onclick="clsMod()">Cancel</button><button class="btn bs" onclick="savHol()">💾 Save</button></div>`)}
-function savHol(){let dt=$('h_dt').value,nm=$('h_nm').value.trim();if(!dt||!nm){toast('Fill date & name','tw2');return}DB.holidays.push({id:'H'+Date.now(),dt:dt,nm:nm,yr:$('h_yr').value,tp:$('h_tp').value});save();clsMod();toast('Added!');pgAHol($('cnt'))}
-function remHol(hid){if(!confirm('Remove?'))return;DB.holidays=DB.holidays.filter(h=>h.id!==hid);save();toast('Removed');pgAHol($('cnt'))}
-
-// ===== ADMIN: USERS =====
-function pgAUsrs(c){let rows=DB.users.map((u,i)=>`<tr><td>${i+1}</td><td><b>${u.u}</b></td><td><span class="badge ${u.role==='admin'?'bdd':'bds'}">${u.role}</span></td><td>${u.name}</td><td>${u.fid||'-'}</td><td><button class="btn btn-s bw" onclick="chPwd('${u.u}')">🔑</button></td></tr>`).join('');
-c.innerHTML=`<div class="ptitle">🔑 User Management (${DB.users.length})</div><div class="card"><div class="tw"><table class="dt"><thead><tr><th>Sr</th><th>Username</th><th>Role</th><th>Name</th><th>FID</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table></div></div>`}
-function chPwd(un){opMod(`<div class="mhdr"><h3>🔑 Change Password: ${un}</h3><button class="mcls" onclick="clsMod()">✕</button></div><div class="mbody">
-<div class="fg"><label>Security Q: Your favorite sport?</label><input type="text" id="sq_a" placeholder="Answer"></div>
-<div class="fg"><label>New Password</label><input type="text" id="nw_p" placeholder="New Password"></div>
-</div><div class="mft"><button class="btn bgh" onclick="clsMod()">Cancel</button><button class="btn bs" onclick="doChPwd('${un}')">💾 Change</button></div>`)}
-function doChPwd(un){if($('sq_a').value.trim().toLowerCase()!==SEC_ANS){toast('Wrong answer!','te');return}let np=$('nw_p').value.trim();if(!np){toast('Enter password','tw2');return}let u=DB.users.find(x=>x.u===un);if(u){u.p=np;save();clsMod();toast('Changed!');pgAUsrs($('cnt'))}}
-
-// ===== ADMIN: REPORTS =====
-function pgARpt(c){c.innerHTML=`<div class="ptitle">🖨️ Print Reports - ${S.yr}</div>${yrBtns()}
-<div class="card"><div class="chdr">Detailed Reports</div><div class="cbody">
-<button class="btn bp" onclick="rptInd(null,null)">📄 All Faculty</button>
-<button class="btn bi" onclick="rptIndDept()">📄 Dept Wise</button>
-<button class="btn bw" onclick="rptSearch()">🔍 Search</button></div></div>
-<div class="card"><div class="chdr">Summary Reports</div><div class="cbody">
-<button class="btn bp" onclick="rptMaster(null)">📊 Master All</button>
-<button class="btn bg2" onclick="rptMasterDept()">📊 Dept Wise</button></div></div>
-<div class="card"><div class="chdr">Export</div><div class="cbody"><button class="btn bs" onclick="expCSV()">📥 Export CSV</button></div></div>`}
-
-function rptSearch(){let n=prompt('Name:');if(!n)return;let f=DB.faculty.find(x=>x.name.toLowerCase().includes(n.toLowerCase()));if(f)rptInd(null,f.id);else toast('Not found','te')}
-function rptIndDept(){let d=prompt('Department:');if(d)rptInd(d.trim(),null)}
-function rptMasterDept(){let d=prompt('Department:');if(d)rptMaster(d.trim())}
-
-function rptInd(dept,fid){let ps=$('printSec');let h=getPH();
-h+=`<h4 style="text-align:center;margin:4px 0;text-decoration:underline">${fid?'INDIVIDUAL':dept?'DEPT: '+dept.toUpperCase():'ALL FACULTY'} (${S.yr})</h4>`;
-let found=false;
-sortFac(DB.faculty.filter(f=>f.status==='active')).forEach(f=>{if(fid&&f.id!==fid)return;if(dept&&!(f.dept||'').toUpperCase().includes(dept.toUpperCase()))return;found=true;
-let lv=(DB.leaves[S.yr]||{})[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
-h+=`<div class="ic2"><div style="display:flex;justify-content:space-between;border-bottom:1px solid #000;padding-bottom:2px;margin-bottom:3px"><span style="font-size:11px;font-weight:bold">${f.name}</span><span style="font-weight:bold;font-size:10px">${S.yr}</span></div>
-<div style="font-size:8px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1px;margin-bottom:3px"><div><b>Desig:</b> ${f.desig}</div><div><b>Dept:</b> ${f.dept.split('(')[0]}</div><div><b>Code:</b> ${f.code}</div><div><b>Exp:</b> ${calcExp(f.doj)}</div></div>
-<table class="rt"><tr><th>Type</th><th>Lim</th><th>U</th><th>B</th><th>Type</th><th>Lim</th><th>U</th><th>B</th></tr>
-<tr><td>CL</td><td>8</td><td>${v('cl')}</td><td>${r.cl_b}</td><td>ML</td><td>10</td><td>${v('ml')}</td><td>${r.ml_b}</td></tr>
-<tr><td>EL(${r.el_o}+15)</td><td>${r.el_t}</td><td>${v('el_u')}</td><td>${r.el_b}</td><td>SL</td><td>15</td><td>${v('sl')}</td><td>${r.sl_b}</td></tr>
-<tr><td>Mat</td><td>180</td><td>${v('mat')}</td><td>${r.mat_b}</td><td>Pat</td><td>15</td><td>${v('pat')}</td><td>${r.pat_b}</td></tr>
-<tr><td>RH</td><td>2</td><td>${v('rh')}</td><td>${r.rh_b}</td><td>OD</td><td>-</td><td>${v('od')}</td><td>-</td></tr></table>
-<div style="font-size:8px;margin-top:1px"><b>Late:</b> ${r.lc}→Ded:${r.ld} | LWP:${v('lwp')} | Ovf:${r.ovf}</div>
-<div style="display:flex;justify-content:flex-end;gap:8px;font-weight:bold;font-size:9px;margin-top:2px;border-top:1px solid #000;padding-top:1px">
-<span>PAID:${r.tp}</span><span style="color:red">UNPD:${r.tu}</span><span style="background:yellow;padding:0 3px">TOT:${r.gt}</span></div></div>`});
-if(!found){toast('Not found','te');return}ps.innerHTML=h;ps.style.display='block';window.print();setTimeout(()=>ps.style.display='none',500)}
-
-function rptMaster(dept){let ps=$('printSec');let h=getPH();h+=`<h4 style="text-align:center;text-decoration:underline;margin:4px 0">${dept?'DEPT: '+dept.toUpperCase():'MASTER SUMMARY'} (${S.yr})</h4>`;
-let grp={};sortFac(DB.faculty.filter(f=>f.status==='active')).forEach(f=>{let d=(f.dept||'Other').toUpperCase().trim();if(dept&&!d.includes(dept.toUpperCase()))return;if(!grp[d])grp[d]=[];grp[d].push(f)});
-let dpts=Object.keys(grp);if(!dpts.length){toast('None','te');return}
-dpts.forEach(d=>{h+=`<div class="dh">DEPT: ${d}</div><table class="rt"><thead><tr><th style="width:4%">Sr</th><th style="width:25%">Name</th><th>CL</th><th>ML</th><th>EL</th><th>OD</th><th>RH</th><th>SL</th><th>Mat</th><th>Pat</th><th>Lat</th><th>LWP</th><th>Tot</th></tr></thead><tbody>`;
-grp[d].forEach((f,i)=>{let lv=(DB.leaves[S.yr]||{})[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
-h+=`<tr><td>${i+1}</td><td style="text-align:left"><b>${f.name}</b></td><td>${r.cl_b}</td><td>${r.ml_b}</td><td>${r.el_b}</td><td>${v('od')}</td><td>${r.rh_b}</td><td>${r.sl_b}</td><td>${r.mat_b}</td><td>${r.pat_b}</td><td>${r.ld}</td><td>${r.tu}</td><td><b>${r.gt}</b></td></tr>`});h+=`</tbody></table>`});
-ps.innerHTML=h;ps.style.display='block';window.print();setTimeout(()=>ps.style.display='none',500)}
-
-function expCSV(){let csv="Sr,Name,Desig,Dept,Code,DOJ,Exp,CL_B,ML_B,EL_O,EL_T,EL_U,EL_B,OD,RH_B,SL_B,Mat_B,Pat_B,Late,LWP,Total\n";
-sortFac(DB.faculty.filter(f=>f.status==='active')).forEach((f,i)=>{let lv=(DB.leaves[S.yr]||{})[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
-csv+=`${i+1},"${f.name}","${f.desig}","${f.dept}","${f.code}","${f.doj}","${calcExp(f.doj)}",${r.cl_b},${r.ml_b},${r.el_o},${r.el_t},${v('el_u')},${r.el_b},${v('od')},${r.rh_b},${r.sl_b},${r.mat_b},${r.pat_b},${r.ld},${r.tu},${r.gt}\n`});
-let b=new Blob([csv],{type:'text/csv'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='DAMCH_Leave_'+S.yr+'.csv';a.click();toast('CSV exported!')}
-
-// ===== ADMIN: SETTINGS =====
-function pgASet(c){let sz=(new Blob([JSON.stringify(DB)]).size/1024).toFixed(1);
-c.innerHTML=`<div class="ptitle">⚙️ Settings & Backup</div>
-<div class="card"><div class="chdr">💾 Data Management</div><div class="cbody">
-<p style="font-size:11px;margin-bottom:10px">Size: <b>${sz} KB</b> (limit ~5MB)</p>
-<button class="btn bp" onclick="dlJSON()">📥 Download Backup (JSON)</button>
-<input type="file" id="rstF" accept=".json" style="display:none" onchange="rstJSON(event)">
-<button class="btn bw" onclick="$('rstF').click()">📤 Restore</button>
-<button class="btn ba" onclick="if(confirm('RESET ALL? Cannot undo!')){localStorage.removeItem(VER);location.reload()}" style="margin-left:20px">🗑️ Reset All</button>
-</div></div>
-<div class="card"><div class="chdr">🔑 Admin Password</div><div class="cbody"><div class="pdet" style="max-width:400px">
-<div class="pf pfull"><label>Security Q: Favorite sport?</label><input type="text" id="as_sq"></div>
-<div class="pf pfull"><label>New Admin Password</label><input type="text" id="as_np"></div>
-<div class="pf pfull"><button class="btn bs" onclick="chAdmP()">🔑 Change</button></div></div></div></div>
-<div class="card"><div class="chdr">ℹ️ About</div><div class="cbody" style="font-size:11px">
-<p><b>Bal Bhagwan Shikshan Prasarak Mandal's</b></p>
-<p><b style="color:var(--a);font-size:14px">Dhanwantari Ayurved Medical College & Charitable Hospital</b></p>
-<p>Degloor Road, Udgir - 413517, Dist. Latur, Maharashtra</p>
-<p>Ph: (02385) 259825 | contact@damchudgir.edu.in | <a href="https://www.damchudgir.edu.in" target="_blank">www.damchudgir.edu.in</a></p>
-<p>UG Intake: 100 Seats (BAMS) | Departments: 14 (As per NCISM MESA&R 2024)</p>
-<p>Affiliated to: Maharashtra University of Health Sciences, Nashik</p>
-<hr style="margin:8px 0">
-<p>Designed & Developed by <b>Dr. Jadhav V.R.</b> (95183 56305)</p>
-<p>Leave Policy as per College Service Rules | Late marks from NCISM AEBS Portal</p>
-<p>© 2025-2027 | Faculty Leave Tracking System v4.0</p></div></div>`}
-
-function dlJSON(){let s=JSON.stringify(DB,null,2);let b=new Blob([s],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='DAMCH_Backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('Downloaded!')}
-function rstJSON(e){let r=new FileReader();r.onload=ev=>{try{DB=JSON.parse(ev.target.result);save();toast('Restored! Reloading...');setTimeout(()=>location.reload(),1000)}catch(er){toast('Invalid!','te')}};r.readAsText(e.target.files[0])}
-function chAdmP(){if($('as_sq').value.trim().toLowerCase()!==SEC_ANS){toast('Wrong answer!','te');return}let np=$('as_np').value.trim();if(!np||np.length<4){toast('Min 4 chars','tw2');return}let u=DB.users.find(x=>x.u==='admin');if(u){u.p=np;save();toast('Changed!')}}
-
-// ===== PRINT HEADER =====
-function getPH(){return`<div class="rh"><div class="rl">🏥</div><div class="rti">
-<h3>Bal Bhagwan Shikshan Prasarak Mandal's</h3>
-<h2>Dhanwantari Ayurved Medical College & Charitable Hospital</h2>
-<h5>Degloor Road, Udgir - 413517, Dist. Latur, Maharashtra | Ph: (02385) 259825</h5>
-<h5>Teaching Faculty Leave Record | UG 100 Seats | NCISM/MUHS Norms</h5>
-</div><div style="font-size:9px;font-weight:bold;width:70px;text-align:right">Date: ${new Date().toLocaleDateString('en-GB')}</div></div>`}
+// Enter key on login
+document.getElementById('loginPass').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin()});
+document.getElementById('loginUser').addEventListener('keypress',e=>{if(e.key==='Enter')document.getElementById('loginPass').focus()});
 </script>
 </body>
 </html>
