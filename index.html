@@ -6,22 +6,10 @@
 <title>DAMCH - Faculty Leave Tracker</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏥</text></svg>">
 <style>
-/* ============ CSS VARIABLES ============ */
-:root{
---p:#1a237e;--pl:#3949ab;--pd:#0d1342;
---a:#b71c1c;--al:#e53935;
---s:#1b5e20;--sl:#43a047;
---w:#e65100;--i:#01579b;--g:#f9a825;
---bg:#f0f2f5;--c:#fff;--t:#212121;--tl:#616161;
---bd:#e0e0e0;--sh:0 2px 12px rgba(0,0,0,.08);
---r:10px;--tr:all .3s ease;
-}
+:root{--p:#1a237e;--pl:#3949ab;--pd:#0d1342;--a:#b71c1c;--al:#e53935;--s:#1b5e20;--sl:#43a047;--w:#e65100;--i:#01579b;--g:#f9a825;--bg:#f0f2f5;--c:#fff;--t:#212121;--tl:#616161;--bd:#e0e0e0;--sh:0 2px 12px rgba(0,0,0,.08);--r:10px;--tr:all .3s ease}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--t);font-size:14px;line-height:1.5}
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-thumb{background:#bbb;border-radius:3px}
-
-/* ============ LOGIN ============ */
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:#bbb;border-radius:3px}
 #loginPage{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--pd),var(--p),var(--pl));padding:20px}
 .lcard{background:var(--c);border-radius:var(--r);box-shadow:0 20px 60px rgba(0,0,0,.3);width:100%;max-width:440px;overflow:hidden}
 .lhdr{text-align:center;padding:25px 20px 12px;border-bottom:3px solid var(--a)}
@@ -40,8 +28,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .lft{text-align:center;padding:10px;background:#f5f5f5;border-top:1px solid var(--bd)}
 .lft p{font-size:9px;color:var(--tl)}
 .lerr{color:var(--a);font-size:11px;font-weight:600;text-align:center;margin-bottom:8px;min-height:16px}
-
-/* ============ APP LAYOUT ============ */
 #app{display:none;min-height:100vh}
 .tnav{background:linear-gradient(135deg,var(--pd),var(--p));color:#fff;padding:0 15px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,.3)}
 .nbrand{display:flex;align-items:center;gap:8px}
@@ -49,22 +35,12 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .nbrand span{font-size:12px;font-weight:700}
 .nright{display:flex;align-items:center;gap:10px}
 .nuser{font-size:10px;opacity:.9}
-
-/* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:var(--tr);white-space:nowrap}
 .btn:hover{transform:translateY(-1px);box-shadow:var(--sh)}
 .btn-s{padding:4px 8px;font-size:10px}
-.bp{background:var(--p);color:#fff}
-.ba{background:var(--a);color:#fff}
-.bs{background:var(--s);color:#fff}
-.bw{background:var(--w);color:#fff}
-.bi{background:var(--i);color:#fff}
-.bo{background:transparent;border:2px solid #fff;color:#fff}
-.bo:hover{background:#fff;color:var(--p)}
-.bg{background:var(--g);color:#333}
-.bgh{background:transparent;color:var(--p);border:1px solid var(--bd)}
-
-/* SIDEBAR + CONTENT */
+.bp{background:var(--p);color:#fff}.ba{background:var(--a);color:#fff}.bs{background:var(--s);color:#fff}
+.bw{background:var(--w);color:#fff}.bi{background:var(--i);color:#fff}.bo{background:transparent;border:2px solid #fff;color:#fff}
+.bo:hover{background:#fff;color:var(--p)}.bg2{background:var(--g);color:#333}.bgh{background:transparent;color:var(--p);border:1px solid var(--bd)}
 .mwrap{display:flex}
 .side{width:220px;min-height:calc(100vh - 52px);background:#fff;border-right:1px solid var(--bd);padding:10px 0;position:sticky;top:52px;overflow-y:auto;max-height:calc(100vh - 52px);flex-shrink:0}
 .msec{padding:6px 12px;font-size:8px;font-weight:700;color:var(--tl);text-transform:uppercase;letter-spacing:1px;margin-top:6px}
@@ -73,56 +49,40 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .mi.act{background:#e8eaf6;color:var(--p);border-left-color:var(--p);font-weight:700}
 .mi .ic{width:16px;text-align:center;font-size:14px}
 .cnt{flex:1;padding:15px;max-width:calc(100% - 220px);overflow-x:hidden}
-
 .ptitle{font-size:18px;font-weight:800;color:var(--pd);margin-bottom:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .card{background:var(--c);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:15px;overflow:hidden}
 .chdr{padding:10px 15px;font-weight:700;font-size:12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
 .cbody{padding:15px}
-
-/* STATS */
 .srow{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:15px}
 .scard{background:var(--c);border-radius:var(--r);padding:14px;box-shadow:var(--sh);border-left:4px solid var(--p);display:flex;align-items:center;gap:10px}
 .sicon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px}
-.sinfo h3{font-size:20px;font-weight:800}
-.sinfo p{font-size:9px;color:var(--tl);text-transform:uppercase;letter-spacing:.5px}
-
-/* DATA TABLE */
-.tw{overflow-x:auto;max-height:70vh;overflow-y:auto}
+.sinfo h3{font-size:20px;font-weight:800}.sinfo p{font-size:9px;color:var(--tl);text-transform:uppercase;letter-spacing:.5px}
+.tw{overflow-x:auto;max-height:72vh;overflow-y:auto}
 table.dt{width:100%;border-collapse:collapse;font-size:11px;min-width:1500px}
 table.dt th{background:var(--p);color:#fff;padding:7px 4px;text-align:center;font-weight:700;text-transform:uppercase;font-size:9px;letter-spacing:.3px;position:sticky;top:0;z-index:5;white-space:nowrap}
 table.dt td{padding:5px 3px;text-align:center;border-bottom:1px solid var(--bd);vertical-align:middle}
 table.dt tr:hover{background:#e8eaf6}
 table.dt .nc{text-align:left;font-weight:600;min-width:200px;position:sticky;left:0;background:#fff;z-index:3;border-right:2px solid var(--p);padding-left:5px}
 table.dt tr:hover .nc{background:#e8eaf6}
-
 .ci{width:38px;text-align:center;border:1px solid var(--bd);border-radius:3px;padding:3px;font-size:11px;font-weight:600;transition:var(--tr)}
 .ci:focus{border-color:var(--p);box-shadow:0 0 0 2px rgba(26,35,126,.1);outline:none}
 .ci[disabled]{background:#f5f5f5;color:var(--t);border-color:transparent}
-
-.bc{font-weight:800;font-size:11px}
-.bpos{color:var(--s)}.bneg{color:var(--a);background:#ffebee;border-radius:3px;padding:1px 3px}.bzr{color:var(--tl)}
+.bc{font-weight:800;font-size:11px}.bpos{color:var(--s)}.bneg{color:var(--a);background:#ffebee;border-radius:3px;padding:1px 3px}.bzr{color:var(--tl)}
 .tp{background:#e8f5e9;font-weight:800;color:var(--s);font-size:12px}
 .tu{background:#ffebee;font-weight:800;color:var(--a);font-size:12px}
 .tg{background:#fff9c4;font-weight:900;font-size:13px;color:#333}
-
 .thp{background:var(--s)!important}.thu{background:var(--a)!important}.thel{background:#1565c0!important}.thlt{background:#333!important}.thsub{background:#37474f!important;font-size:8px!important}
-
-/* BADGE */
 .badge{display:inline-block;padding:2px 6px;border-radius:10px;font-size:9px;font-weight:700}
 .bdp{background:#e8eaf6;color:var(--p)}.bds{background:#e8f5e9;color:var(--s)}.bdd{background:#ffebee;color:var(--a)}.bdw{background:#fff3e0;color:var(--w)}.bdi{background:#e1f5fe;color:var(--i)}
-
-/* MODAL */
 .mov{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2000;display:none;align-items:center;justify-content:center;padding:15px}
 .mov.show{display:flex}
-.mod{background:#fff;border-radius:var(--r);box-shadow:0 20px 60px rgba(0,0,0,.3);width:100%;max-width:600px;max-height:90vh;overflow-y:auto}
+.mod{background:#fff;border-radius:var(--r);box-shadow:0 20px 60px rgba(0,0,0,.3);width:100%;max-width:620px;max-height:90vh;overflow-y:auto}
 .mhdr{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1}
 .mhdr h3{font-size:14px;color:var(--p)}
 .mcls{width:26px;height:26px;border:none;background:#f5f5f5;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
 .mcls:hover{background:#e0e0e0}
 .mbody{padding:18px}
 .mft{padding:10px 18px;border-top:1px solid var(--bd);display:flex;justify-content:flex-end;gap:6px}
-
-/* PROFILE */
 .pgrid{display:grid;grid-template-columns:160px 1fr;gap:15px}
 .pharea{text-align:center;padding:12px}
 .photo{width:120px;height:120px;border-radius:50%;border:3px solid var(--p);object-fit:cover;background:#e8eaf6;display:flex;align-items:center;justify-content:center;font-size:40px;color:var(--p);margin:0 auto 6px;overflow:hidden}
@@ -133,92 +93,47 @@ table.dt tr:hover .nc{background:#e8eaf6}
 .pf input,.pf select,.pf textarea{width:100%;padding:6px 10px;border:2px solid var(--bd);border-radius:5px;font-size:11px;transition:var(--tr)}
 .pf input:focus,.pf select:focus{border-color:var(--p);outline:none}
 .pfull{grid-column:1/-1}
-
-/* POLICY TABLE */
 .ptbl{width:100%;border-collapse:collapse;margin-bottom:10px}
 .ptbl th,.ptbl td{border:1px solid var(--bd);padding:7px 9px;text-align:left;font-size:11px}
 .ptbl th{background:var(--p);color:#fff;font-size:10px;text-transform:uppercase}
 .ptbl tr:nth-child(even){background:#f5f5f5}
 .ptbl .hl{background:#fff9c4;font-weight:700}
-
-/* HOLIDAY */
 .hrow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd)}
 .hdate{background:var(--p);color:#fff;padding:3px 7px;border-radius:5px;font-weight:700;min-width:70px;text-align:center;font-size:10px}
 .hname{font-weight:600;font-size:11px;flex:1}
-
-/* LEAVE APP */
 .lacard{border:2px dashed var(--bd);border-radius:var(--r);padding:12px;margin-bottom:10px;background:#fafafa;display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:6px;align-items:center;font-size:11px}
 .lacard.pend{border-color:var(--g);background:#fffde7}
 .lacard.appr{border-color:var(--sl);background:#e8f5e9}
 .lacard.rej{border-color:var(--al);background:#ffebee}
-
-/* YEAR BTN */
 .yrb{padding:4px 12px;border:2px solid var(--p);border-radius:5px;background:#fff;color:var(--p);font-weight:700;cursor:pointer;font-size:11px;transition:var(--tr)}
-.yrb.act{background:var(--p);color:#fff}
-.yrb:hover{background:var(--p);color:#fff}
-
-/* TABS */
-.tabs{display:flex;border-bottom:2px solid var(--bd);margin-bottom:15px;gap:3px;flex-wrap:wrap}
-.tabb{padding:7px 14px;cursor:pointer;font-weight:600;font-size:11px;color:var(--tl);border:none;border-bottom:3px solid transparent;transition:var(--tr);background:none}
-.tabb:hover{color:var(--p)}.tabb.act{color:var(--p);border-bottom-color:var(--p)}
-
-/* EXP TAG */
+.yrb.act{background:var(--p);color:#fff}.yrb:hover{background:var(--p);color:#fff}
 .exp{font-size:9px;color:var(--i);font-weight:700;background:#e1f5fe;padding:1px 5px;border-radius:3px;display:inline-block}
-
-/* TOAST */
 .toast{position:fixed;top:60px;right:15px;padding:10px 18px;border-radius:8px;color:#fff;font-weight:600;font-size:12px;z-index:3000;transform:translateX(120%);transition:transform .3s ease;box-shadow:0 4px 15px rgba(0,0,0,.2)}
-.toast.show{transform:translateX(0)}
-.ts{background:var(--s)}.te{background:var(--a)}.tw2{background:var(--w)}
-
-/* LOADING */
-.lov{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,.85);display:none;align-items:center;justify-content:center;z-index:3000;flex-direction:column;gap:8px}
-.lov.show{display:flex}
-.spin{width:36px;height:36px;border:4px solid #ddd;border-top-color:var(--p);border-radius:50%;animation:sp .8s linear infinite}
-@keyframes sp{to{transform:rotate(360deg)}}
-
-/* PRINT */
+.toast.show{transform:translateX(0)}.ts{background:var(--s)}.te{background:var(--a)}.tw2{background:var(--w)}
 @media print{
 body{background:#fff;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-#loginPage,.tnav,.side,.nopr,.toast,.lov,.mov{display:none!important}
-#app{display:block!important}
-.cnt{max-width:100%;padding:0}
-.mwrap{display:block}
+#loginPage,.tnav,.side,.nopr,.toast,.mov{display:none!important}
+#app{display:block!important}.cnt{max-width:100%;padding:0}.mwrap{display:block}
 @page{size:A4 portrait;margin:.5cm}
 .rt{width:100%;border-collapse:collapse;font-size:8px;border:2px solid #000!important;margin-bottom:8px}
 .rt th,.rt td{border:1px solid #000!important;padding:2px;text-align:center;color:#000}
 .rt th{background:#ddd!important;font-weight:bold}
 .rh{display:flex;align-items:center;border-bottom:2px solid #000!important;padding-bottom:4px;margin-bottom:6px}
-.rl{width:50px;height:50px;margin-right:6px}
-.rl img{max-width:100%;max-height:100%}
+.rl{width:50px;height:50px;margin-right:6px}.rl img{max-width:100%;max-height:100%}
 .rti{text-align:center;flex:1}
 .rti h3{margin:1px 0;font-size:11px}.rti h2{margin:1px 0;font-size:13px;font-weight:900}.rti h5{margin:1px 0;font-size:8px}
 .ic2{border:1px solid #000!important;padding:4px;margin-bottom:6px;page-break-inside:avoid;width:99%}
 .dh{background:#eee;font-weight:bold;text-align:left;padding:2px;font-size:9px;border:1px solid #000!important;margin-top:4px}
 }
-
-/* RESPONSIVE */
-@media(max-width:768px){
-.side{display:none}.cnt{max-width:100%;padding:8px}
-.pgrid{grid-template-columns:1fr}.pdet{grid-template-columns:1fr}
-.srow{grid-template-columns:1fr 1fr}
-.lacard{grid-template-columns:1fr}
-}
-
-.hid{display:none!important}
-.mt8{margin-top:8px}.mb8{margin-bottom:8px}
+@media(max-width:768px){.side{display:none}.cnt{max-width:100%;padding:8px}.pgrid{grid-template-columns:1fr}.pdet{grid-template-columns:1fr}.srow{grid-template-columns:1fr 1fr}.lacard{grid-template-columns:1fr}}
+.hid{display:none!important}.mt8{margin-top:8px}.mb8{margin-bottom:8px}
 .flx{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
 .tc{text-align:center}.tr{text-align:right}
 </style>
 </head>
 <body>
-
-<!-- LOADING -->
-<div class="lov" id="loadOv"><div class="spin"></div><span style="font-weight:700;color:var(--p)">Loading...</span></div>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
-
-<!-- ==================== LOGIN PAGE ==================== -->
+<!-- LOGIN -->
 <div id="loginPage">
 <div class="lcard">
 <div class="lhdr">
@@ -226,8 +141,8 @@ body{background:#fff;color:#000;-webkit-print-color-adjust:exact;print-color-adj
 <h2>Bal Bhagwan Shikshan Prasarak Mandal's</h2>
 <h1>Dhanwantari Ayurved Medical College &amp; Charitable Hospital</h1>
 <h3>Degloor Road, Udgir - 413517, Dist. Latur, Maharashtra</h3>
-<h3>Ph: (02385) 259825 | contact@damchudgir.edu.in</h3>
-<div class="sub">📋 Teaching Faculty Leave Tracking System</div>
+<h3>Ph: (02385) 259825 | Email: contact@damchudgir.edu.in | MUHS Code: ____</h3>
+<div class="sub">📋 Teaching Faculty Leave Tracking System (UG 100 Seats)</div>
 </div>
 <div class="lbody">
 <div class="lerr" id="lerr"></div>
@@ -241,8 +156,7 @@ body{background:#fff;color:#000;-webkit-print-color-adjust:exact;print-color-adj
 </div>
 </div>
 </div>
-
-<!-- ==================== MAIN APP ==================== -->
+<!-- MAIN APP -->
 <div id="app">
 <div class="tnav nopr">
 <div class="nbrand"><div class="nlogo">🏥</div><span>DAMCH Leave Tracker</span></div>
@@ -256,41 +170,40 @@ body{background:#fff;color:#000;-webkit-print-color-adjust:exact;print-color-adj
 <div class="cnt" id="cnt"></div>
 </div>
 </div>
-
 <!-- MODAL -->
 <div class="mov" id="modOv" onclick="if(event.target===this)clsMod()">
 <div class="mod" id="modBox"></div>
 </div>
-
 <!-- PRINT -->
 <div id="printSec" style="display:none"></div>
 
 <script>
 // ============================================================
-// DAMCH FACULTY LEAVE TRACKER - COMPLETE SYSTEM
-// Single PC, localStorage + IndexedDB
-// Designed by Dr. Jadhav V.R. (95183 56305)
+// DAMCH FACULTY LEAVE TRACKER v4.0
+// As per MUHS LIC Proforma & NCISM MESA&R 2024
+// UG 100 Seats - 14 Departments
 // ============================================================
 
-// ============ CONSTANTS ============
-const DEPTS = [
-"Samhita Siddhant & Sanskrit",
-"Rachana Sharir (Anatomy)",
-"Kriya Sharir (Physiology)",
-"Dravyaguna (Pharmacology)",
-"Rasashastra & Bhaishajya Kalpana (Pharmaceutics)",
-"Roga Nidan & Vikriti Vigyan (Pathology)",
-"Swasthavritta & Yoga (Preventive Medicine)",
-"Agada Tantra & Vidhi Ayurved (Toxicology & Jurisprudence)",
-"Prasuti Tantra & Stri Roga (Obstetrics & Gynecology)",
-"Kaumarbhritya (Pediatrics)",
-"Kayachikitsa (Internal Medicine)",
-"Shalya Tantra (Surgery)",
-"Shalakya Tantra (ENT, Eye & Dentistry)",
-"Panchakarma (Bio-Purification)"
+// ===== DEPARTMENTS (As per NCISM/MUHS Schedule IV for 100 seats UG) =====
+const DEPTS=[
+{code:"SS",name:"Samhita Siddhant & Sanskrit",short:"Samhita Siddhant",staff:{prof:1,assoc:1,asst:3}},
+{code:"RS",name:"Rachana Sharir (Anatomy)",short:"Rachana Sharir",staff:{prof:1,assoc:1,asst:1}},
+{code:"KS",name:"Kriya Sharir (Physiology)",short:"Kriya Sharir",staff:{prof:1,assoc:1,asst:1}},
+{code:"DG",name:"Dravyaguna (Pharmacology)",short:"Dravyaguna",staff:{prof:1,assoc:1,asst:1}},
+{code:"RB",name:"Rasashastra & Bhaishajya Kalpana",short:"Rasa & BK",staff:{prof:1,assoc:1,asst:1}},
+{code:"RN",name:"Roga Nidan & Vikriti Vigyan (Pathology)",short:"Roga Nidan",staff:{prof:1,assoc:1,asst:1}},
+{code:"SW",name:"Swasthavritta & Yoga (Preventive Medicine)",short:"Swasthavritta",staff:{prof:1,assoc:1,asst:1}},
+{code:"AT",name:"Agada Tantra & Vidhi Ayurved (Toxicology)",short:"Agada Tantra",staff:{prof:1,assoc:1,asst:1}},
+{code:"KC",name:"Kayachikitsa (Internal Medicine)",short:"Kayachikitsa",staff:{prof:1,assoc:2,asst:2}},
+{code:"PK",name:"Panchakarma (Bio-Purification)",short:"Panchakarma",staff:{prof:1,assoc:1,asst:2}},
+{code:"SH",name:"Shalya Tantra (Surgery)",short:"Shalya Tantra",staff:{prof:1,assoc:2,asst:2}},
+{code:"SK",name:"Shalakya Tantra (ENT, Eye & Dentistry)",short:"Shalakya Tantra",staff:{prof:1,assoc:2,asst:2}},
+{code:"PT",name:"Prasuti Tantra & Stri Roga (OBG)",short:"Prasuti & Stri Roga",staff:{prof:1,assoc:1,asst:2}},
+{code:"KB",name:"Kaumarbhritya - Balaroga (Pediatrics)",short:"Kaumarbhritya",staff:{prof:1,assoc:1,asst:2}}
 ];
-const DESIGS = ["Principal","Professor","Associate Professor","Reader","Assistant Professor","Lecturer","Tutor"];
-const LTYPES = [
+
+const DESIGS=["Principal","Professor","Associate Professor","Reader","Assistant Professor","Lecturer","Tutor"];
+const LTYPES=[
 {c:'CL',n:'Casual Leave',l:8},{c:'ML',n:'Medical Leave',l:10},{c:'EL',n:'Earned Leave',l:'15+CF'},
 {c:'OD',n:'On Duty',l:'∞'},{c:'RH',n:'Restricted Holiday',l:2},{c:'SL',n:'Study Leave',l:15},
 {c:'Mat',n:'Maternity Leave',l:180},{c:'Pat',n:'Paternity Leave',l:15},{c:'SD',n:'Special Disability',l:120},
@@ -298,43 +211,67 @@ const LTYPES = [
 ];
 const DRANK={"PRINCIPAL":1,"PROFESSOR":2,"ASSOCIATE PROFESSOR":3,"READER":3,"ASSISTANT PROFESSOR":4,"LECTURER":4,"TUTOR":5};
 const YEARS=['2025','2026','2027'];
-const SECURITY_ANSWER='cricket';
-const VER='damch_v30';
+const SEC_ANS='cricket';
+const VER='damch_v40';
 
-// ============ STATE ============
 let S={user:null,pg:'dash',yr:'2026'};
 let DB={users:[],faculty:[],leaves:{},holidays:[],apps:[]};
+// ===== INITIAL DATA GENERATION =====
+// UG 100 seats: As per Schedule IV, staffing pattern
+// Total: 14 Prof + 14(+4 clinical extra) Assoc + varies Asst
+// Principal = 1 (from any dept, usually senior Prof)
 
-// ============ INIT ============
 window.onload=()=>{
 let d=localStorage.getItem(VER);
 if(d){try{DB=JSON.parse(d)}catch(e){}}
 if(!DB.users||DB.users.length===0)initDB();
-// Check session
 let ss=sessionStorage.getItem('damch_ss');
 if(ss){try{S.user=JSON.parse(ss);showApp()}catch(e){}}
 };
 
 function initDB(){
-DB.users=[{u:'admin',p:'Admin@2025',role:'admin',fid:'',name:'Administrator'}];
-DB.faculty=[];
-DB.leaves={'2025':{},'2026':{},'2027':{}};
-DB.holidays=[];
-DB.apps=[];
-// Create 50 sample faculty accounts
-for(let i=1;i<=50;i++){
-let code='TC'+String(i).padStart(3,'0');
-let fid='F'+i;
-DB.users.push({u:code,p:'damch@'+code,role:'faculty',fid:fid,name:'Faculty '+i});
-DB.faculty.push({id:fid,name:'Faculty '+i,desig:'Assistant Professor',dept:DEPTS[i%14],code:code,doj:'',dob:'',phone:'',email:'',photo:'',univApproved:'No',status:'active'});
-YEARS.forEach(y=>{if(!DB.leaves[y])DB.leaves[y]={};DB.leaves[y][fid]={cl:0,ml:0,od:0,el_open:0,el_u:0,lat:0,mat:0,pat:0,sl:0,sd:0,rh:0,lwp:0}});
-}
+DB={users:[{u:'admin',p:'Admin@2025',role:'admin',fid:'',name:'Administrator (Dr. Jadhav V.R.)'}],
+faculty:[],leaves:{'2025':{},'2026':{},'2027':{}},holidays:[],apps:[]};
+
+// Generate faculty as per MUHS Schedule IV for 100 seats
+let fid=1;
+// Principal - 1
+addF(fid++,'Principal','','Principal',DEPTS[0].name);
+
+DEPTS.forEach(dept=>{
+// Professor - 1 per dept (14 total, Principal counts as 1 professor)
+if(dept.code!=='SS') // SS dept professor is Principal
+addF(fid++,dept.code+'_P','Professor',dept.code,dept.name);
+// Associate Professor - as per schedule
+for(let i=0;i<dept.staff.assoc;i++)
+addF(fid++,dept.code+'_AP'+(i+1),'Associate Professor',dept.code,dept.name);
+// Assistant Professor - as per schedule
+for(let i=0;i<dept.staff.asst;i++)
+addF(fid++,dept.code+'_L'+(i+1),'Assistant Professor',dept.code,dept.name);
+});
+
 save();
+}
+
+function addF(num,codeBase,desig,deptCode,deptName){
+let fid='F'+num;
+let code='TC'+String(num).padStart(3,'0');
+let name=desig+' - '+deptName.split('(')[0].trim();
+if(desig==='Principal')name='Principal';
+
+DB.faculty.push({
+id:fid,name:name,desig:desig,dept:deptName,code:code,
+doj:'',dob:'',phone:'',email:'',photo:'',univApproved:'No',status:'active'
+});
+DB.users.push({u:code,p:'damch@'+code,role:'faculty',fid:fid,name:name});
+YEARS.forEach(y=>{
+DB.leaves[y][fid]={cl:0,ml:0,od:0,el_open:0,el_u:0,lat:0,mat:0,pat:0,sl:0,sd:0,rh:0,lwp:0};
+});
 }
 
 function save(){localStorage.setItem(VER,JSON.stringify(DB))}
 
-// ============ UTILS ============
+// ===== UTILS =====
 function toast(m,t='ts'){let e=document.getElementById('toast');e.className='toast '+t+' show';e.textContent=m;setTimeout(()=>e.classList.remove('show'),3000)}
 function $(id){return document.getElementById(id)}
 function opMod(h){$('modBox').innerHTML=h;$('modOv').classList.add('show')}
@@ -344,8 +281,7 @@ function calcExp(d){
 if(!d)return'-';let dj=new Date(d);if(isNaN(dj))return'-';
 let n=new Date(),y=n.getFullYear()-dj.getFullYear(),m=n.getMonth()-dj.getMonth(),dd=n.getDate()-dj.getDate();
 if(dd<0){m--;dd+=new Date(n.getFullYear(),n.getMonth(),0).getDate()}
-if(m<0){y--;m+=12}
-return y<0?'0':y+'Y '+m+'M '+dd+'D';
+if(m<0){y--;m+=12}return y<0?'0':y+'Y '+m+'M '+dd+'D';
 }
 
 function calcRow(lv){
@@ -361,39 +297,42 @@ return{cl_b,ml_b,rh_b,mat_b,pat_b,sl_b,sd_b,el_o,el_t,el_b,lc,ld,cov,ovf,tp,tu,g
 }
 
 function bc(v){return v>0?'bc bpos':v<0?'bc bneg':'bc bzr'}
-function dOpts(s){return DEPTS.map(d=>`<option value="${d}" ${d===s?'selected':''}>${d}</option>`).join('')}
+function dOpts(s){return DEPTS.map(d=>`<option value="${d.name}" ${d.name===s?'selected':''}>${d.name}</option>`).join('')}
 function dgOpts(s){return DESIGS.map(d=>`<option value="${d}" ${d===s?'selected':''}>${d}</option>`).join('')}
 function ltOpts(s){return LTYPES.map(l=>`<option value="${l.c}" ${l.c===s?'selected':''}>${l.c} - ${l.n}</option>`).join('')}
 
 function sortFac(arr){
 return[...arr].sort((a,b)=>{
+// First group by department
+let da=DEPTS.findIndex(d=>d.name===a.dept),db=DEPTS.findIndex(d=>d.name===b.dept);
+if(da===-1)da=99;if(db===-1)db=99;
+// Principal first
+if(a.desig==='Principal')return-1;if(b.desig==='Principal')return 1;
+// Then by dept
+if(da!==db)return da-db;
+// Then by rank within dept
 let ra=DRANK[(a.desig||'').toUpperCase()]||99,rb=DRANK[(b.desig||'').toUpperCase()]||99;
 if(ra!==rb)return ra-rb;
-let da=a.doj?new Date(a.doj):new Date('9999-12-31'),db=b.doj?new Date(b.doj):new Date('9999-12-31');
-if(da.getTime()!==db.getTime())return da-db;
-return(a.name||'').localeCompare(b.name||'');
+let dta=a.doj?new Date(a.doj):new Date('9999-12-31'),dtb=b.doj?new Date(b.doj):new Date('9999-12-31');
+return dta-dtb;
 });
 }
 
-// ============ AUTH ============
+// ===== AUTH =====
 function doLogin(){
 let u=$('lu').value.trim(),p=$('lp').value.trim();
 if(!u||!p){$('lerr').textContent='Enter Username & Password';return}
 let found=DB.users.find(x=>x.u.toLowerCase()===u.toLowerCase()&&x.p===p);
 if(!found){$('lerr').textContent='Invalid Username or Password!';return}
-S.user=found;
-sessionStorage.setItem('damch_ss',JSON.stringify(found));
-showApp();
+S.user=found;sessionStorage.setItem('damch_ss',JSON.stringify(found));showApp();
 }
 function doLogout(){S.user=null;sessionStorage.removeItem('damch_ss');$('app').style.display='none';$('loginPage').style.display='flex';$('lu').value='';$('lp').value='';$('lerr').textContent=''}
 function isAdmin(){return S.user&&S.user.role==='admin'}
 
-// ============ APP INIT ============
 function showApp(){
 $('loginPage').style.display='none';$('app').style.display='block';
 $('navInfo').innerHTML='👤 '+S.user.name+' <span class="badge '+(isAdmin()?'bdd':'bds')+'">'+(isAdmin()?'ADMIN':'FACULTY')+'</span>';
-buildSidebar();
-nav('dash');
+buildSidebar();nav('dash');
 }
 
 function buildSidebar(){
@@ -411,6 +350,7 @@ if(isAdmin()){
 h+='<div class="msec">Admin Panel</div>';
 h+='<div class="mi" data-pg="atbl" onclick="nav(\'atbl\')"><span class="ic">📊</span> Leave Master Table</div>';
 h+='<div class="mi" data-pg="afac" onclick="nav(\'afac\')"><span class="ic">👥</span> Manage Faculty</div>';
+h+='<div class="mi" data-pg="adstat" onclick="nav(\'adstat\')"><span class="ic">📈</span> Dept Staff Status</div>';
 h+='<div class="mi" data-pg="aapps" onclick="nav(\'aapps\')"><span class="ic">📬</span> All Applications</div>';
 h+='<div class="mi" data-pg="ahol" onclick="nav(\'ahol\')"><span class="ic">📅</span> Manage Holidays</div>';
 h+='<div class="mi" data-pg="ausrs" onclick="nav(\'ausrs\')"><span class="ic">🔑</span> User Management</div>';
@@ -425,40 +365,48 @@ S.pg=pg;
 document.querySelectorAll('.mi').forEach(e=>e.classList.toggle('act',e.dataset.pg===pg));
 let c=$('cnt');
 switch(pg){
-case'dash':pgDash(c);break;
-case'myprof':pgMyProf(c);break;
-case'myleav':pgMyLeav(c);break;
-case'apply':pgApply(c);break;
-case'myapps':pgMyApps(c);break;
-case'policy':pgPolicy(c);break;
-case'hols':pgHols(c);break;
-case'atbl':pgATbl(c);break;
-case'afac':pgAFac(c);break;
-case'aapps':pgAApps(c);break;
-case'ahol':pgAHol(c);break;
-case'ausrs':pgAUsrs(c);break;
-case'arpt':pgARpt(c);break;
-case'aset':pgASet(c);break;
+case'dash':pgDash(c);break;case'myprof':pgMyProf(c);break;case'myleav':pgMyLeav(c);break;
+case'apply':pgApply(c);break;case'myapps':pgMyApps(c);break;case'policy':pgPolicy(c);break;
+case'hols':pgHols(c);break;case'atbl':pgATbl(c);break;case'afac':pgAFac(c);break;
+case'adstat':pgDeptStat(c);break;case'aapps':pgAApps(c);break;case'ahol':pgAHol(c);break;
+case'ausrs':pgAUsrs(c);break;case'arpt':pgARpt(c);break;case'aset':pgASet(c);break;
 default:pgDash(c);
 }
 }
 
-// ============ DASHBOARD ============
+function yrBtns(){return`<div class="flx nopr mb8"><div style="display:flex;gap:4px">${YEARS.map(y=>`<button class="yrb ${y===S.yr?'act':''}" onclick="S.yr='${y}';nav(S.pg)">${y}</button>`).join('')}</div></div>`}
+// ===== DASHBOARD =====
 function pgDash(c){
 let af=DB.faculty.filter(f=>f.status==='active');
 let yl=DB.leaves[S.yr]||{};
-let h=`<div class="ptitle">📊 Dashboard - ${S.yr}</div>`;
-h+=yrBtns();
+let h=`<div class="ptitle">📊 Dashboard - ${S.yr}</div>`;h+=yrBtns();
 
 if(isAdmin()){
-let tp=0,tu=0;af.forEach(f=>{let lv=yl[f.id]||{};let r=calcRow(lv);tp+=r.tp;tu+=r.tu});
+let tp=0,tu=0;af.forEach(f=>{let r=calcRow(yl[f.id]||{});tp+=r.tp;tu+=r.tu});
 let hc=DB.holidays.filter(x=>x.yr===S.yr).length;
+// Dept-wise count
+let deptCount={};DEPTS.forEach(d=>{deptCount[d.name]=af.filter(f=>f.dept===d.name).length});
+let reqTotal=DEPTS.reduce((s,d)=>s+1+d.staff.assoc+d.staff.asst,0); // Prof+AP+Asst per dept
+
 h+=`<div class="srow">
 <div class="scard" style="border-left-color:var(--p)"><div class="sicon" style="background:#e8eaf6">👥</div><div class="sinfo"><h3>${af.length}</h3><p>Active Faculty</p></div></div>
 <div class="scard" style="border-left-color:var(--s)"><div class="sicon" style="background:#e8f5e9">📋</div><div class="sinfo"><h3>${tp}</h3><p>Total Paid Used</p></div></div>
 <div class="scard" style="border-left-color:var(--a)"><div class="sicon" style="background:#ffebee">⚠️</div><div class="sinfo"><h3>${tu}</h3><p>Total Unpaid</p></div></div>
 <div class="scard" style="border-left-color:var(--g)"><div class="sicon" style="background:#fff9c4">🎉</div><div class="sinfo"><h3>${hc}</h3><p>Holidays</p></div></div>
 </div>`;
+
+// Dept-wise summary mini table
+h+=`<div class="card"><div class="chdr">📈 Department-wise Staff Count (UG 100 Seats - NCISM Norms)</div><div class="cbody"><table style="width:100%;border-collapse:collapse;font-size:11px">
+<tr style="background:var(--p);color:#fff"><th style="padding:5px;text-align:left">Department</th><th style="padding:5px">Required</th><th style="padding:5px">Available</th><th style="padding:5px">Status</th></tr>`;
+DEPTS.forEach(d=>{
+let req=1+d.staff.assoc+d.staff.asst; // Prof+AP+Asst
+let avail=af.filter(f=>f.dept===d.name).length;
+let st=avail>=req?'✅':'❌ ('+( req-avail)+' deficit)';
+let bg=avail>=req?'':'background:#ffebee';
+h+=`<tr style="${bg}"><td style="padding:4px;border-bottom:1px solid var(--bd);font-size:10px">${d.short}</td><td style="text-align:center;padding:4px;border-bottom:1px solid var(--bd)">${req}</td><td style="text-align:center;padding:4px;border-bottom:1px solid var(--bd);font-weight:700">${avail}</td><td style="text-align:center;padding:4px;border-bottom:1px solid var(--bd)">${st}</td></tr>`;
+});
+h+=`</table></div></div>`;
+
 }else{
 let mf=DB.faculty.find(f=>f.id===S.user.fid);
 let ml=mf?(yl[mf.id]||{}):{};let r=calcRow(ml);
@@ -470,40 +418,57 @@ h+=`<div class="srow">
 </div>`;
 if(mf)h+=`<div class="card"><div class="chdr">👤 Quick Info</div><div class="cbody" style="font-size:12px">
 <p><b>Name:</b> ${mf.name} | <b>Dept:</b> ${mf.dept} | <b>Desig:</b> ${mf.desig}</p>
-<p><b>Code:</b> ${mf.code} | <b>Experience:</b> <span class="exp">${calcExp(mf.doj)}</span></p>
+<p><b>Code:</b> ${mf.code} | <b>Experience:</b> <span class="exp">${calcExp(mf.doj)}</span> | <b>Univ.Approved:</b> ${mf.univApproved}</p>
 </div></div>`;
 }
 
-// Upcoming holidays
 let today=new Date().toISOString().split('T')[0];
 let uh=DB.holidays.filter(x=>x.yr===S.yr&&x.dt>=today).sort((a,b)=>a.dt.localeCompare(b.dt)).slice(0,5);
 h+=`<div class="card"><div class="chdr">🎉 Upcoming Holidays</div><div class="cbody">`;
 h+=uh.length?uh.map(x=>`<div class="hrow"><span class="hdate">${x.dt}</span><span class="hname">${x.nm}</span><span class="badge bdi">${x.tp||'General'}</span></div>`).join(''):'<p style="color:var(--tl);font-size:11px">No upcoming holidays</p>';
 h+=`</div></div>`;
-h+=`<div class="tc" style="margin-top:10px;padding:8px;background:#fff3e0;border-radius:8px;font-size:9px">📌 Late marks are added monthly by Admin from NCISM AEBS Portal. 6 Late = 1 Day Penalty.</div>`;
+h+=`<div class="tc" style="margin-top:10px;padding:8px;background:#fff3e0;border-radius:8px;font-size:9px">📌 Late marks added monthly from NCISM AEBS Portal by Admin. 6 Late = 1 Day Penalty.</div>`;
 c.innerHTML=h;
 }
 
-function yrBtns(){return`<div class="flx nopr mb8"><div style="display:flex;gap:4px">${YEARS.map(y=>`<button class="yrb ${y===S.yr?'act':''}" onclick="S.yr='${y}';nav(S.pg)">${y}</button>`).join('')}</div></div>`}
+// ===== DEPT STAFF STATUS (Admin Only - New Page) =====
+function pgDeptStat(c){
+let af=DB.faculty.filter(f=>f.status==='active');
+let h=`<div class="ptitle">📈 Department Staff Status (UG 100 Seats - NCISM/MUHS Schedule IV)</div>`;
 
-// ============ MY PROFILE ============
+DEPTS.forEach(d=>{
+let dFac=af.filter(f=>f.dept===d.name);
+let profs=dFac.filter(f=>f.desig==='Professor'||f.desig==='Principal');
+let assocs=dFac.filter(f=>f.desig==='Associate Professor'||f.desig==='Reader');
+let assts=dFac.filter(f=>f.desig==='Assistant Professor'||f.desig==='Lecturer');
+
+h+=`<div class="card"><div class="chdr" style="background:#e8eaf6">${d.name}</div><div class="cbody">
+<table style="width:100%;border-collapse:collapse;font-size:11px">
+<tr style="background:var(--p);color:#fff"><th style="padding:5px">Designation</th><th style="padding:5px">Required</th><th style="padding:5px">Available</th><th style="padding:5px">Names</th><th style="padding:5px">Status</th></tr>
+<tr><td style="padding:4px;border:1px solid var(--bd)">Professor</td><td style="text-align:center;border:1px solid var(--bd)">1</td><td style="text-align:center;border:1px solid var(--bd);font-weight:700">${profs.length}</td><td style="border:1px solid var(--bd);font-size:10px">${profs.map(f=>f.name).join(', ')||'-'}</td><td style="text-align:center;border:1px solid var(--bd)">${profs.length>=1?'✅':'❌'}</td></tr>
+<tr style="background:#f9f9f9"><td style="padding:4px;border:1px solid var(--bd)">Associate Prof</td><td style="text-align:center;border:1px solid var(--bd)">${d.staff.assoc}</td><td style="text-align:center;border:1px solid var(--bd);font-weight:700">${assocs.length}</td><td style="border:1px solid var(--bd);font-size:10px">${assocs.map(f=>f.name).join(', ')||'-'}</td><td style="text-align:center;border:1px solid var(--bd)">${assocs.length>=d.staff.assoc?'✅':'❌'}</td></tr>
+<tr><td style="padding:4px;border:1px solid var(--bd)">Assistant Prof</td><td style="text-align:center;border:1px solid var(--bd)">${d.staff.asst}</td><td style="text-align:center;border:1px solid var(--bd);font-weight:700">${assts.length}</td><td style="border:1px solid var(--bd);font-size:10px">${assts.map(f=>f.name).join(', ')||'-'}</td><td style="text-align:center;border:1px solid var(--bd)">${assts.length>=d.staff.asst?'✅':'❌'}</td></tr>
+</table></div></div>`;
+});
+c.innerHTML=h;
+}
+
+// ===== MY PROFILE =====
 function pgMyProf(c){
 let f=DB.faculty.find(x=>x.id===S.user.fid);
 if(!f){c.innerHTML='<div class="ptitle">Profile not found</div>';return}
 let ph=f.photo?`<img src="${f.photo}">`:'👤';
 c.innerHTML=`<div class="ptitle">👤 My Profile</div>
 <div class="card"><div class="cbody"><div class="pgrid">
-<div class="pharea">
-<div class="photo">${ph}</div>
+<div class="pharea"><div class="photo">${ph}</div>
 <input type="file" id="phUp" accept="image/jpeg,image/png" style="display:none" onchange="upPhoto(this)">
 <button class="btn btn-s bp" onclick="$('phUp').click()">📷 Photo</button>
-<p style="font-size:8px;color:var(--tl);margin-top:3px">Max 1MB, JPG/PNG</p>
-</div>
+<p style="font-size:8px;color:var(--tl);margin-top:3px">Max 1MB, JPG/PNG</p></div>
 <div class="pdet">
 <div class="pf"><label>Name</label><div class="val">${f.name}</div></div>
 <div class="pf"><label>Code</label><div class="val">${f.code}</div></div>
 <div class="pf"><label>Designation</label><div class="val">${f.desig}</div></div>
-<div class="pf"><label>Department</label><div class="val">${f.dept}</div></div>
+<div class="pf"><label>Department</label><div class="val" style="font-size:10px">${f.dept}</div></div>
 <div class="pf"><label>Date of Joining</label><div class="val">${f.doj||'-'}</div></div>
 <div class="pf"><label>Experience</label><div class="val"><span class="exp">${calcExp(f.doj)}</span></div></div>
 <div class="pf"><label>University Approved</label><div class="val">${f.univApproved||'No'}</div></div>
@@ -513,178 +478,96 @@ c.innerHTML=`<div class="ptitle">👤 My Profile</div>
 <div class="pf"><label>Phone</label><input type="text" id="pf_ph" value="${f.phone||''}"></div>
 <div class="pf pfull"><label>Email</label><input type="email" id="pf_em" value="${f.email||''}"></div>
 <div class="pf pfull tr"><button class="btn bs" onclick="savProf()">💾 Save Changes</button></div>
-</div>
-</div></div></div>`;
+</div></div></div></div>`;
 }
+function savProf(){let f=DB.faculty.find(x=>x.id===S.user.fid);if(!f)return;f.dob=$('pf_dob').value;f.phone=$('pf_ph').value;f.email=$('pf_em').value;save();toast('Profile updated!');pgMyProf($('cnt'))}
+function upPhoto(inp){let file=inp.files[0];if(!file)return;if(file.size>1048576){toast('Max 1MB!','te');return}if(!file.type.match('image/(jpeg|png)')){toast('JPG/PNG only!','te');return}let r=new FileReader();r.onload=e=>{let f=DB.faculty.find(x=>x.id===S.user.fid);if(f){f.photo=e.target.result;save();toast('Photo uploaded!');pgMyProf($('cnt'))}};r.readAsDataURL(file)}
 
-function savProf(){
-let f=DB.faculty.find(x=>x.id===S.user.fid);if(!f)return;
-f.dob=$('pf_dob').value;f.phone=$('pf_ph').value;f.email=$('pf_em').value;
-save();toast('Profile updated!');pgMyProf($('cnt'));
-}
-
-function upPhoto(inp){
-let file=inp.files[0];if(!file)return;
-if(file.size>1024*1024){toast('Max 1MB!','te');return}
-if(!file.type.match('image/(jpeg|png)')){toast('JPG/PNG only!','te');return}
-let r=new FileReader();
-r.onload=e=>{
-let f=DB.faculty.find(x=>x.id===S.user.fid);if(!f)return;
-f.photo=e.target.result;save();toast('Photo uploaded!');pgMyProf($('cnt'));
-};r.readAsDataURL(file);
-}
-
-// ============ MY LEAVES ============
-function pgMyLeav(c){
-let fid=S.user.fid;let yl=DB.leaves[S.yr]||{};let lv=yl[fid]||{};let r=calcRow(lv);
-let v=k=>parseFloat(lv[k])||0;
-c.innerHTML=`<div class="ptitle">📋 My Leave Record - ${S.yr}</div>${yrBtns()}
-<div class="flx nopr mb8"><div></div><button class="btn bi btn-s" onclick="printMyRec()">🖨️ Print My Record</button></div>
+// ===== MY LEAVES =====
+function pgMyLeav(c){let fid=S.user.fid;let yl=DB.leaves[S.yr]||{};let lv=yl[fid]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
+c.innerHTML=`<div class="ptitle">📋 My Leave Record - ${S.yr}</div>${yrBtns()}<div class="flx nopr mb8"><div></div><button class="btn bi btn-s" onclick="printMyRec()">🖨️ Print</button></div>
 <div class="card"><div class="chdr">Leave Summary</div><div class="cbody">
 <table style="width:100%;border-collapse:collapse;font-size:11px">
 <tr style="background:var(--p);color:#fff"><th style="padding:6px;text-align:left">Leave Type</th><th style="padding:6px">Limit</th><th style="padding:6px">Used</th><th style="padding:6px">Balance</th></tr>
-${[
-['CL',8,v('cl'),r.cl_b],['ML',10,v('ml'),r.ml_b],
-[`EL (Open:${r.el_o}+15)`,r.el_t,v('el_u'),r.el_b],
-['OD','-',v('od'),'-'],['RH',2,v('rh'),r.rh_b],
-['SL',15,v('sl'),r.sl_b],['Mat',180,v('mat'),r.mat_b],
-['Pat',15,v('pat'),r.pat_b],['SD',120,v('sd'),r.sd_b]
-].map((x,i)=>`<tr style="background:${i%2?'#f9f9f9':'#fff'}"><td style="padding:6px;border-bottom:1px solid var(--bd);font-weight:600">${x[0]}</td><td style="text-align:center;padding:6px;border-bottom:1px solid var(--bd)">${x[1]}</td><td style="text-align:center;padding:6px;border-bottom:1px solid var(--bd)">${x[2]}</td><td style="text-align:center;padding:6px;border-bottom:1px solid var(--bd)" class="${typeof x[3]==='number'?bc(x[3]):''}">${x[3]}</td></tr>`).join('')}
-<tr style="background:#fff3e0"><td style="padding:6px;font-weight:700">Late → Penalty (1/6)</td><td style="text-align:center;padding:6px">${r.lc}</td><td colspan="2" style="text-align:center;padding:6px;color:var(--a);font-weight:800">${r.ld} day(s) ded ${r.ovf>0?'('+r.ovf+' LWP)':''}</td></tr>
+${[['CL',8,v('cl'),r.cl_b],['ML',10,v('ml'),r.ml_b],[`EL (Open:${r.el_o}+15)`,r.el_t,v('el_u'),r.el_b],['OD','-',v('od'),'-'],['RH',2,v('rh'),r.rh_b],['SL',15,v('sl'),r.sl_b],['Mat',180,v('mat'),r.mat_b],['Pat',15,v('pat'),r.pat_b],['SD',120,v('sd'),r.sd_b]].map((x,i)=>`<tr style="background:${i%2?'#f9f9f9':'#fff'}"><td style="padding:6px;border-bottom:1px solid var(--bd);font-weight:600">${x[0]}</td><td style="text-align:center;padding:6px;border-bottom:1px solid var(--bd)">${x[1]}</td><td style="text-align:center;padding:6px;border-bottom:1px solid var(--bd)">${x[2]}</td><td style="text-align:center;padding:6px;border-bottom:1px solid var(--bd)" class="${typeof x[3]==='number'?bc(x[3]):''}">${x[3]}</td></tr>`).join('')}
+<tr style="background:#fff3e0"><td style="padding:6px;font-weight:700">Late → Penalty (1/6)</td><td style="text-align:center;padding:6px">${r.lc}</td><td colspan="2" style="text-align:center;padding:6px;color:var(--a);font-weight:800">${r.ld} day(s) ${r.ovf>0?'('+r.ovf+' LWP)':''}</td></tr>
 <tr style="background:#ffebee"><td style="padding:6px;font-weight:700">LWP</td><td style="text-align:center;padding:6px">-</td><td style="text-align:center;padding:6px">${v('lwp')}</td><td style="text-align:center;padding:6px;color:var(--a);font-weight:800">${r.tu}</td></tr>
 </table>
 <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:10px;padding:8px;background:#f5f5f5;border-radius:6px">
-<span style="font-weight:700;color:var(--s)">PAID: ${r.tp}</span>
-<span style="font-weight:700;color:var(--a)">UNPAID: ${r.tu}</span>
-<span style="font-weight:900;background:yellow;padding:1px 6px;border-radius:3px">TOTAL: ${r.gt}</span>
-</div>
-</div></div>`;
-}
+<span style="font-weight:700;color:var(--s)">PAID: ${r.tp}</span><span style="font-weight:700;color:var(--a)">UNPAID: ${r.tu}</span>
+<span style="font-weight:900;background:yellow;padding:1px 6px;border-radius:3px">TOTAL: ${r.gt}</span></div></div></div>`}
 
-function printMyRec(){
-let f=DB.faculty.find(x=>x.id===S.user.fid);if(!f)return;
-let yl=DB.leaves[S.yr]||{};let lv=yl[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
-let ps=$('printSec');
+function printMyRec(){let f=DB.faculty.find(x=>x.id===S.user.fid);if(!f)return;let yl=DB.leaves[S.yr]||{};let lv=yl[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;let ps=$('printSec');
 ps.innerHTML=getPH()+`<div class="ic2"><div style="display:flex;justify-content:space-between;border-bottom:1px solid #000;padding-bottom:2px;margin-bottom:4px"><span style="font-size:12px;font-weight:bold">${f.name}</span><span style="font-weight:bold">${S.yr}</span></div>
-<div style="font-size:9px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:2px;margin-bottom:4px"><div><b>Desig:</b> ${f.desig}</div><div><b>Dept:</b> ${f.dept}</div><div><b>Code:</b> ${f.code}</div><div><b>Exp:</b> ${calcExp(f.doj)}</div></div>
+<div style="font-size:9px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:2px;margin-bottom:4px"><div><b>Desig:</b> ${f.desig}</div><div><b>Dept:</b> ${f.dept.split('(')[0]}</div><div><b>Code:</b> ${f.code}</div><div><b>Exp:</b> ${calcExp(f.doj)}</div></div>
 <table class="rt"><tr><th>Type</th><th>Limit</th><th>Used</th><th>Bal</th><th>Type</th><th>Limit</th><th>Used</th><th>Bal</th></tr>
 <tr><td>CL</td><td>8</td><td>${v('cl')}</td><td>${r.cl_b}</td><td>ML</td><td>10</td><td>${v('ml')}</td><td>${r.ml_b}</td></tr>
 <tr><td>EL(${r.el_o}+15)</td><td>${r.el_t}</td><td>${v('el_u')}</td><td>${r.el_b}</td><td>SL</td><td>15</td><td>${v('sl')}</td><td>${r.sl_b}</td></tr>
 <tr><td>Mat</td><td>180</td><td>${v('mat')}</td><td>${r.mat_b}</td><td>Pat</td><td>15</td><td>${v('pat')}</td><td>${r.pat_b}</td></tr>
-<tr><td>RH</td><td>2</td><td>${v('rh')}</td><td>${r.rh_b}</td><td>OD</td><td>-</td><td>${v('od')}</td><td>-</td></tr>
-</table>
-<div style="font-size:9px;margin-top:2px"><b>Late:</b> ${r.lc} → Penalty: ${r.ld} | LWP: ${v('lwp')} | Overflow: ${r.ovf}</div>
+<tr><td>RH</td><td>2</td><td>${v('rh')}</td><td>${r.rh_b}</td><td>OD</td><td>-</td><td>${v('od')}</td><td>-</td></tr></table>
+<div style="font-size:9px;margin-top:2px"><b>Late:</b> ${r.lc} → Ded: ${r.ld} | LWP: ${v('lwp')} | Overflow: ${r.ovf}</div>
 <div style="display:flex;justify-content:flex-end;gap:8px;font-weight:bold;font-size:10px;margin-top:3px;border-top:1px solid #000;padding-top:2px">
-<span>PAID: ${r.tp}</span><span style="color:red">UNPAID: ${r.tu}</span><span style="background:yellow;padding:0 4px">TOTAL: ${r.gt}</span>
-</div></div>`;
-ps.style.display='block';window.print();setTimeout(()=>ps.style.display='none',500);
-}
+<span>PAID:${r.tp}</span><span style="color:red">UNPD:${r.tu}</span><span style="background:yellow;padding:0 4px">TOT:${r.gt}</span></div></div>`;
+ps.style.display='block';window.print();setTimeout(()=>ps.style.display='none',500)}
 
-// ============ APPLY LEAVE ============
-function pgApply(c){
-c.innerHTML=`<div class="ptitle">✍️ Apply for Leave</div>
-<div class="card"><div class="chdr">New Leave Application</div><div class="cbody">
-<div class="pdet">
-<div class="pf"><label>From Date *</label><input type="date" id="la_f"></div>
-<div class="pf"><label>To Date *</label><input type="date" id="la_t"></div>
+// ===== APPLY LEAVE =====
+function pgApply(c){c.innerHTML=`<div class="ptitle">✍️ Apply for Leave</div><div class="card"><div class="chdr">New Application</div><div class="cbody">
+<div class="pdet"><div class="pf"><label>From Date *</label><input type="date" id="la_f"></div><div class="pf"><label>To Date *</label><input type="date" id="la_t"></div>
 <div class="pf"><label>Leave Type *</label><select id="la_tp"><option value="">-- Select --</option>${ltOpts()}</select></div>
 <div class="pf"><label>Document (PDF, Max 1MB)</label><input type="file" id="la_doc" accept="application/pdf"></div>
 <div class="pf pfull"><label>Reason</label><input type="text" id="la_rs" placeholder="Reason (optional)"></div>
-<div class="pf pfull tr"><button class="btn bs" onclick="subApp()">📤 Submit</button></div>
-</div>
-<div style="margin-top:10px;padding:8px;background:#e1f5fe;border-radius:6px;font-size:10px">
-📌 Upload scanned leave application (PDF, max 1MB). Admin will review and update your leave record.
-</div>
-</div></div>`;
-}
+<div class="pf pfull tr"><button class="btn bs" onclick="subApp()">📤 Submit</button></div></div>
+<div style="margin-top:10px;padding:8px;background:#e1f5fe;border-radius:6px;font-size:10px">📌 Upload scanned leave application (PDF, max 1MB). Admin will review.</div></div></div>`}
 
-function subApp(){
-let f=$('la_f').value,t=$('la_t').value,tp=$('la_tp').value,rs=$('la_rs').value;
+function subApp(){let f=$('la_f').value,t=$('la_t').value,tp=$('la_tp').value,rs=$('la_rs').value;
 if(!f||!t||!tp){toast('Fill From, To & Type','tw2');return}
-let docIn=$('la_doc');let docData='';
-if(docIn.files.length>0){
-let file=docIn.files[0];
-if(file.size>1024*1024){toast('Max 1MB!','te');return}
-if(file.type!=='application/pdf'){toast('PDF only!','te');return}
-let reader=new FileReader();
-reader.onload=e=>{
-DB.apps.push({id:'A'+Date.now(),fid:S.user.fid,from:f,to:t,type:tp,reason:rs,doc:e.target.result,status:'Pending',dt:new Date().toISOString().split('T')[0],by:'',rdt:''});
-save();toast('Application submitted!');nav('myapps');
-};reader.readAsDataURL(file);
-}else{
-DB.apps.push({id:'A'+Date.now(),fid:S.user.fid,from:f,to:t,type:tp,reason:rs,doc:'',status:'Pending',dt:new Date().toISOString().split('T')[0],by:'',rdt:''});
-save();toast('Application submitted!');nav('myapps');
-}
-}
+let docIn=$('la_doc');
+let finish=(docData)=>{DB.apps.push({id:'A'+Date.now(),fid:S.user.fid,from:f,to:t,type:tp,reason:rs,doc:docData||'',status:'Pending',dt:new Date().toISOString().split('T')[0],by:'',rdt:''});save();toast('Submitted!');nav('myapps')};
+if(docIn.files.length>0){let file=docIn.files[0];if(file.size>1048576){toast('Max 1MB!','te');return}if(file.type!=='application/pdf'){toast('PDF only!','te');return}let r=new FileReader();r.onload=e=>finish(e.target.result);r.readAsDataURL(file)}else finish('')}
 
-// ============ MY APPLICATIONS ============
-function pgMyApps(c){
-let apps=DB.apps.filter(a=>a.fid===S.user.fid).reverse();
+// ===== MY APPLICATIONS =====
+function pgMyApps(c){let apps=DB.apps.filter(a=>a.fid===S.user.fid).reverse();
 c.innerHTML=`<div class="ptitle">📑 My Applications</div><div class="card"><div class="chdr">History</div><div class="cbody">`+
-(apps.length===0?'<p style="color:var(--tl);font-size:11px">No applications.</p>':
-apps.map(a=>{let cls=a.status==='Approved'?'appr':a.status==='Rejected'?'rej':'pend';
-let bdg=a.status==='Approved'?'bds':a.status==='Rejected'?'bdd':'bdw';
-return`<div class="lacard ${cls}"><div><b>${a.type}</b><br><span style="font-size:10px">${a.reason||'-'}</span></div>
-<div>📅 ${a.from} → ${a.to}</div><div><span class="badge ${bdg}">${a.status}</span></div>
-<div>${a.doc?`<a href="${a.doc}" target="_blank" class="btn btn-s bi">📄</a>`:''}</div></div>`}).join(''))
-+`</div></div>`;
-}
+(apps.length===0?'<p style="color:var(--tl);font-size:11px">No applications.</p>':apps.map(a=>{let cls=a.status==='Approved'?'appr':a.status==='Rejected'?'rej':'pend';let bdg=a.status==='Approved'?'bds':a.status==='Rejected'?'bdd':'bdw';
+return`<div class="lacard ${cls}"><div><b>${a.type}</b><br><span style="font-size:10px">${a.reason||'-'}</span></div><div>📅 ${a.from} → ${a.to}</div><div><span class="badge ${bdg}">${a.status}</span></div><div>${a.doc?`<a href="${a.doc}" target="_blank" class="btn btn-s bi">📄</a>`:''}</div></div>`}).join(''))+`</div></div>`}
 
-// ============ LEAVE POLICY ============
-function pgPolicy(c){
-c.innerHTML=`<div class="ptitle">📜 Leave Policy</div>
-<div class="card"><div class="chdr">DAMCH Teaching Faculty Leave Policy (Effective 2025)</div><div class="cbody">
+// ===== POLICY =====
+function pgPolicy(c){c.innerHTML=`<div class="ptitle">📜 Leave Policy</div><div class="card"><div class="chdr">DAMCH Teaching Faculty Leave Policy (Effective 2025)</div><div class="cbody">
 <table class="ptbl"><thead><tr><th>Sr</th><th>Type</th><th>Code</th><th>Limit/Year</th><th>Paid/Unpaid</th><th>Details</th></tr></thead><tbody>
 <tr><td>1</td><td>Casual Leave</td><td>CL</td><td>8</td><td>Paid</td><td>Non-accumulative. Max 3 days stretch.</td></tr>
-<tr><td>2</td><td>Medical Leave</td><td>ML</td><td>10</td><td>Paid</td><td>Certificate needed >2 days. Non-accumulative.</td></tr>
-<tr class="hl"><td>3</td><td>Earned Leave</td><td>EL</td><td>15+CF</td><td>Paid</td><td>15 new/year + carry forward balance. Accumulative. Encashable.</td></tr>
-<tr><td>4</td><td>On Duty</td><td>OD</td><td>As needed</td><td>Paid</td><td>Official work, seminars. Prior approval needed.</td></tr>
+<tr><td>2</td><td>Medical Leave</td><td>ML</td><td>10</td><td>Paid</td><td>Certificate >2 days. Non-accumulative.</td></tr>
+<tr class="hl"><td>3</td><td>Earned Leave</td><td>EL</td><td>15+CF</td><td>Paid</td><td>15 new/year + carry forward. Accumulative. Encashable.</td></tr>
+<tr><td>4</td><td>On Duty</td><td>OD</td><td>As needed</td><td>Paid</td><td>Seminars, conferences. Prior approval.</td></tr>
 <tr><td>5</td><td>Restricted Holiday</td><td>RH</td><td>2</td><td>Paid</td><td>Gazetted holidays not in list.</td></tr>
 <tr><td>6</td><td>Study Leave</td><td>SL</td><td>15</td><td>Paid</td><td>Academic, research, paper presentation.</td></tr>
-<tr><td>7</td><td>Maternity</td><td>Mat</td><td>180</td><td>Paid</td><td>As per govt norms. Medical docs needed.</td></tr>
+<tr><td>7</td><td>Maternity</td><td>Mat</td><td>180</td><td>Paid</td><td>As per govt norms.</td></tr>
 <tr><td>8</td><td>Paternity</td><td>Pat</td><td>15</td><td>Paid</td><td>Within 6 months of birth.</td></tr>
-<tr><td>9</td><td>Special Disability</td><td>SD</td><td>120</td><td>Paid</td><td>Medical board certification required.</td></tr>
-<tr class="hl"><td>10</td><td>Leave Without Pay</td><td>LWP</td><td>∞</td><td>Unpaid</td><td>When paid leave exhausted. Salary deducted.</td></tr>
+<tr><td>9</td><td>Special Disability</td><td>SD</td><td>120</td><td>Paid</td><td>Medical board cert required.</td></tr>
+<tr class="hl"><td>10</td><td>Leave Without Pay</td><td>LWP</td><td>∞</td><td>Unpaid</td><td>When paid leave exhausted.</td></tr>
 </tbody></table>
 <h4 style="color:var(--a);margin:12px 0 6px">⚠️ Late Penalty (1/6 Rule)</h4>
 <div style="background:#fff3e0;padding:10px;border-radius:6px;border-left:3px solid var(--w);font-size:11px;margin-bottom:10px">
-<b>6 Late marks = 1 day deduction from paid leave.</b><br>
-Late marks from NCISM AEBS Portal added monthly by Admin. Penalty adjusted against CL, ML, RH & EL. If exhausted → LWP.<br>
-<b>Example:</b> 18 late → 3 penalty days from paid balance.
-</div>
+<b>6 Late marks = 1 day deduction from paid leave.</b><br>Late marks from NCISM AEBS Portal added monthly by Admin. Adjusted against CL,ML,RH & EL. If exhausted → LWP.</div>
 <h4 style="color:var(--i);margin:12px 0 6px">📋 EL Carry Forward</h4>
-<div style="background:#e1f5fe;padding:10px;border-radius:6px;border-left:3px solid var(--i);font-size:11px">
-Year-end EL balance (after late penalty) carries forward. <b>Next Year EL = Opening (CF) + 15 (New)</b>
-</div>
-</div></div>`;
-}
+<div style="background:#e1f5fe;padding:10px;border-radius:6px;border-left:3px solid var(--i);font-size:11px"><b>Next Year EL = Opening (CF) + 15 (New)</b></div>
+<h4 style="color:var(--p);margin:12px 0 6px">📌 Attendance Requirement (MUHS LIC Norms)</h4>
+<div style="background:#e8eaf6;padding:10px;border-radius:6px;border-left:3px solid var(--p);font-size:11px">As per MUHS LIC Proforma Chapter IV, minimum 75% attendance is required for all teaching faculty. Faculty below 75% attendance will be flagged in the annual report.</div>
+</div></div>`}
 
-// ============ HOLIDAYS ============
-function pgHols(c){
-let yh=DB.holidays.filter(x=>x.yr===S.yr).sort((a,b)=>a.dt.localeCompare(b.dt));
-c.innerHTML=`<div class="ptitle">🎉 Holidays - ${S.yr}</div>${yrBtns()}
-<div class="card"><div class="chdr">Holiday List</div><div class="cbody">`+
-(yh.length?yh.map(h=>`<div class="hrow"><span class="hdate">${h.dt}</span><span class="hname">${h.nm}</span><span class="badge bdi">${h.tp||'General'}</span></div>`).join(''):
-'<p style="color:var(--tl);font-size:11px">No holidays for this year.</p>')+
-`</div></div>`;
-}
+// ===== HOLIDAYS =====
+function pgHols(c){let yh=DB.holidays.filter(x=>x.yr===S.yr).sort((a,b)=>a.dt.localeCompare(b.dt));
+c.innerHTML=`<div class="ptitle">🎉 Holidays - ${S.yr}</div>${yrBtns()}<div class="card"><div class="chdr">Holiday List</div><div class="cbody">`+
+(yh.length?yh.map(h=>`<div class="hrow"><span class="hdate">${h.dt}</span><span class="hname">${h.nm}</span><span class="badge bdi">${h.tp||'General'}</span></div>`).join(''):'<p style="color:var(--tl);font-size:11px">No holidays.</p>')+`</div></div>`}
 
-// ============ ADMIN: LEAVE TABLE ============
-function pgATbl(c){
-let yl=DB.leaves[S.yr]||{};
-let sf=sortFac(DB.faculty.filter(f=>f.status==='active'));
-let rows=sf.map((f,i)=>{
-let lv=yl[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
-return`<tr>
-<td>${i+1}</td>
-<td class="nc"><b>${f.name}</b><br><span style="font-size:9px">${f.desig||''} | ${(f.dept||'').split('(')[0].trim()}</span><br><span class="exp">${calcExp(f.doj)}</span></td>
+// ===== ADMIN: LEAVE TABLE =====
+function pgATbl(c){let yl=DB.leaves[S.yr]||{};let sf=sortFac(DB.faculty.filter(f=>f.status==='active'));
+let rows=sf.map((f,i)=>{let lv=yl[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
+return`<tr><td>${i+1}</td><td class="nc"><b>${f.name}</b><br><span style="font-size:9px">${f.desig||''} | ${(f.dept||'').split('(')[0].trim()}</span><br><span class="exp">${calcExp(f.doj)}</span></td>
 <td><input class="ci" type="number" value="${v('cl')}" onchange="uL('${f.id}','cl',this.value)"></td><td class="${bc(r.cl_b)}">${r.cl_b}</td>
 <td><input class="ci" type="number" value="${v('ml')}" onchange="uL('${f.id}','ml',this.value)"></td><td class="${bc(r.ml_b)}">${r.ml_b}</td>
 <td><input class="ci" type="number" value="${v('od')}" onchange="uL('${f.id}','od',this.value)"></td>
-<td><input class="ci" type="number" value="${v('el_open')}" onchange="uL('${f.id}','el_open',this.value)" style="background:#e1f5fe;width:32px"></td>
-<td class="bc">15</td><td class="bc">${r.el_t}</td>
-<td><input class="ci" type="number" value="${v('el_u')}" onchange="uL('${f.id}','el_u',this.value)"></td>
-<td style="color:#1565c0;font-weight:800">${r.el_b}</td>
+<td><input class="ci" type="number" value="${v('el_open')}" onchange="uL('${f.id}','el_open',this.value)" style="background:#e1f5fe;width:32px"></td><td class="bc">15</td><td class="bc">${r.el_t}</td>
+<td><input class="ci" type="number" value="${v('el_u')}" onchange="uL('${f.id}','el_u',this.value)"></td><td style="color:#1565c0;font-weight:800">${r.el_b}</td>
 <td><input class="ci" type="number" value="${v('lat')}" onchange="uL('${f.id}','lat',this.value)"></td><td class="bc bneg">${r.ld}</td>
 <td><input class="ci" type="number" value="${v('mat')}" onchange="uL('${f.id}','mat',this.value)"></td><td class="${bc(r.mat_b)}">${r.mat_b}</td>
 <td><input class="ci" type="number" value="${v('pat')}" onchange="uL('${f.id}','pat',this.value)"></td><td class="${bc(r.pat_b)}">${r.pat_b}</td>
@@ -693,99 +576,56 @@ return`<tr>
 <td><input class="ci" type="number" value="${v('rh')}" onchange="uL('${f.id}','rh',this.value)"></td><td class="${bc(r.rh_b)}">${r.rh_b}</td>
 <td class="tp">${r.tp}</td>
 <td><input class="ci" type="number" value="${v('lwp')}" onchange="uL('${f.id}','lwp',this.value)">${r.ovf>0?`<div style="font-size:7px;color:var(--a);font-weight:700">(+${r.ovf})</div>`:''}</td>
-<td class="tu">${r.tu}</td><td class="tg">${r.gt}</td></tr>`;
-}).join('');
-
+<td class="tu">${r.tu}</td><td class="tg">${r.gt}</td></tr>`}).join('');
 c.innerHTML=`<div class="ptitle">📊 Leave Master Table - ${S.yr}</div>
 <div class="flx nopr mb8"><div style="display:flex;gap:4px">${YEARS.map(y=>`<button class="yrb ${y===S.yr?'act':''}" onclick="S.yr='${y}';nav('atbl')">${y}</button>`).join('')}</div>
-<div style="display:flex;gap:4px"><button class="btn bg btn-s" onclick="doCF()">⚡ EL Carry Forward</button><button class="btn bi btn-s" onclick="nav('arpt')">🖨️ Reports</button></div>
-</div>
-<div class="card"><div class="chdr">Record: ${S.yr} <span class="badge bdp">${sf.length} Faculty</span></div>
-<div class="tw"><table class="dt"><thead>
+<div style="display:flex;gap:4px"><button class="btn bg2 btn-s" onclick="doCF()">⚡ EL Carry Forward</button><button class="btn bi btn-s" onclick="nav('arpt')">🖨️ Reports</button></div></div>
+<div class="card"><div class="chdr">Record: ${S.yr} <span class="badge bdp">${sf.length} Faculty</span></div><div class="tw"><table class="dt"><thead>
 <tr><th rowspan="3" style="width:28px">Sr</th><th rowspan="3" style="min-width:200px;text-align:left">Faculty</th>
 <th colspan="23" class="thp">PAID LEAVE</th><th colspan="2" class="thu">UNPAID</th><th rowspan="3" style="background:#333">GRAND<br>TOT</th></tr>
-<tr><th colspan="2" class="thp">CL(8)</th><th colspan="2" class="thp">ML(10)</th><th class="thp">OD</th>
-<th colspan="5" class="thel">EL(Earned)</th><th colspan="2" class="thlt">Late(1/6)</th>
-<th colspan="2" class="thp">Mat(180)</th><th colspan="2" class="thp" style="background:#004d40!important">Pat(15)</th>
-<th colspan="2" class="thp">SL(15)</th><th colspan="2" class="thp">SD(120)</th><th colspan="2" class="thp">RH(2)</th>
+<tr><th colspan="2" class="thp">CL(8)</th><th colspan="2" class="thp">ML(10)</th><th class="thp">OD</th><th colspan="5" class="thel">EL(Earned)</th><th colspan="2" class="thlt">Late(1/6)</th>
+<th colspan="2" class="thp">Mat(180)</th><th colspan="2" class="thp" style="background:#004d40!important">Pat(15)</th><th colspan="2" class="thp">SL(15)</th><th colspan="2" class="thp">SD(120)</th><th colspan="2" class="thp">RH(2)</th>
 <th rowspan="2" style="background:#333">PAID<br>TOT</th><th class="thu">LWP</th><th rowspan="2" class="thu">UNPD<br>TOT</th></tr>
 <tr class="thsub"><th>U</th><th>B</th><th>U</th><th>B</th><th>U</th><th>Op</th><th>Nw</th><th>Tot</th><th>U</th><th>B</th><th>Cnt</th><th>Ded</th><th>U</th><th>B</th><th>U</th><th>B</th><th>U</th><th>B</th><th>U</th><th>B</th><th>U</th><th>B</th><th>U</th></tr>
 </thead><tbody>${rows}</tbody></table></div></div>
-<div class="tc" style="margin-top:8px;padding:6px;background:#fff3e0;border-radius:6px;font-size:9px">📌 Late marks updated monthly from NCISM AEBS Portal | 6 Late = 1 Penalty Day</div>`;
-}
+<div class="tc" style="margin-top:8px;padding:6px;background:#fff3e0;border-radius:6px;font-size:9px">📌 Late marks from NCISM AEBS Portal monthly | 6 Late = 1 Penalty Day | Attendance ≥75% required (MUHS LIC)</div>`}
 
-function uL(fid,k,v){
-if(!DB.leaves[S.yr])DB.leaves[S.yr]={};
-if(!DB.leaves[S.yr][fid])DB.leaves[S.yr][fid]={cl:0,ml:0,od:0,el_open:0,el_u:0,lat:0,mat:0,pat:0,sl:0,sd:0,rh:0,lwp:0};
-DB.leaves[S.yr][fid][k]=parseFloat(v)||0;save();pgATbl($('cnt'));
-}
+function uL(fid,k,v){if(!DB.leaves[S.yr])DB.leaves[S.yr]={};if(!DB.leaves[S.yr][fid])DB.leaves[S.yr][fid]={cl:0,ml:0,od:0,el_open:0,el_u:0,lat:0,mat:0,pat:0,sl:0,sd:0,rh:0,lwp:0};DB.leaves[S.yr][fid][k]=parseFloat(v)||0;save();pgATbl($('cnt'))}
 
-function doCF(){
-let fy=prompt('FROM year:','2025');if(!fy)return;
-let ty=prompt('TO year:','2026');if(!ty)return;
-if(!confirm(`Calculate EL Carry Forward ${fy} → ${ty}?\nThis overwrites Opening EL in ${ty}.`))return;
-DB.faculty.filter(f=>f.status==='active').forEach(f=>{
-let lv=(DB.leaves[fy]||{})[f.id]||{};let r=calcRow(lv);
-let pen=r.ld;let oa=Math.max(0,r.cl_b+r.ml_b+r.rh_b);
-let pel=pen>oa?pen-oa:0;let ael=Math.max(0,r.el_b-pel);
-if(!DB.leaves[ty])DB.leaves[ty]={};
-if(!DB.leaves[ty][f.id])DB.leaves[ty][f.id]={cl:0,ml:0,od:0,el_open:0,el_u:0,lat:0,mat:0,pat:0,sl:0,sd:0,rh:0,lwp:0};
-DB.leaves[ty][f.id].el_open=ael;
-});
-save();S.yr=ty;toast('Carry Forward done! Showing '+ty);nav('atbl');
-}
+function doCF(){let fy=prompt('FROM year:','2025');if(!fy)return;let ty=prompt('TO year:','2026');if(!ty)return;
+if(!confirm(`EL Carry Forward ${fy} → ${ty}?`))return;
+DB.faculty.filter(f=>f.status==='active').forEach(f=>{let lv=(DB.leaves[fy]||{})[f.id]||{};let r=calcRow(lv);let pen=r.ld;let oa=Math.max(0,r.cl_b+r.ml_b+r.rh_b);let pel=pen>oa?pen-oa:0;let ael=Math.max(0,r.el_b-pel);
+if(!DB.leaves[ty])DB.leaves[ty]={};if(!DB.leaves[ty][f.id])DB.leaves[ty][f.id]={cl:0,ml:0,od:0,el_open:0,el_u:0,lat:0,mat:0,pat:0,sl:0,sd:0,rh:0,lwp:0};DB.leaves[ty][f.id].el_open=ael});
+save();S.yr=ty;toast('Done! Showing '+ty);nav('atbl')}
 
-// ============ ADMIN: MANAGE FACULTY ============
-function pgAFac(c){
-let sf=sortFac(DB.faculty.filter(f=>f.status==='active'));
-let rows=sf.map((f,i)=>`<tr>
-<td>${i+1}</td><td class="nc"><b>${f.name}</b><br><span style="font-size:9px">${f.code||'-'}</span></td>
-<td>${f.desig||'-'}</td><td style="font-size:9px">${(f.dept||'-').split('(')[0].trim()}</td>
-<td>${f.doj||'-'}</td><td><span class="exp">${calcExp(f.doj)}</span></td>
-<td>${f.univApproved||'No'}</td>
-<td><button class="btn btn-s bp" onclick="editFac('${f.id}')">✏️</button> <button class="btn btn-s ba" onclick="remFac('${f.id}','${f.name}')">🗑️</button></td>
-</tr>`).join('');
+// ===== ADMIN: MANAGE FACULTY =====
+function pgAFac(c){let sf=sortFac(DB.faculty.filter(f=>f.status==='active'));
+let rows=sf.map((f,i)=>`<tr><td>${i+1}</td><td class="nc"><b>${f.name}</b><br><span style="font-size:9px">${f.code||'-'}</span></td>
+<td style="font-size:10px">${f.desig||'-'}</td><td style="font-size:9px">${(f.dept||'-').split('(')[0].trim()}</td><td>${f.doj||'-'}</td><td><span class="exp">${calcExp(f.doj)}</span></td><td>${f.univApproved||'No'}</td>
+<td><button class="btn btn-s bp" onclick="editFac('${f.id}')">✏️</button> <button class="btn btn-s ba" onclick="remFac('${f.id}','${f.name.replace(/'/g,"\\'")}')">🗑️</button></td></tr>`).join('');
+c.innerHTML=`<div class="ptitle">👥 Manage Faculty (${sf.length} Active)</div>
+<div class="flx nopr mb8"><span class="badge bdp">${sf.length} Active | Required: ~${DEPTS.reduce((s,d)=>s+1+d.staff.assoc+d.staff.asst,0)+1} (incl. Principal)</span><button class="btn bs" onclick="addFac()">➕ Add Faculty</button></div>
+<div class="card"><div class="tw"><table class="dt"><thead><tr><th>Sr</th><th style="text-align:left">Name/Code</th><th>Designation</th><th>Department</th><th>DOJ</th><th>Exp</th><th>Univ</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table></div></div>`}
 
-c.innerHTML=`<div class="ptitle">👥 Manage Faculty</div>
-<div class="flx nopr mb8"><span class="badge bdp">${sf.length} Active</span><button class="btn bs" onclick="addFac()">➕ Add Faculty</button></div>
-<div class="card"><div class="tw"><table class="dt"><thead><tr>
-<th>Sr</th><th style="text-align:left">Name/Code</th><th>Designation</th><th>Department</th><th>DOJ</th><th>Exp</th><th>Univ.Appr</th><th>Action</th>
-</tr></thead><tbody>${rows}</tbody></table></div></div>`;
-}
-
-function addFac(){
-opMod(`<div class="mhdr"><h3>➕ Add Faculty</h3><button class="mcls" onclick="clsMod()">✕</button></div>
-<div class="mbody"><div class="pdet">
+function addFac(){opMod(`<div class="mhdr"><h3>➕ Add Faculty</h3><button class="mcls" onclick="clsMod()">✕</button></div><div class="mbody"><div class="pdet">
 <div class="pf pfull"><label>Full Name *</label><input type="text" id="nf_nm"></div>
 <div class="pf"><label>Designation</label><select id="nf_dg"><option value="">--</option>${dgOpts()}</select></div>
 <div class="pf"><label>Department</label><select id="nf_dp"><option value="">--</option>${dOpts()}</select></div>
-<div class="pf"><label>Teacher Code</label><input type="text" id="nf_cd" placeholder="e.g. TC051"></div>
-<div class="pf"><label>DOJ</label><input type="date" id="nf_dj"></div>
-<div class="pf"><label>DOB</label><input type="date" id="nf_db"></div>
-<div class="pf"><label>Phone</label><input type="text" id="nf_ph"></div>
-<div class="pf"><label>Email</label><input type="email" id="nf_em"></div>
+<div class="pf"><label>Teacher Code</label><input type="text" id="nf_cd" placeholder="TC051"></div>
+<div class="pf"><label>DOJ</label><input type="date" id="nf_dj"></div><div class="pf"><label>DOB</label><input type="date" id="nf_db"></div>
+<div class="pf"><label>Phone</label><input type="text" id="nf_ph"></div><div class="pf"><label>Email</label><input type="email" id="nf_em"></div>
 <div class="pf"><label>Univ Approved</label><select id="nf_ua"><option>No</option><option>Yes</option><option>Applied</option></select></div>
-</div></div>
-<div class="mft"><button class="btn bgh" onclick="clsMod()">Cancel</button><button class="btn bs" onclick="savNewFac()">💾 Save & Create Account</button></div>`);
-}
+</div></div><div class="mft"><button class="btn bgh" onclick="clsMod()">Cancel</button><button class="btn bs" onclick="savNewFac()">💾 Save</button></div>`)}
 
-function savNewFac(){
-let nm=$('nf_nm').value.trim();if(!nm){toast('Name required','tw2');return}
-let cd=$('nf_cd').value.trim()||('TC'+Date.now().toString().slice(-4));
-let fid='F'+Date.now();
+function savNewFac(){let nm=$('nf_nm').value.trim();if(!nm){toast('Name required','tw2');return}
+let cd=$('nf_cd').value.trim()||('TC'+Date.now().toString().slice(-4));let fid='F'+Date.now();
 DB.faculty.push({id:fid,name:nm,desig:$('nf_dg').value,dept:$('nf_dp').value,code:cd,doj:$('nf_dj').value,dob:$('nf_db').value,phone:$('nf_ph').value,email:$('nf_em').value,photo:'',univApproved:$('nf_ua').value,status:'active'});
-let pwd='damch@'+cd;
-DB.users.push({u:cd,p:pwd,role:'faculty',fid:fid,name:nm});
+let pwd='damch@'+cd;DB.users.push({u:cd,p:pwd,role:'faculty',fid:fid,name:nm});
 YEARS.forEach(y=>{if(!DB.leaves[y])DB.leaves[y]={};DB.leaves[y][fid]={cl:0,ml:0,od:0,el_open:0,el_u:0,lat:0,mat:0,pat:0,sl:0,sd:0,rh:0,lwp:0}});
-save();clsMod();toast('Added! User: '+cd+' | Pass: '+pwd);
-alert('New Account:\nUsername: '+cd+'\nPassword: '+pwd);
-pgAFac($('cnt'));
-}
+save();clsMod();toast('Added! User:'+cd+' Pass:'+pwd);alert('New Account:\nUsername: '+cd+'\nPassword: '+pwd);pgAFac($('cnt'))}
 
-function editFac(fid){
-let f=DB.faculty.find(x=>x.id===fid);if(!f)return;
-opMod(`<div class="mhdr"><h3>✏️ Edit: ${f.name}</h3><button class="mcls" onclick="clsMod()">✕</button></div>
-<div class="mbody"><div class="pdet">
+function editFac(fid){let f=DB.faculty.find(x=>x.id===fid);if(!f)return;
+opMod(`<div class="mhdr"><h3>✏️ Edit: ${f.name}</h3><button class="mcls" onclick="clsMod()">✕</button></div><div class="mbody"><div class="pdet">
 <div class="pf pfull"><label>Name</label><input type="text" id="ef_nm" value="${f.name}"></div>
 <div class="pf"><label>Designation</label><select id="ef_dg">${dgOpts(f.desig)}</select></div>
 <div class="pf"><label>Department</label><select id="ef_dp">${dOpts(f.dept)}</select></div>
@@ -795,245 +635,124 @@ opMod(`<div class="mhdr"><h3>✏️ Edit: ${f.name}</h3><button class="mcls" onc
 <div class="pf"><label>Phone</label><input type="text" id="ef_ph" value="${f.phone||''}"></div>
 <div class="pf"><label>Email</label><input type="email" id="ef_em" value="${f.email||''}"></div>
 <div class="pf"><label>Univ Approved</label><select id="ef_ua"><option ${f.univApproved==='No'?'selected':''}>No</option><option ${f.univApproved==='Yes'?'selected':''}>Yes</option><option ${f.univApproved==='Applied'?'selected':''}>Applied</option></select></div>
-</div></div>
-<div class="mft"><button class="btn bgh" onclick="clsMod()">Cancel</button><button class="btn bs" onclick="savEditFac('${fid}')">💾 Save</button></div>`);
-}
+</div></div><div class="mft"><button class="btn bgh" onclick="clsMod()">Cancel</button><button class="btn bs" onclick="savEditFac('${fid}')">💾 Save</button></div>`)}
 
-function savEditFac(fid){
-let f=DB.faculty.find(x=>x.id===fid);if(!f)return;
-f.name=$('ef_nm').value;f.desig=$('ef_dg').value;f.dept=$('ef_dp').value;
-f.code=$('ef_cd').value;f.doj=$('ef_dj').value;f.dob=$('ef_db').value;
-f.phone=$('ef_ph').value;f.email=$('ef_em').value;f.univApproved=$('ef_ua').value;
-let usr=DB.users.find(u=>u.fid===fid);if(usr)usr.name=f.name;
-save();clsMod();toast('Updated!');pgAFac($('cnt'));
-}
+function savEditFac(fid){let f=DB.faculty.find(x=>x.id===fid);if(!f)return;f.name=$('ef_nm').value;f.desig=$('ef_dg').value;f.dept=$('ef_dp').value;f.code=$('ef_cd').value;f.doj=$('ef_dj').value;f.dob=$('ef_db').value;f.phone=$('ef_ph').value;f.email=$('ef_em').value;f.univApproved=$('ef_ua').value;
+let usr=DB.users.find(u=>u.fid===fid);if(usr)usr.name=f.name;save();clsMod();toast('Updated!');pgAFac($('cnt'))}
 
-function remFac(fid,nm){
-if(!confirm('Remove "'+nm+'"?'))return;
-let f=DB.faculty.find(x=>x.id===fid);if(f)f.status='removed';
-save();toast('Removed');pgAFac($('cnt'));
-}
+function remFac(fid,nm){if(!confirm('Remove "'+nm+'"?'))return;let f=DB.faculty.find(x=>x.id===fid);if(f)f.status='removed';save();toast('Removed');pgAFac($('cnt'))}
 
-// ============ ADMIN: ALL APPLICATIONS ============
-function pgAApps(c){
-let apps=[...DB.apps].reverse();
-c.innerHTML=`<div class="ptitle">📬 All Applications</div><div class="card"><div class="chdr">Applications (${apps.length})</div><div class="cbody">`+
-(apps.length===0?'<p style="color:var(--tl)">No applications.</p>':
-apps.map(a=>{let f=DB.faculty.find(x=>x.id===a.fid);let cls=a.status==='Approved'?'appr':a.status==='Rejected'?'rej':'pend';
-let bdg=a.status==='Approved'?'bds':a.status==='Rejected'?'bdd':'bdw';
-return`<div class="lacard ${cls}"><div><b>${f?f.name:a.fid}</b><br><span style="font-size:10px">${a.type} | ${a.reason||'-'}</span></div>
-<div>📅 ${a.from} → ${a.to}</div><div><span class="badge ${bdg}">${a.status}</span></div>
-<div style="display:flex;gap:3px;flex-wrap:wrap">${a.doc?`<a href="${a.doc}" target="_blank" class="btn btn-s bi">📄</a>`:''}
-${a.status==='Pending'?`<button class="btn btn-s bs" onclick="rvApp('${a.id}','Approved')">✅</button><button class="btn btn-s ba" onclick="rvApp('${a.id}','Rejected')">❌</button>`:''}</div></div>`}).join(''))
-+`</div></div>`;
-}
+// ===== ADMIN: APPLICATIONS =====
+function pgAApps(c){let apps=[...DB.apps].reverse();
+c.innerHTML=`<div class="ptitle">📬 All Applications (${apps.length})</div><div class="card"><div class="cbody">`+
+(apps.length===0?'<p style="color:var(--tl)">No applications.</p>':apps.map(a=>{let f=DB.faculty.find(x=>x.id===a.fid);let cls=a.status==='Approved'?'appr':a.status==='Rejected'?'rej':'pend';let bdg=a.status==='Approved'?'bds':a.status==='Rejected'?'bdd':'bdw';
+return`<div class="lacard ${cls}"><div><b>${f?f.name:a.fid}</b><br><span style="font-size:10px">${a.type} | ${a.reason||'-'}</span></div><div>📅 ${a.from} → ${a.to}</div><div><span class="badge ${bdg}">${a.status}</span></div>
+<div style="display:flex;gap:3px;flex-wrap:wrap">${a.doc?`<a href="${a.doc}" target="_blank" class="btn btn-s bi">📄</a>`:''}${a.status==='Pending'?`<button class="btn btn-s bs" onclick="rvApp('${a.id}','Approved')">✅</button><button class="btn btn-s ba" onclick="rvApp('${a.id}','Rejected')">❌</button>`:''}</div></div>`}).join(''))+`</div></div>`}
+function rvApp(aid,st){if(!confirm(st+'?'))return;let a=DB.apps.find(x=>x.id===aid);if(a){a.status=st;a.by=S.user.name;a.rdt=new Date().toISOString().split('T')[0]}save();toast(st+'!');pgAApps($('cnt'))}
 
-function rvApp(aid,st){
-if(!confirm(st+' this?'))return;
-let a=DB.apps.find(x=>x.id===aid);if(a){a.status=st;a.by=S.user.name;a.rdt=new Date().toISOString().split('T')[0]}
-save();toast(st+'!');pgAApps($('cnt'));
-}
-
-// ============ ADMIN: HOLIDAYS ============
-function pgAHol(c){
-let yh=DB.holidays.filter(x=>x.yr===S.yr).sort((a,b)=>a.dt.localeCompare(b.dt));
-c.innerHTML=`<div class="ptitle">📅 Manage Holidays - ${S.yr}</div>${yrBtns()}
-<div class="card"><div class="chdr">Add Holiday <button class="btn btn-s bs" onclick="addHol()">➕</button></div><div class="cbody">`+
-(yh.length?yh.map(h=>`<div class="hrow"><span class="hdate">${h.dt}</span><span class="hname">${h.nm}</span><span class="badge bdi">${h.tp||'General'}</span>
-<button class="btn btn-s ba" onclick="remHol('${h.id}')" style="margin-left:auto">✕</button></div>`).join(''):
-'<p style="color:var(--tl);font-size:11px">No holidays. Click + to add.</p>')+
-`</div></div>`;
-}
-
-function addHol(){
-opMod(`<div class="mhdr"><h3>➕ Add Holiday</h3><button class="mcls" onclick="clsMod()">✕</button></div>
-<div class="mbody"><div class="pdet">
-<div class="pf"><label>Date</label><input type="date" id="h_dt"></div>
-<div class="pf"><label>Year</label><select id="h_yr">${YEARS.map(y=>`<option ${y===S.yr?'selected':''}>${y}</option>`).join('')}</select></div>
-<div class="pf pfull"><label>Holiday Name</label><input type="text" id="h_nm" placeholder="e.g. Republic Day"></div>
+// ===== ADMIN: HOLIDAYS =====
+function pgAHol(c){let yh=DB.holidays.filter(x=>x.yr===S.yr).sort((a,b)=>a.dt.localeCompare(b.dt));
+c.innerHTML=`<div class="ptitle">📅 Manage Holidays - ${S.yr}</div>${yrBtns()}<div class="card"><div class="chdr">Holidays <button class="btn btn-s bs" onclick="addHol()">➕</button></div><div class="cbody">`+
+(yh.length?yh.map(h=>`<div class="hrow"><span class="hdate">${h.dt}</span><span class="hname">${h.nm}</span><span class="badge bdi">${h.tp||'General'}</span><button class="btn btn-s ba" onclick="remHol('${h.id}')" style="margin-left:auto">✕</button></div>`).join(''):'<p style="color:var(--tl);font-size:11px">No holidays. Click ➕</p>')+`</div></div>`}
+function addHol(){opMod(`<div class="mhdr"><h3>➕ Add Holiday</h3><button class="mcls" onclick="clsMod()">✕</button></div><div class="mbody"><div class="pdet">
+<div class="pf"><label>Date</label><input type="date" id="h_dt"></div><div class="pf"><label>Year</label><select id="h_yr">${YEARS.map(y=>`<option ${y===S.yr?'selected':''}>${y}</option>`).join('')}</select></div>
+<div class="pf pfull"><label>Name</label><input type="text" id="h_nm" placeholder="e.g. Republic Day"></div>
 <div class="pf"><label>Type</label><select id="h_tp"><option>General</option><option>National</option><option>State</option><option>Restricted</option><option>College</option></select></div>
-</div></div>
-<div class="mft"><button class="btn bgh" onclick="clsMod()">Cancel</button><button class="btn bs" onclick="savHol()">💾 Save</button></div>`);
-}
+</div></div><div class="mft"><button class="btn bgh" onclick="clsMod()">Cancel</button><button class="btn bs" onclick="savHol()">💾 Save</button></div>`)}
+function savHol(){let dt=$('h_dt').value,nm=$('h_nm').value.trim();if(!dt||!nm){toast('Fill date & name','tw2');return}DB.holidays.push({id:'H'+Date.now(),dt:dt,nm:nm,yr:$('h_yr').value,tp:$('h_tp').value});save();clsMod();toast('Added!');pgAHol($('cnt'))}
+function remHol(hid){if(!confirm('Remove?'))return;DB.holidays=DB.holidays.filter(h=>h.id!==hid);save();toast('Removed');pgAHol($('cnt'))}
 
-function savHol(){
-let dt=$('h_dt').value,nm=$('h_nm').value.trim();
-if(!dt||!nm){toast('Fill date & name','tw2');return}
-DB.holidays.push({id:'H'+Date.now(),dt:dt,nm:nm,yr:$('h_yr').value,tp:$('h_tp').value});
-save();clsMod();toast('Holiday added!');pgAHol($('cnt'));
-}
+// ===== ADMIN: USERS =====
+function pgAUsrs(c){let rows=DB.users.map((u,i)=>`<tr><td>${i+1}</td><td><b>${u.u}</b></td><td><span class="badge ${u.role==='admin'?'bdd':'bds'}">${u.role}</span></td><td>${u.name}</td><td>${u.fid||'-'}</td><td><button class="btn btn-s bw" onclick="chPwd('${u.u}')">🔑</button></td></tr>`).join('');
+c.innerHTML=`<div class="ptitle">🔑 User Management (${DB.users.length})</div><div class="card"><div class="tw"><table class="dt"><thead><tr><th>Sr</th><th>Username</th><th>Role</th><th>Name</th><th>FID</th><th>Action</th></tr></thead><tbody>${rows}</tbody></table></div></div>`}
+function chPwd(un){opMod(`<div class="mhdr"><h3>🔑 Change Password: ${un}</h3><button class="mcls" onclick="clsMod()">✕</button></div><div class="mbody">
+<div class="fg"><label>Security Q: Your favorite sport?</label><input type="text" id="sq_a" placeholder="Answer"></div>
+<div class="fg"><label>New Password</label><input type="text" id="nw_p" placeholder="New Password"></div>
+</div><div class="mft"><button class="btn bgh" onclick="clsMod()">Cancel</button><button class="btn bs" onclick="doChPwd('${un}')">💾 Change</button></div>`)}
+function doChPwd(un){if($('sq_a').value.trim().toLowerCase()!==SEC_ANS){toast('Wrong answer!','te');return}let np=$('nw_p').value.trim();if(!np){toast('Enter password','tw2');return}let u=DB.users.find(x=>x.u===un);if(u){u.p=np;save();clsMod();toast('Changed!');pgAUsrs($('cnt'))}}
 
-function remHol(hid){
-if(!confirm('Remove holiday?'))return;
-DB.holidays=DB.holidays.filter(h=>h.id!==hid);save();toast('Removed');pgAHol($('cnt'));
-}
-
-// ============ ADMIN: USERS ============
-function pgAUsrs(c){
-let rows=DB.users.map((u,i)=>`<tr><td>${i+1}</td><td><b>${u.u}</b></td><td><span class="badge ${u.role==='admin'?'bdd':'bds'}">${u.role}</span></td><td>${u.name}</td><td>${u.fid||'-'}</td>
-<td><button class="btn btn-s bw" onclick="chPwd('${u.u}')">🔑</button></td></tr>`).join('');
-c.innerHTML=`<div class="ptitle">🔑 User Management</div>
-<div class="card"><div class="chdr">All Users (${DB.users.length})</div>
-<div class="tw"><table class="dt"><thead><tr><th>Sr</th><th>Username</th><th>Role</th><th>Name</th><th>Faculty ID</th><th>Action</th></tr></thead>
-<tbody>${rows}</tbody></table></div></div>`;
-}
-
-function chPwd(uname){
-opMod(`<div class="mhdr"><h3>🔑 Change Password: ${uname}</h3><button class="mcls" onclick="clsMod()">✕</button></div>
-<div class="mbody">
-<div class="fg"><label>Security Question: What is your favorite sport?</label><input type="text" id="sq_ans" placeholder="Answer"></div>
-<div class="fg"><label>New Password</label><input type="text" id="new_pwd" placeholder="New Password"></div>
-</div>
-<div class="mft"><button class="btn bgh" onclick="clsMod()">Cancel</button><button class="btn bs" onclick="doChPwd('${uname}')">💾 Change</button></div>`);
-}
-
-function doChPwd(uname){
-let ans=$('sq_ans').value.trim().toLowerCase();
-if(ans!==SECURITY_ANSWER){toast('Wrong answer! Hint: A popular sport','te');return}
-let np=$('new_pwd').value.trim();if(!np){toast('Enter new password','tw2');return}
-let u=DB.users.find(x=>x.u===uname);if(u){u.p=np;save();clsMod();toast('Password changed!');pgAUsrs($('cnt'))}
-}
-
-// ============ ADMIN: REPORTS ============
-function pgARpt(c){
-c.innerHTML=`<div class="ptitle">🖨️ Print Reports - ${S.yr}</div>${yrBtns()}
-<div class="card"><div class="chdr">Detailed Reports (Individual Cards)</div><div class="cbody">
+// ===== ADMIN: REPORTS =====
+function pgARpt(c){c.innerHTML=`<div class="ptitle">🖨️ Print Reports - ${S.yr}</div>${yrBtns()}
+<div class="card"><div class="chdr">Detailed Reports</div><div class="cbody">
 <button class="btn bp" onclick="rptInd(null,null)">📄 All Faculty</button>
-<button class="btn bi" onclick="rptIndDept()">📄 Department Wise</button>
-<button class="btn bw" onclick="rptIndSearch()">🔍 Search Faculty</button>
-</div></div>
-<div class="card"><div class="chdr">Summary Reports (Master Table)</div><div class="cbody">
+<button class="btn bi" onclick="rptIndDept()">📄 Dept Wise</button>
+<button class="btn bw" onclick="rptSearch()">🔍 Search</button></div></div>
+<div class="card"><div class="chdr">Summary Reports</div><div class="cbody">
 <button class="btn bp" onclick="rptMaster(null)">📊 Master All</button>
-<button class="btn bg" onclick="rptMasterDept()">📊 Department Wise</button>
-</div></div>
-<div class="card"><div class="chdr">Export</div><div class="cbody">
-<button class="btn bs" onclick="expCSV()">📥 Export CSV/Excel</button>
-</div></div>`;
-}
+<button class="btn bg2" onclick="rptMasterDept()">📊 Dept Wise</button></div></div>
+<div class="card"><div class="chdr">Export</div><div class="cbody"><button class="btn bs" onclick="expCSV()">📥 Export CSV</button></div></div>`}
 
-function rptIndSearch(){let n=prompt('Enter Name:');if(!n)return;let f=DB.faculty.find(x=>x.name.toLowerCase().includes(n.toLowerCase()));if(f)rptInd(null,f.id);else toast('Not found','te')}
-function rptIndDept(){let d=prompt('Enter Department:');if(d)rptInd(d.trim(),null)}
-function rptMasterDept(){let d=prompt('Enter Department:');if(d)rptMaster(d.trim())}
+function rptSearch(){let n=prompt('Name:');if(!n)return;let f=DB.faculty.find(x=>x.name.toLowerCase().includes(n.toLowerCase()));if(f)rptInd(null,f.id);else toast('Not found','te')}
+function rptIndDept(){let d=prompt('Department:');if(d)rptInd(d.trim(),null)}
+function rptMasterDept(){let d=prompt('Department:');if(d)rptMaster(d.trim())}
 
-function rptInd(dept,fid){
-let ps=$('printSec');let h=getPH();
-let title=fid?'INDIVIDUAL RECORD':dept?'DEPT REPORT: '+dept.toUpperCase():'ALL FACULTY DETAILED REPORT';
-h+=`<h4 style="text-align:center;margin:4px 0;text-decoration:underline">${title} (${S.yr})</h4>`;
+function rptInd(dept,fid){let ps=$('printSec');let h=getPH();
+h+=`<h4 style="text-align:center;margin:4px 0;text-decoration:underline">${fid?'INDIVIDUAL':dept?'DEPT: '+dept.toUpperCase():'ALL FACULTY'} (${S.yr})</h4>`;
 let found=false;
-sortFac(DB.faculty.filter(f=>f.status==='active')).forEach(f=>{
-if(fid&&f.id!==fid)return;
-if(dept&&!(f.dept||'').toUpperCase().includes(dept.toUpperCase()))return;
-found=true;
-let yl=DB.leaves[S.yr]||{};let lv=yl[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
+sortFac(DB.faculty.filter(f=>f.status==='active')).forEach(f=>{if(fid&&f.id!==fid)return;if(dept&&!(f.dept||'').toUpperCase().includes(dept.toUpperCase()))return;found=true;
+let lv=(DB.leaves[S.yr]||{})[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
 h+=`<div class="ic2"><div style="display:flex;justify-content:space-between;border-bottom:1px solid #000;padding-bottom:2px;margin-bottom:3px"><span style="font-size:11px;font-weight:bold">${f.name}</span><span style="font-weight:bold;font-size:10px">${S.yr}</span></div>
-<div style="font-size:8px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1px;margin-bottom:3px"><div><b>Desig:</b> ${f.desig}</div><div><b>Dept:</b> ${f.dept}</div><div><b>Code:</b> ${f.code}</div><div><b>Exp:</b> ${calcExp(f.doj)}</div></div>
-<table class="rt"><tr><th>Type</th><th>Limit</th><th>Used</th><th>Bal</th><th>Type</th><th>Limit</th><th>Used</th><th>Bal</th></tr>
+<div style="font-size:8px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1px;margin-bottom:3px"><div><b>Desig:</b> ${f.desig}</div><div><b>Dept:</b> ${f.dept.split('(')[0]}</div><div><b>Code:</b> ${f.code}</div><div><b>Exp:</b> ${calcExp(f.doj)}</div></div>
+<table class="rt"><tr><th>Type</th><th>Lim</th><th>U</th><th>B</th><th>Type</th><th>Lim</th><th>U</th><th>B</th></tr>
 <tr><td>CL</td><td>8</td><td>${v('cl')}</td><td>${r.cl_b}</td><td>ML</td><td>10</td><td>${v('ml')}</td><td>${r.ml_b}</td></tr>
 <tr><td>EL(${r.el_o}+15)</td><td>${r.el_t}</td><td>${v('el_u')}</td><td>${r.el_b}</td><td>SL</td><td>15</td><td>${v('sl')}</td><td>${r.sl_b}</td></tr>
 <tr><td>Mat</td><td>180</td><td>${v('mat')}</td><td>${r.mat_b}</td><td>Pat</td><td>15</td><td>${v('pat')}</td><td>${r.pat_b}</td></tr>
 <tr><td>RH</td><td>2</td><td>${v('rh')}</td><td>${r.rh_b}</td><td>OD</td><td>-</td><td>${v('od')}</td><td>-</td></tr></table>
-<div style="font-size:8px;margin-top:1px"><b>Late:</b> ${r.lc} → Ded: ${r.ld} | LWP: ${v('lwp')} | Overflow: ${r.ovf}</div>
+<div style="font-size:8px;margin-top:1px"><b>Late:</b> ${r.lc}→Ded:${r.ld} | LWP:${v('lwp')} | Ovf:${r.ovf}</div>
 <div style="display:flex;justify-content:flex-end;gap:8px;font-weight:bold;font-size:9px;margin-top:2px;border-top:1px solid #000;padding-top:1px">
-<span>PAID:${r.tp}</span><span style="color:red">UNPD:${r.tu}</span><span style="background:yellow;padding:0 3px">TOT:${r.gt}</span></div></div>`;
-});
-if(!found){toast('No faculty found','te');return}
-ps.innerHTML=h;ps.style.display='block';window.print();setTimeout(()=>ps.style.display='none',500);
-}
+<span>PAID:${r.tp}</span><span style="color:red">UNPD:${r.tu}</span><span style="background:yellow;padding:0 3px">TOT:${r.gt}</span></div></div>`});
+if(!found){toast('Not found','te');return}ps.innerHTML=h;ps.style.display='block';window.print();setTimeout(()=>ps.style.display='none',500)}
 
-function rptMaster(dept){
-let ps=$('printSec');let h=getPH();
-let title=dept?'DEPT SUMMARY: '+dept.toUpperCase():'MASTER SUMMARY REPORT';
-h+=`<h4 style="text-align:center;text-decoration:underline;margin:4px 0">${title} (${S.yr})</h4>`;
-let grp={};
-sortFac(DB.faculty.filter(f=>f.status==='active')).forEach(f=>{
-let d=(f.dept||'Other').toUpperCase().trim();
-if(dept&&!d.includes(dept.toUpperCase()))return;
-if(!grp[d])grp[d]=[];grp[d].push(f);
-});
-let dpts=Object.keys(grp).sort();
-if(!dpts.length){toast('No faculty','te');return}
-dpts.forEach(d=>{
-h+=`<div class="dh">DEPARTMENT: ${d}</div>`;
-h+=`<table class="rt"><thead><tr><th style="width:4%">Sr</th><th style="width:25%">Name</th><th>CL</th><th>ML</th><th>EL</th><th>OD</th><th>RH</th><th>SL</th><th>Mat</th><th>Pat</th><th>Lat</th><th>LWP</th><th>Tot</th></tr></thead><tbody>`;
-grp[d].forEach((f,i)=>{
-let lv=(DB.leaves[S.yr]||{})[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
-h+=`<tr><td>${i+1}</td><td style="text-align:left"><b>${f.name}</b></td><td>${r.cl_b}</td><td>${r.ml_b}</td><td>${r.el_b}</td><td>${v('od')}</td><td>${r.rh_b}</td><td>${r.sl_b}</td><td>${r.mat_b}</td><td>${r.pat_b}</td><td>${r.ld}</td><td>${r.tu}</td><td><b>${r.gt}</b></td></tr>`;
-});h+=`</tbody></table>`;
-});
-ps.innerHTML=h;ps.style.display='block';window.print();setTimeout(()=>ps.style.display='none',500);
-}
+function rptMaster(dept){let ps=$('printSec');let h=getPH();h+=`<h4 style="text-align:center;text-decoration:underline;margin:4px 0">${dept?'DEPT: '+dept.toUpperCase():'MASTER SUMMARY'} (${S.yr})</h4>`;
+let grp={};sortFac(DB.faculty.filter(f=>f.status==='active')).forEach(f=>{let d=(f.dept||'Other').toUpperCase().trim();if(dept&&!d.includes(dept.toUpperCase()))return;if(!grp[d])grp[d]=[];grp[d].push(f)});
+let dpts=Object.keys(grp);if(!dpts.length){toast('None','te');return}
+dpts.forEach(d=>{h+=`<div class="dh">DEPT: ${d}</div><table class="rt"><thead><tr><th style="width:4%">Sr</th><th style="width:25%">Name</th><th>CL</th><th>ML</th><th>EL</th><th>OD</th><th>RH</th><th>SL</th><th>Mat</th><th>Pat</th><th>Lat</th><th>LWP</th><th>Tot</th></tr></thead><tbody>`;
+grp[d].forEach((f,i)=>{let lv=(DB.leaves[S.yr]||{})[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
+h+=`<tr><td>${i+1}</td><td style="text-align:left"><b>${f.name}</b></td><td>${r.cl_b}</td><td>${r.ml_b}</td><td>${r.el_b}</td><td>${v('od')}</td><td>${r.rh_b}</td><td>${r.sl_b}</td><td>${r.mat_b}</td><td>${r.pat_b}</td><td>${r.ld}</td><td>${r.tu}</td><td><b>${r.gt}</b></td></tr>`});h+=`</tbody></table>`});
+ps.innerHTML=h;ps.style.display='block';window.print();setTimeout(()=>ps.style.display='none',500)}
 
-function expCSV(){
-let csv="Sr,Name,Desig,Dept,Code,DOJ,Exp,CL_B,ML_B,EL_O,EL_T,EL_U,EL_B,OD,RH_B,SL_B,Mat_B,Pat_B,Late,LWP,Total\n";
-sortFac(DB.faculty.filter(f=>f.status==='active')).forEach((f,i)=>{
-let lv=(DB.leaves[S.yr]||{})[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
-csv+=`${i+1},"${f.name}","${f.desig}","${f.dept}","${f.code}","${f.doj}","${calcExp(f.doj)}",${r.cl_b},${r.ml_b},${r.el_o},${r.el_t},${v('el_u')},${r.el_b},${v('od')},${r.rh_b},${r.sl_b},${r.mat_b},${r.pat_b},${r.ld},${r.tu},${r.gt}\n`;
-});
-let b=new Blob([csv],{type:'text/csv'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='DAMCH_Leave_'+S.yr+'.csv';a.click();
-toast('CSV exported!');
-}
+function expCSV(){let csv="Sr,Name,Desig,Dept,Code,DOJ,Exp,CL_B,ML_B,EL_O,EL_T,EL_U,EL_B,OD,RH_B,SL_B,Mat_B,Pat_B,Late,LWP,Total\n";
+sortFac(DB.faculty.filter(f=>f.status==='active')).forEach((f,i)=>{let lv=(DB.leaves[S.yr]||{})[f.id]||{};let r=calcRow(lv);let v=k=>parseFloat(lv[k])||0;
+csv+=`${i+1},"${f.name}","${f.desig}","${f.dept}","${f.code}","${f.doj}","${calcExp(f.doj)}",${r.cl_b},${r.ml_b},${r.el_o},${r.el_t},${v('el_u')},${r.el_b},${v('od')},${r.rh_b},${r.sl_b},${r.mat_b},${r.pat_b},${r.ld},${r.tu},${r.gt}\n`});
+let b=new Blob([csv],{type:'text/csv'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='DAMCH_Leave_'+S.yr+'.csv';a.click();toast('CSV exported!')}
 
-// ============ ADMIN: SETTINGS & BACKUP ============
-function pgASet(c){
-let sz=(new Blob([JSON.stringify(DB)]).size/1024).toFixed(1);
+// ===== ADMIN: SETTINGS =====
+function pgASet(c){let sz=(new Blob([JSON.stringify(DB)]).size/1024).toFixed(1);
 c.innerHTML=`<div class="ptitle">⚙️ Settings & Backup</div>
 <div class="card"><div class="chdr">💾 Data Management</div><div class="cbody">
-<p style="font-size:11px;margin-bottom:10px">Data Size: <b>${sz} KB</b> (localStorage limit ~5MB)</p>
-<button class="btn bp" onclick="dlJSON()">📥 Download Full Backup (JSON)</button>
-<input type="file" id="rstFile" accept=".json" style="display:none" onchange="rstJSON(event)">
-<button class="btn bw" onclick="$('rstFile').click()">📤 Restore from Backup</button>
-<button class="btn ba" onclick="if(confirm('RESET ALL DATA? This cannot be undone!')){localStorage.removeItem(VER);location.reload()}" style="margin-left:20px">🗑️ Reset All Data</button>
+<p style="font-size:11px;margin-bottom:10px">Size: <b>${sz} KB</b> (limit ~5MB)</p>
+<button class="btn bp" onclick="dlJSON()">📥 Download Backup (JSON)</button>
+<input type="file" id="rstF" accept=".json" style="display:none" onchange="rstJSON(event)">
+<button class="btn bw" onclick="$('rstF').click()">📤 Restore</button>
+<button class="btn ba" onclick="if(confirm('RESET ALL? Cannot undo!')){localStorage.removeItem(VER);location.reload()}" style="margin-left:20px">🗑️ Reset All</button>
 </div></div>
-<div class="card"><div class="chdr">🔑 Admin Password Change</div><div class="cbody">
-<div class="pdet" style="max-width:400px">
-<div class="pf pfull"><label>Security Question: What is your favorite sport?</label><input type="text" id="as_sq" placeholder="Answer"></div>
-<div class="pf pfull"><label>New Admin Password</label><input type="text" id="as_np" placeholder="New Password"></div>
-<div class="pf pfull"><button class="btn bs" onclick="chAdmPwd()">🔑 Change Admin Password</button></div>
-</div>
-</div></div>
+<div class="card"><div class="chdr">🔑 Admin Password</div><div class="cbody"><div class="pdet" style="max-width:400px">
+<div class="pf pfull"><label>Security Q: Favorite sport?</label><input type="text" id="as_sq"></div>
+<div class="pf pfull"><label>New Admin Password</label><input type="text" id="as_np"></div>
+<div class="pf pfull"><button class="btn bs" onclick="chAdmP()">🔑 Change</button></div></div></div></div>
 <div class="card"><div class="chdr">ℹ️ About</div><div class="cbody" style="font-size:11px">
 <p><b>Bal Bhagwan Shikshan Prasarak Mandal's</b></p>
 <p><b style="color:var(--a);font-size:14px">Dhanwantari Ayurved Medical College & Charitable Hospital</b></p>
 <p>Degloor Road, Udgir - 413517, Dist. Latur, Maharashtra</p>
-<p>Ph: (02385) 259825 | Email: contact@damchudgir.edu.in</p>
-<p>Website: <a href="https://www.damchudgir.edu.in" target="_blank">www.damchudgir.edu.in</a></p>
+<p>Ph: (02385) 259825 | contact@damchudgir.edu.in | <a href="https://www.damchudgir.edu.in" target="_blank">www.damchudgir.edu.in</a></p>
+<p>UG Intake: 100 Seats (BAMS) | Departments: 14 (As per NCISM MESA&R 2024)</p>
+<p>Affiliated to: Maharashtra University of Health Sciences, Nashik</p>
 <hr style="margin:8px 0">
 <p>Designed & Developed by <b>Dr. Jadhav V.R.</b> (95183 56305)</p>
-<p>© 2025-2027 | Faculty Leave Tracking System v3.0</p>
-</div></div>`;
-}
+<p>Leave Policy as per College Service Rules | Late marks from NCISM AEBS Portal</p>
+<p>© 2025-2027 | Faculty Leave Tracking System v4.0</p></div></div>`}
 
-function dlJSON(){
-let s=JSON.stringify(DB,null,2);let b=new Blob([s],{type:'application/json'});
-let a=document.createElement('a');a.href=URL.createObjectURL(b);
-a.download='DAMCH_Backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();
-toast('Backup downloaded!');
-}
+function dlJSON(){let s=JSON.stringify(DB,null,2);let b=new Blob([s],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='DAMCH_Backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('Downloaded!')}
+function rstJSON(e){let r=new FileReader();r.onload=ev=>{try{DB=JSON.parse(ev.target.result);save();toast('Restored! Reloading...');setTimeout(()=>location.reload(),1000)}catch(er){toast('Invalid!','te')}};r.readAsText(e.target.files[0])}
+function chAdmP(){if($('as_sq').value.trim().toLowerCase()!==SEC_ANS){toast('Wrong answer!','te');return}let np=$('as_np').value.trim();if(!np||np.length<4){toast('Min 4 chars','tw2');return}let u=DB.users.find(x=>x.u==='admin');if(u){u.p=np;save();toast('Changed!')}}
 
-function rstJSON(e){
-let r=new FileReader();r.onload=ev=>{
-try{DB=JSON.parse(ev.target.result);save();toast('Data restored! Reloading...');setTimeout(()=>location.reload(),1000)}
-catch(er){toast('Invalid file!','te')}
-};r.readAsText(e.target.files[0]);
-}
-
-function chAdmPwd(){
-let ans=$('as_sq').value.trim().toLowerCase();
-if(ans!==SECURITY_ANSWER){toast('Wrong answer!','te');return}
-let np=$('as_np').value.trim();if(!np||np.length<4){toast('Min 4 chars','tw2');return}
-let u=DB.users.find(x=>x.u==='admin');if(u){u.p=np;save();toast('Admin password changed!')}
-}
-
-// ============ PRINT HEADER ============
-function getPH(){
-return`<div class="rh"><div class="rl">🏥</div><div class="rti">
+// ===== PRINT HEADER =====
+function getPH(){return`<div class="rh"><div class="rl">🏥</div><div class="rti">
 <h3>Bal Bhagwan Shikshan Prasarak Mandal's</h3>
 <h2>Dhanwantari Ayurved Medical College & Charitable Hospital</h2>
 <h5>Degloor Road, Udgir - 413517, Dist. Latur, Maharashtra | Ph: (02385) 259825</h5>
-<h5>Teaching Faculty Leave Record</h5>
-</div><div style="font-size:9px;font-weight:bold;width:70px;text-align:right">Date: ${new Date().toLocaleDateString('en-GB')}</div></div>`;
-}
+<h5>Teaching Faculty Leave Record | UG 100 Seats | NCISM/MUHS Norms</h5>
+</div><div style="font-size:9px;font-weight:bold;width:70px;text-align:right">Date: ${new Date().toLocaleDateString('en-GB')}</div></div>`}
 </script>
 </body>
 </html>
-
