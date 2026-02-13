@@ -1,419 +1,925 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DAMCH Teaching Faculty Leave Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<style>
-:root{--primary:#0f4c81;--primary-light:#1a6bab;--primary-dark:#0a3459;--accent:#e8a838;--accent-light:#f0c060;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;--info:#3b82f6;--bg:#f0f4f8;--bg-card:#fff;--bg-sidebar:#0b1a2e;--text:#1e293b;--text-light:#64748b;--text-white:#f8fafc;--border:#e2e8f0;--shadow:0 4px 24px rgba(0,0,0,.08);--shadow-lg:0 12px 40px rgba(0,0,0,.12);--radius:12px;--radius-sm:8px;--radius-lg:16px;--transition:all .3s cubic-bezier(.4,0,.2,1)}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh}
-::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--primary-light);border-radius:3px}
-.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0b1a2e 0%,#0f4c81 50%,#1a6bab 100%);position:relative;overflow:hidden}
-.login-page::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(232,168,56,.15),transparent 70%);top:-200px;right:-200px;border-radius:50%}
-.login-page::after{content:'';position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(26,107,171,.2),transparent 70%);bottom:-100px;left:-100px;border-radius:50%}
-.login-container{background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-radius:var(--radius-lg);padding:48px 40px;width:440px;max-width:95%;box-shadow:var(--shadow-lg);position:relative;z-index:1;border:1px solid rgba(255,255,255,.2)}
-.login-logo{text-align:center;margin-bottom:28px}
-.login-logo .college-emblem{width:80px;height:80px;background:linear-gradient(135deg,var(--primary),var(--accent));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 8px 24px rgba(15,76,129,.3)}
-.login-logo .college-emblem i{font-size:36px;color:#fff}
-.login-logo h2{font-family:'Noto Sans Devanagari',sans-serif;font-size:17px;color:var(--primary-dark);font-weight:700;line-height:1.5}
-.login-logo h3{font-size:12px;color:var(--text-light);margin-top:4px;font-weight:500;letter-spacing:.5px}
-.login-logo .addr{font-size:11px;color:var(--text-light);margin-top:6px;line-height:1.5}
-.form-group{margin-bottom:20px;position:relative}
-.form-group label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
-.form-group input,.form-group select{width:100%;padding:12px 16px 12px 44px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:14px;transition:var(--transition);background:#fff;color:var(--text)}
-.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(15,76,129,.1)}
-.form-group .icon{position:absolute;left:14px;top:38px;color:var(--text-light);font-size:16px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;transition:var(--transition);text-decoration:none}
-.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;box-shadow:0 4px 16px rgba(15,76,129,.3)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(15,76,129,.4)}
-.btn-success{background:linear-gradient(135deg,var(--success),#059669);color:#fff}
-.btn-danger{background:linear-gradient(135deg,var(--danger),#dc2626);color:#fff}
-.btn-warning{background:linear-gradient(135deg,var(--warning),#d97706);color:#fff}
-.btn-info{background:linear-gradient(135deg,var(--info),#2563eb);color:#fff}
-.btn-outline{background:transparent;border:2px solid var(--border);color:var(--text)}
-.btn-outline:hover{border-color:var(--primary);color:var(--primary)}
-.btn-sm{padding:8px 16px;font-size:12px}.btn-lg{padding:14px 32px;font-size:16px}.btn-block{width:100%}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
-.login-btn{width:100%;padding:14px;font-size:15px;font-weight:700;letter-spacing:.5px;margin-top:8px}
-.forgot-link{text-align:center;margin-top:16px}.forgot-link a{color:var(--primary);font-size:13px;text-decoration:none;font-weight:500}.forgot-link a:hover{text-decoration:underline}
-.app{display:flex;min-height:100vh;display:none}
-.sidebar{width:270px;background:var(--bg-sidebar);color:var(--text-white);display:flex;flex-direction:column;position:fixed;height:100vh;z-index:100;transition:var(--transition);overflow-y:auto}
-.sidebar-header{padding:20px;text-align:center;border-bottom:1px solid rgba(255,255,255,.08)}
-.sidebar-header .logo-circle{width:56px;height:56px;background:linear-gradient(135deg,var(--accent),var(--accent-light));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:24px;color:var(--primary-dark);font-weight:800}
-.sidebar-header h3{font-family:'Noto Sans Devanagari',sans-serif;font-size:13px;font-weight:600;line-height:1.5;color:var(--text-white)}
-.sidebar-header p{font-size:10px;color:rgba(255,255,255,.5);margin-top:4px}
-.sidebar-nav{flex:1;padding:12px 0}
-.nav-section{padding:8px 20px 4px;font-size:10px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:1.5px;text-transform:uppercase}
-.nav-item{display:flex;align-items:center;gap:12px;padding:11px 20px;color:rgba(255,255,255,.65);font-size:13px;font-weight:500;cursor:pointer;transition:var(--transition);border-left:3px solid transparent;margin:1px 0}
-.nav-item:hover{background:rgba(255,255,255,.06);color:#fff}
-.nav-item.active{background:rgba(232,168,56,.12);color:var(--accent);border-left-color:var(--accent)}
-.nav-item i{width:20px;text-align:center;font-size:15px}
-.sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.08)}
-.user-info{display:flex;align-items:center;gap:10px}
-.user-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-light));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--primary-dark)}
-.user-details{flex:1}.user-details .name{font-size:13px;font-weight:600;color:#fff}.user-details .role{font-size:10px;color:rgba(255,255,255,.5)}
-.main{margin-left:270px;flex:1;min-height:100vh;display:flex;flex-direction:column}
-.topbar{background:#fff;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.04);position:sticky;top:0;z-index:50}
-.topbar-left{display:flex;align-items:center;gap:16px}
-.topbar-left h1{font-size:20px;font-weight:700;color:var(--primary-dark)}
-.topbar-left .breadcrumb{font-size:12px;color:var(--text-light)}
-.topbar-right{display:flex;align-items:center;gap:12px}
-.topbar-right .btn-icon{width:40px;height:40px;border-radius:50%;border:none;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-light);transition:var(--transition);font-size:16px}
-.topbar-right .btn-icon:hover{background:var(--primary);color:#fff}
-.content{flex:1;padding:28px 32px;overflow-y:auto}
-.page{display:none}.page.active{display:block}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-bottom:28px}
-.stat-card{background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:var(--transition)}
-.stat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
-.stat-card:nth-child(1)::before{background:linear-gradient(90deg,var(--primary),var(--primary-light))}
-.stat-card:nth-child(2)::before{background:linear-gradient(90deg,var(--success),#059669)}
-.stat-card:nth-child(3)::before{background:linear-gradient(90deg,var(--warning),#d97706)}
-.stat-card:nth-child(4)::before{background:linear-gradient(90deg,var(--info),#2563eb)}
-.stat-card:nth-child(5)::before{background:linear-gradient(90deg,var(--danger),#dc2626)}
-.stat-card .stat-icon{width:48px;height:48px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
-.stat-card:nth-child(1) .stat-icon{background:rgba(15,76,129,.1);color:var(--primary)}
-.stat-card:nth-child(2) .stat-icon{background:rgba(16,185,129,.1);color:var(--success)}
-.stat-card:nth-child(3) .stat-icon{background:rgba(245,158,11,.1);color:var(--warning)}
-.stat-card:nth-child(4) .stat-icon{background:rgba(59,130,246,.1);color:var(--info)}
-.stat-card:nth-child(5) .stat-icon{background:rgba(239,68,68,.1);color:var(--danger)}
-.stat-card .stat-value{font-size:28px;font-weight:800;color:var(--text)}
-.stat-card .stat-label{font-size:12px;color:var(--text-light);margin-top:4px;font-weight:500}
-.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:24px;margin-bottom:28px}
-.chart-card{background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
-.chart-card h3{font-size:15px;font-weight:700;color:var(--text);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
-.table-container{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-.table-header{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px}
-.table-header h3{font-size:16px;font-weight:700;color:var(--text)}
-.table-actions{display:flex;gap:8px;flex-wrap:wrap}
-.search-box{position:relative}
-.search-box input{padding:10px 16px 10px 40px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:13px;width:260px;transition:var(--transition)}
-.search-box input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 4px rgba(15,76,129,.1)}
-.search-box i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-light);font-size:14px}
-table{width:100%;border-collapse:collapse}
-th{background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;padding:12px 16px;text-align:left;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
-td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
-tr:hover td{background:rgba(15,76,129,.02)}
-.dept-badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
-.desig-badge{display:inline-block;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600}
-.desig-principal{background:#fef3c7;color:#92400e}
-.desig-professor{background:#dbeafe;color:#1e40af}
-.desig-reader,.desig-associate{background:#d1fae5;color:#065f46}
-.desig-lecturer,.desig-assistant{background:#ede9fe;color:#5b21b6}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
-.modal-overlay.show{display:flex}
-.modal{background:#fff;border-radius:var(--radius-lg);width:680px;max-width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:modalIn .3s ease}
-@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.modal-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,var(--primary-dark),var(--primary));border-radius:var(--radius-lg) var(--radius-lg) 0 0}
-.modal-header h3{font-size:17px;font-weight:700;color:#fff}
-.modal-close{width:32px;height:32px;border:none;background:rgba(255,255,255,.15);color:#fff;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
-.modal-close:hover{background:rgba(255,255,255,.3)}
-.modal-body{padding:24px}
-.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.form-row .form-group{margin-bottom:0}
-.form-group textarea{width:100%;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:14px;resize:vertical;min-height:80px}
-.profile-hero{background:linear-gradient(135deg,var(--primary-dark),var(--primary),var(--primary-light));border-radius:var(--radius-lg);padding:40px;color:#fff;margin-bottom:24px;position:relative;overflow:hidden}
-.profile-hero::before{content:'';position:absolute;width:300px;height:300px;background:radial-gradient(circle,rgba(232,168,56,.15),transparent);top:-100px;right:-50px;border-radius:50%}
-.profile-info-grid{display:grid;grid-template-columns:120px 1fr;gap:24px;align-items:start}
-.profile-photo{width:120px;height:120px;border-radius:50%;border:4px solid rgba(255,255,255,.3);object-fit:cover;background:#fff;display:flex;align-items:center;justify-content:center;font-size:40px;color:var(--primary);overflow:hidden}
-.profile-photo img{width:100%;height:100%;object-fit:cover}
-.profile-details h2{font-size:24px;font-weight:800;margin-bottom:4px}
-.profile-details .designation{font-size:14px;opacity:.85;margin-bottom:8px}
-.profile-details .dept{font-size:13px;opacity:.7}
-.profile-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-.profile-card{background:#fff;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
-.profile-card h4{font-size:14px;font-weight:700;color:var(--primary);margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--bg)}
-.profile-field{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bg);font-size:13px}
-.profile-field .label{color:var(--text-light);font-weight:500}
-.profile-field .value{font-weight:600;color:var(--text);text-align:right}
-.toast-container{position:fixed;top:20px;right:20px;z-index:2000;display:flex;flex-direction:column;gap:8px}
-.toast{padding:14px 20px;border-radius:var(--radius-sm);color:#fff;font-size:13px;font-weight:500;display:flex;align-items:center;gap:10px;animation:toastIn .3s ease;min-width:300px;box-shadow:var(--shadow-lg)}
-.toast-success{background:linear-gradient(135deg,var(--success),#059669)}
-.toast-error{background:linear-gradient(135deg,var(--danger),#dc2626)}
-.toast-info{background:linear-gradient(135deg,var(--info),#2563eb)}
-@keyframes toastIn{from{opacity:0;transform:translateX(100px)}to{opacity:1;transform:translateX(0)}}
-@media print{.sidebar,.topbar,.no-print{display:none!important}.main{margin-left:0!important}.content{padding:0!important}body{background:#fff}.print-header{display:block!important;text-align:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #000}.print-header h2{font-size:16px;margin-bottom:4px}.print-header p{font-size:11px}}
-.print-header{display:none}
-@media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.content{padding:16px}.form-row{grid-template-columns:1fr}.charts-grid{grid-template-columns:1fr}.stats-grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}.search-box input{width:100%}.table-header{flex-direction:column;align-items:stretch}.profile-info-grid{grid-template-columns:1fr;text-align:center}.profile-photo{margin:0 auto}}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.page.active{animation:fadeIn .4s ease}
-.tag-approved{background:#d1fae5;color:#065f46;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600}
-.tag-pending{background:#fef3c7;color:#92400e;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600}
-.leave-card{background:#fff;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px;border-left:4px solid var(--primary)}
-.leave-card.approved{border-left-color:var(--success)}.leave-card.rejected{border-left-color:var(--danger)}.leave-card.pending{border-left-color:var(--warning)}
-.tab-bar{display:flex;gap:4px;margin-bottom:20px;background:#fff;padding:4px;border-radius:var(--radius-sm);box-shadow:var(--shadow)}
-.tab-btn{padding:10px 20px;border:none;background:transparent;font-size:13px;font-weight:600;color:var(--text-light);cursor:pointer;border-radius:var(--radius-sm);transition:var(--transition)}
-.tab-btn.active{background:var(--primary);color:#fff}
-.empty-state{text-align:center;padding:60px 20px;color:var(--text-light)}.empty-state i{font-size:48px;margin-bottom:16px;opacity:.3}.empty-state p{font-size:14px}
-select.form-select{padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:#fff;cursor:pointer;transition:var(--transition)}
-select.form-select:focus{border-color:var(--primary);outline:none}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Book & Leave Record - DAMCH Udgir</title>
+    <style>
+        /* ===== GLOBAL ===== */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #e8eaf6; color: #000; font-size: 11px; }
+
+        /* ===== LOGIN PAGE ===== */
+        .login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #1a237e 0%, #b71c1c 100%);
+            display: flex; justify-content: center; align-items: center; z-index: 9999;
+        }
+        .login-box {
+            background: #fff; border-radius: 12px; padding: 30px 35px; width: 380px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4); text-align: center;
+        }
+        .login-box .login-logo { width: 70px; height: 70px; margin: 0 auto 8px; }
+        .login-box .login-logo img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid #b71c1c; }
+        .login-box h2 { color: #b71c1c; font-size: 15px; margin-bottom: 2px; text-transform: uppercase; }
+        .login-box h4 { color: #333; font-size: 11px; margin-bottom: 15px; font-weight: 600; }
+        .login-box input {
+            width: 100%; padding: 10px 12px; margin-bottom: 10px; border: 1.5px solid #bbb;
+            border-radius: 6px; font-size: 13px; outline: none; transition: border 0.3s;
+        }
+        .login-box input:focus { border-color: #b71c1c; background: #fff8e1; }
+        .login-box .login-btn {
+            width: 100%; padding: 11px; background: #b71c1c; color: #fff; border: none;
+            border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer;
+            transition: background 0.3s;
+        }
+        .login-box .login-btn:hover { background: #d32f2f; }
+        .login-msg { color: #b71c1c; font-size: 11px; font-weight: bold; margin-top: 8px; min-height: 16px; }
+        .login-footer { font-size: 9px; color: #888; margin-top: 12px; }
+        .login-footer a { color: #1a237e; }
+        .toggle-pw { font-size: 10px; color: #1a237e; cursor: pointer; text-align: right; display: block; margin: -6px 0 8px; }
+
+        /* ===== PROFILE MODAL ===== */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: none; justify-content: center;
+            align-items: center; z-index: 8000;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: #fff; border-radius: 10px; padding: 20px 25px; width: 460px;
+            max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .modal-box h3 { color: #b71c1c; border-bottom: 2px solid #b71c1c; padding-bottom: 6px; margin-bottom: 12px; font-size: 15px; }
+        .modal-box label { font-weight: bold; font-size: 11px; color: #333; display: block; margin-top: 8px; }
+        .modal-box input, .modal-box select {
+            width: 100%; padding: 7px 10px; border: 1.5px solid #ccc; border-radius: 5px;
+            font-size: 12px; margin-top: 3px;
+        }
+        .modal-box input:focus, .modal-box select:focus { border-color: #1a237e; background: #e8eaf6; }
+        .modal-box .readonly-field { background: #f5f5f5; color: #555; cursor: not-allowed; }
+        .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .modal-btns { margin-top: 15px; text-align: right; }
+        .modal-btns button { padding: 8px 18px; border: none; border-radius: 5px; font-size: 12px; font-weight: bold; cursor: pointer; margin-left: 8px; }
+        .mbtn-save { background: #2e7d32; color: #fff; }
+        .mbtn-cancel { background: #757575; color: #fff; }
+        .mbtn-save:hover { background: #388e3c; }
+        .mbtn-cancel:hover { background: #888; }
+        .date-input-group { display: flex; gap: 4px; align-items: center; }
+        .date-input-group input { width: 50px; text-align: center; padding: 7px 4px; }
+        .date-input-group input.yr-input { width: 65px; }
+        .date-input-group span { font-weight: bold; color: #999; font-size: 14px; }
+
+        /* ===== HEADER ===== */
+        .header-section {
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 4px solid #b71c1c; padding: 8px; background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo-area { width: 60px; height: 60px; border: 2px dashed #555; display: flex; justify-content: center; align-items: center; cursor: pointer; background: #f9f9f9; border-radius: 6px; }
+        .logo-area img { max-width: 100%; max-height: 100%; border-radius: 4px; }
+        .title-area { text-align: center; flex-grow: 1; }
+        .college-name { font-size: 17px; font-weight: 900; color: #b71c1c; text-transform: uppercase; margin: 2px 0 0; }
+        .college-addr { font-size: 11px; font-weight: bold; color: #444; margin-bottom: 3px; }
+        .user-info-bar { text-align: right; font-size: 10px; font-weight: bold; }
+        .user-info-bar .user-name { color: #1a237e; font-size: 12px; }
+        .logout-btn { background: #b71c1c; color: #fff; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: bold; margin-top: 4px; }
+        .profile-btn { background: #1a237e; color: #fff; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: bold; margin-top: 4px; }
+
+        /* ===== CONTROLS ===== */
+        .mgmt-panel {
+            background: #fff; padding: 8px; margin: 8px 5px; border-left: 6px solid #2e7d32;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .tab-btn { padding: 6px 20px; border: 2px solid #b71c1c; background: #fff; color: #b71c1c; cursor: pointer; font-weight: bold; font-size: 12px; }
+        .tab-btn.active { background: #b71c1c; color: #fff; }
+
+        /* ===== TABLE ===== */
+        .table-container { overflow-x: auto; background: #fff; border: 2px solid #444; max-height: 78vh; margin: 0 5px; }
+        table.main-table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 1900px; }
+        th, td { border: 1px solid #555; padding: 3px; text-align: center; vertical-align: middle; color: #000; }
+        thead th { position: sticky; top: 0; z-index: 10; height: 32px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.3px; }
+        .head-paid { background-color: #1b5e20; color: #fff; border-color: #fff; }
+        .head-unpaid { background-color: #b71c1c; color: #fff; border-color: #fff; }
+        .th-paid { background-color: #2e7d32; color: #fff; }
+        .th-unpaid { background-color: #d32f2f; color: #fff; }
+        .th-late { background-color: #000; color: #fff; }
+        .th-tot { background-color: #212121; color: #fff; }
+        .col-fix { position: sticky; left: 0; background: #eee; z-index: 5; width: 35px; border-right: 2px solid #000; font-weight: bold; }
+        .col-fix-2 { position: sticky; left: 35px; background: #eee; z-index: 5; width: 240px; text-align: left; border-right: 2px solid #000; padding-left: 5px; }
+        input[type="number"] { width: 35px; text-align: center; border: 1px solid #333; background: #fff; color: #000; font-weight: bold; font-size: 12px; padding: 2px; }
+        input[type="text"], input[type="date"] { width: 96%; font-size: 11px; border: 1px solid #555; margin-bottom: 2px; font-weight: 600; color: #000; background: #fff; padding: 1px; }
+        input:focus { background: #fff9c4; outline: 2px solid #000; }
+        .info-label { font-size: 9px; color: #333; font-weight: bold; display: block; }
+        .exp-tag { font-size: 10px; color: #0d47a1; font-weight: bold; background: #e3f2fd; padding: 2px; border-radius: 3px; border: 1px solid #bbdefb; display: block; margin-top: 2px; text-align: center; }
+        .bg-bal { background: #e0e0e0; font-weight: 900; color: #000; font-size: 11px; }
+        .bg-bal-neg { background: #ffcdd2; color: #b71c1c; font-weight: 900; border: 1px solid #b71c1c; }
+        .tot-paid-cell { background: #a5d6a7; border: 2px solid #1b5e20 !important; font-weight: 900; color: #000; font-size: 12px; }
+        .tot-unpaid-cell { background: #ef9a9a; border: 2px solid #b71c1c !important; font-weight: 900; color: #000; font-size: 12px; }
+        .grand-tot-cell { background: #fff176; border: 2px solid #f57f17 !important; font-weight: 900; font-size: 14px; color: #000; }
+
+        /* ===== BUTTONS ===== */
+        .btn { border: 1px solid #333; padding: 5px 10px; color: #fff; cursor: pointer; border-radius: 4px; font-size: 10px; font-weight: bold; margin-left: 4px; box-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
+        .btn-del { background: #d32f2f; }
+        .btn-save { background: #0277bd; }
+        .btn-print-ind { background: #455a64; }
+        .btn-print-mst { background: #e65100; }
+        .btn-search { background: #6a1b9a; }
+        .btn-calc { background: #d84315; border: 2px solid #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.2); animation: pulse 2s infinite; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+
+        /* ===== FOOTER ===== */
+        .dev-footer { text-align: center; padding: 8px; font-size: 10px; color: #555; margin-top: 10px; border-top: 1px solid #ccc; background: #f5f5f5; }
+        .dev-footer b { color: #1a237e; }
+
+        /* ===== PRINT ===== */
+        #printSection { display: none; }
+        @media print {
+            body { background: white; color: black; -webkit-print-color-adjust: exact; }
+            .screen-only { display: none !important; }
+            #printSection { display: block !important; width: 100%; }
+            @page { size: A4 portrait; margin: 0.5cm; }
+            .rpt-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 8px; table-layout: fixed; border: 2px solid #000 !important; }
+            .rpt-table th, .rpt-table td { border: 1px solid #000 !important; padding: 2px 1px; text-align: center; color: black; word-wrap: break-word; }
+            .rpt-table th { background-color: #ddd !important; font-weight: bold; }
+            .rpt-header { display: flex; align-items: center; border-bottom: 2px solid black !important; padding-bottom: 5px; margin-bottom: 10px; }
+            .rpt-logo { width: 60px; height: 60px; margin-right: 10px; }
+            .rpt-logo img { max-width: 100%; max-height: 100%; }
+            .rpt-titles { text-align: center; flex-grow: 1; }
+            .rpt-titles h3 { margin: 2px 0; font-size: 14px; }
+            .rpt-titles h2 { margin: 2px 0; font-size: 16px; font-weight: 900; }
+            .rpt-titles h5 { margin: 2px 0; font-size: 10px; }
+            .dept-head { background-color: #eee; font-weight: bold; text-align: left; padding: 3px; font-size: 10px; border: 1px solid #000 !important; margin-top: 5px; }
+            .ind-card { border: 1px solid #000 !important; padding: 5px; margin-bottom: 10px; page-break-inside: avoid; width: 99%; }
+            .ind-header { border-bottom: 1px solid #000 !important; padding-bottom: 2px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+            .ind-title { font-size: 12px; font-weight: bold; }
+            .ind-meta { font-size: 9px; margin-bottom: 5px; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 2px; }
+            .ind-table { width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 2px; }
+            .ind-table th, .ind-table td { border: 1px solid #000 !important; padding: 2px; text-align: center; color: black; }
+            .ind-table th { background: #eee !important; font-weight: bold; }
+            .ind-sect-title { font-size: 9px; font-weight: bold; background: #333; color: white; padding: 1px 3px; margin-top: 3px; -webkit-print-color-adjust: exact; }
+            .ind-summary { margin-top: 2px; border-top: 1px solid #000 !important; padding-top: 2px; display: flex; justify-content: flex-end; gap: 10px; font-weight: bold; font-size: 10px; }
+            .print-footer { text-align: center; font-size: 8px; color: #555; margin-top: 10px; border-top: 1px solid #999; padding-top: 4px; }
+        }
+    </style>
 </head>
 <body>
-<div id="loginPage" class="login-page">
-<div class="login-container">
-<div class="login-logo">
-<div class="college-emblem"><i class="fas fa-om"></i></div>
-<h2>बाळ भगवान शिक्षण प्रसारक मंडळ, अहमदपूर</h2>
-<h2>धन्वंतरी आयुर्वेद मेडिकल कॉलेज अँड<br>चॅरिटेबल हॉस्पिटल, उदगीर</h2>
-<h3>TEACHING FACULTY LEAVE TRACKING SYSTEM</h3>
-<p class="addr">देगलूर रोड, उदगीर - 413517, जि. लातूर, महाराष्ट्र<br>दूरध्वनी: (02385) 259825 | Email: contact@damchudgir.edu.in</p>
+
+<!-- ===== LOGIN PAGE ===== -->
+<div class="login-overlay" id="loginPage">
+    <div class="login-box">
+        <div class="login-logo" id="loginLogoArea"><img id="loginLogoImg" src="" style="display:none"><span id="loginLogoTxt" style="font-size:28px; color:#b71c1c; font-weight:900;">DAMCH</span></div>
+        <h2>Dhanwantari Ayurved Medical College</h2>
+        <h4>Tq. Udgir, Dist. Latur, Maharashtra</h4>
+        <p style="font-size:12px; font-weight:bold; color:#1a237e; margin-bottom:12px;">Faculty Service Book & Leave Record</p>
+        <input type="text" id="loginUser" placeholder="Username (Teacher Code or admin)" autocomplete="off">
+        <input type="password" id="loginPass" placeholder="Password">
+        <span class="toggle-pw" onclick="togglePw()">Show Password</span>
+        <button class="login-btn" onclick="doLogin()">LOGIN</button>
+        <div class="login-msg" id="loginMsg"></div>
+        <div class="login-footer">
+            Phone: (02385) 259825 | Email: contact@damchudgir.edu.in<br>
+            <a href="http://www.damchudgir.edu.in" target="_blank">www.damchudgir.edu.in</a><br><br>
+            <b style="color:#1a237e;">Designed & Developed by Dr. Jadhav V.R.</b>
+        </div>
+    </div>
 </div>
-<div id="loginForm">
-<div class="form-group"><label>Username</label><i class="fas fa-user icon"></i>
-<input type="text" id="loginUser" placeholder="Enter username" autocomplete="off"></div>
-<div class="form-group"><label>Password</label><i class="fas fa-lock icon"></i>
-<input type="password" id="loginPass" placeholder="Enter password"></div>
-<button class="btn btn-primary login-btn" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
-<div class="forgot-link"><a href="#" onclick="showForgot()">Forgot Password?</a></div>
+<!-- ===== MAIN APP (hidden until login) ===== -->
+<div class="screen-only" id="mainApp" style="display:none; padding:5px;">
+
+    <div class="header-section">
+        <div class="logo-area" onclick="document.getElementById('logoInput').click()">
+            <img id="logoImg" style="display:none">
+            <span id="logoTxt" style="font-weight:bold; color:#000; font-size:9px;">UPLOAD<br>LOGO</span>
+        </div>
+        <input type="file" id="logoInput" style="display:none" accept="image/*" onchange="loadLogo(event)">
+
+        <div class="title-area">
+            <div contenteditable="true" id="tHead" style="font-size:12px; font-weight:bold; color:#333;">Bal Bhagwan Shikshan Prasarak Mandal Ahmedpur's</div>
+            <div contenteditable="true" class="college-name" id="cHead">Dhanwantari Ayurved Medical College & Charitable Hospital</div>
+            <div contenteditable="true" class="college-addr" id="cAddr">Tq. Udgir Dist. Latur Maharashtra State</div>
+            <div style="font-size:13px; font-weight:bold; color:#333;">Faculty Service Book & Leave Record</div>
+        </div>
+
+        <div class="user-info-bar">
+            Date: <input type="text" id="reportDate" onchange="render()" style="border:none; border-bottom:1px dashed #333; background:transparent; font-weight:bold; font-size:11px; width:90px; text-align:center;" placeholder="DD/MM/YYYY"><br>
+            <span class="user-name" id="dispUserName"></span><br>
+            <span id="dispUserRole" style="color:#555; font-size:9px;"></span><br>
+            <button class="profile-btn" onclick="openProfile()">My Profile</button>
+            <button class="logout-btn" onclick="doLogout()">Logout</button>
+        </div>
+    </div>
+
+    <div style="text-align:center; margin:5px 0;">
+        <button class="tab-btn active" id="btn25" onclick="swYear('2025')">2025</button>
+        <button class="tab-btn" id="btn26" onclick="swYear('2026')">2026</button>
+    </div>
+
+    <div class="mgmt-panel" id="adminPanel">
+        <div>
+            <b style="color:#2e7d32;">Manage Faculty</b>
+            <button class="btn" style="background:#2e7d32;" onclick="addRow()">+ Add Faculty</button>
+            <button class="btn btn-search" onclick="searchFaculty()">Search</button>
+        </div>
+        <div>
+            <button class="btn btn-calc" onclick="calculateCarryForward()" title="Calc EL from 2025 to 2026">Auto EL Carry Forward (2025→2026)</button>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+            <div>
+                <span class="info-label" style="display:inline;">Detailed:</span>
+                <button class="btn btn-print-ind" onclick="genIndividualReport(null)">All Faculty</button>
+                <button class="btn btn-print-ind" style="background:#00838f;" onclick="askDetailedDeptReport()">Dept Wise</button>
+            </div>
+            <div>
+                <span class="info-label" style="display:inline;">Summary:</span>
+                <button class="btn btn-print-mst" onclick="genMasterReport(null)">Master All</button>
+                <button class="btn btn-print-mst" style="background:#f57f17; color:#000;" onclick="askDeptReport()">Dept Wise</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <h3 id="yrTitle" style="text-align:center; margin:5px; color:#000; font-weight:900;">Record: 2025</h3>
+        <table class="main-table" id="mainTable">
+            <thead>
+                <tr>
+                    <th rowspan="3" class="col-fix">Sr</th>
+                    <th rowspan="3" class="col-fix-2">Faculty Details & Experience</th>
+                    <th colspan="23" class="head-paid">PAID LEAVE SECTION</th>
+                    <th colspan="2" class="head-unpaid">UNPAID</th>
+                    <th rowspan="3" class="th-tot">GRAND<br>TOTAL</th>
+                    <th rowspan="3" id="actionColHead" style="width:50px; background:#333; color:white;">ACT</th>
+                </tr>
+                <tr>
+                    <th colspan="2" class="th-paid">CL(8)</th>
+                    <th colspan="2" class="th-paid">ML(10)</th>
+                    <th colspan="1" class="th-paid">OD</th>
+                    <th colspan="5" class="th-paid" style="background:#1565c0;">EL (Earned)</th>
+                    <th colspan="2" class="th-late">Late(1/6)</th>
+                    <th colspan="2" class="th-paid">Mat(180)</th>
+                    <th colspan="2" class="th-paid" style="background:#004d40;">Pat(15)</th>
+                    <th colspan="2" class="th-paid">SL(15)</th>
+                    <th colspan="2" class="th-paid">Sp.Dis(120)</th>
+                    <th colspan="2" class="th-paid">RH(2)</th>
+                    <th rowspan="2" class="th-tot">PAID<br>USED</th>
+                    <th colspan="1" class="th-unpaid" style="background:#8e0000;">LWP</th>
+                    <th rowspan="2" class="th-unpaid">TOT<br>UNPD</th>
+                </tr>
+                <tr style="font-size:10px; background:#424242; color:white;">
+                    <th>Used</th><th>Bal</th>
+                    <th>Used</th><th>Bal</th>
+                    <th>Used</th>
+                    <th>Open</th><th>New</th><th>Tot</th><th>Used</th><th style="background:#1565c0;">Bal</th>
+                    <th>Cnt</th><th>Ded</th>
+                    <th>Used</th><th>Bal</th>
+                    <th>Used</th><th>Bal</th>
+                    <th>Used</th><th>Bal</th>
+                    <th>Used</th><th>Bal</th>
+                    <th>Used</th><th>Bal</th>
+                    <th>Used</th>
+                </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
+    </div>
+
+    <div style="margin-top:8px; text-align:right; padding:0 5px;">
+        <span id="adminBtns">
+            <button class="btn btn-save" onclick="saveData()">Save to Browser</button>
+            <button class="btn btn-save" style="background:#5e35b1;" onclick="downloadJSON()">Download JSON</button>
+            <button class="btn btn-save" style="background:#00695c;" onclick="expCSV()">Export Excel</button>
+            <span style="border-left:2px solid #555; margin:0 5px; height:20px; display:inline-block; vertical-align:middle;"></span>
+            <input type="file" id="restFile" style="display:none" accept=".json" onchange="restData(event)">
+            <button class="btn btn-save" style="background:#6a1b9a;" onclick="document.getElementById('restFile').click()">Restore Data</button>
+        </span>
+    </div>
+
+    <div class="dev-footer">Designed & Developed by <b>Dr. Jadhav V.R.</b> | Contact: 9518356305</div>
 </div>
-<div id="forgotForm" style="display:none">
-<div class="form-group"><label>Username</label><i class="fas fa-user icon"></i>
-<input type="text" id="forgotUser" placeholder="Your username"></div>
-<div class="form-group"><label>Security Question: What is your favourite sport?</label><i class="fas fa-shield-alt icon"></i>
-<input type="text" id="forgotAnswer" placeholder="Answer"></div>
-<button class="btn btn-primary login-btn" onclick="doForgotPassword()"><i class="fas fa-key"></i> Recover Password</button>
-<div class="forgot-link"><a href="#" onclick="hideForgot()">← Back to Login</a></div>
+
+<!-- ===== PROFILE MODAL ===== -->
+<div class="modal-overlay" id="profileModal">
+    <div class="modal-box">
+        <h3>My Profile</h3>
+        <label>Name</label>
+        <input type="text" id="pf_name" class="readonly-field" readonly>
+        <label>Designation</label>
+        <input type="text" id="pf_desig" class="readonly-field" readonly>
+        <label>Department</label>
+        <input type="text" id="pf_dept" class="readonly-field" readonly>
+        <label>Teacher Code</label>
+        <input type="text" id="pf_code" class="readonly-field" readonly>
+
+        <div class="modal-row">
+            <div>
+                <label>Date of Joining (DD/MM/YYYY)</label>
+                <div class="date-input-group">
+                    <input type="text" id="pf_doj_dd" maxlength="2" placeholder="DD" oninput="autoTab(this,'pf_doj_mm')">
+                    <span>/</span>
+                    <input type="text" id="pf_doj_mm" maxlength="2" placeholder="MM" oninput="autoTab(this,'pf_doj_yyyy')">
+                    <span>/</span>
+                    <input type="text" id="pf_doj_yyyy" class="yr-input" maxlength="4" placeholder="YYYY">
+                </div>
+            </div>
+            <div>
+                <label>Date of Birth (DD/MM/YYYY)</label>
+                <div class="date-input-group">
+                    <input type="text" id="pf_dob_dd" maxlength="2" placeholder="DD" oninput="autoTab(this,'pf_dob_mm')">
+                    <span>/</span>
+                    <input type="text" id="pf_dob_mm" maxlength="2" placeholder="MM" oninput="autoTab(this,'pf_dob_yyyy')">
+                    <span>/</span>
+                    <input type="text" id="pf_dob_yyyy" class="yr-input" maxlength="4" placeholder="YYYY">
+                </div>
+            </div>
+        </div>
+
+        <label>Change Password</label>
+        <input type="password" id="pf_newpw" placeholder="Leave blank to keep current">
+
+        <div class="modal-btns">
+            <button class="mbtn-cancel" onclick="closeProfile()">Cancel</button>
+            <button class="mbtn-save" onclick="saveProfile()">Save Changes</button>
+        </div>
+    </div>
 </div>
-<div style="text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
-<p style="font-size:11px;color:var(--text-light)">Designed & Developed by <strong>Dr. Jadhav V.R.</strong> | Contact: 95183 56305</p>
-<p style="font-size:10px;color:var(--text-light);margin-top:4px">© 2025-2027 | www.damchudgir.edu.in</p>
-</div></div></div>
-<div id="app" class="app">
-<aside class="sidebar" id="sidebar">
-<div class="sidebar-header"><div class="logo-circle">DA</div><h3>धन्वंतरी आयुर्वेद मे. कॉ.</h3><p>Faculty Leave Tracker</p></div>
-<nav class="sidebar-nav" id="sidebarNav"></nav>
-<div class="sidebar-footer"><div class="user-info">
-<div class="user-avatar" id="avatarInitial">A</div>
-<div class="user-details"><div class="name" id="sidebarUserName">Admin</div><div class="role" id="sidebarUserRole">Administrator</div></div>
-<button onclick="doLogout()" title="Logout" style="background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.6);cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center"><i class="fas fa-sign-out-alt"></i></button>
-</div></div></aside>
-<div class="main">
-<header class="topbar"><div class="topbar-left">
-<button class="btn-icon" onclick="toggleSidebar()" style="display:none" id="menuBtn"><i class="fas fa-bars"></i></button>
-<div><h1 id="pageTitle">Dashboard</h1><div class="breadcrumb" id="breadcrumb">Home / Dashboard</div></div>
-</div><div class="topbar-right no-print">
-<button class="btn-icon" onclick="window.print()" title="Print"><i class="fas fa-print"></i></button>
-<button class="btn-icon" onclick="doLogout()" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
-</div></header>
-<div class="content" id="contentArea">
-<div class="print-header"><h2>धन्वंतरी आयुर्वेद मेडिकल कॉलेज अँड चॅरिटेबल हॉस्पिटल, उदगीर</h2>
-<p>देगलूर रोड, उदगीर - 413517, जि. लातूर | दूरध्वनी: (02385) 259825</p></div>
-</div></div></div>
-<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
-<div class="toast-container" id="toastContainer"></div>
+
+<div id="printSection"></div>
 <script>
-var DEPTS=['Samhita Siddhant','Sharir Rachana','Kriya Sharir','Dravyaguna Vidnyan','Rasashastra B.K.','Rognidan V.V.','Swasthavritta','Agadtantra V.A.','Prasuti & Striroga','Kaumarbhritya','Kayachikitsa','Shalyatantra','Shalakya Tantra','Panchakarma'];
-var DEPT_COLORS=['#3b82f6','#ef4444','#10b981','#f59e0b','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16','#06b6d4','#d946ef','#0ea5e9','#eab308'];
-var DESIG_ORDER={'Principal':0,'Professor':1,'Reader':2,'Associate Professor':2,'Lecturer':3,'Assistant Professor':3};
-var LEAVE_TYPES=['CL','ML','OD','EL','Maternity','Paternity','Study Leave','Sabbatical','RH','LWP','Late Mark'];
-var YEARS=[2025,2026,2027];
-var DEFAULT_FACULTY=[
-{id:'F001',name:'Vd. Patil Dattatraya Vinayakrao',code:'AYSS00481',designation:'Professor',dept:'Samhita Siddhant',email:'hnsdvp10@gmail.com',phone:'9422819195',doj:'2003-12-23',dob:'1977-05-05',approved:'Yes',isPrincipal:true,status:'active'},
-{id:'F002',name:'Vd. Khandilkar Sandeep Subhashrao',code:'AYSS00625',designation:'Professor',dept:'Samhita Siddhant',email:'sandeep.khandalikar@gmail.com',phone:'9860355409',doj:'2010-06-15',dob:'1978-03-12',approved:'Yes',status:'active'},
-{id:'F003',name:'Vda. Kulkarni Neha Madhukarrao',code:'AYSS02080',designation:'Lecturer',dept:'Samhita Siddhant',email:'drnehakulkarni19@gmail.com',phone:'7498686401',doj:'2022-07-01',dob:'1994-08-19',approved:'No',status:'active'},
-{id:'F004',name:'Vda. Tarde Ketaki Rangnath',code:'AYSS02196',designation:'Lecturer',dept:'Samhita Siddhant',email:'ketakitarde65856@gmail.com',phone:'9284782954',doj:'2023-01-15',dob:'1996-06-05',approved:'No',status:'active'},
-{id:'F005',name:'Vda. Patil Shivani Tanajirao',code:'AYSS02244',designation:'Lecturer',dept:'Samhita Siddhant',email:'shivanipatil26896@gmail.com',phone:'8857013868',doj:'2023-06-01',dob:'1997-08-26',approved:'No',status:'active'},
-{id:'F006',name:'Vd. Biradar Prashant Trembakrao',code:'AYSN00048',designation:'Lecturer',dept:'Samhita Siddhant',email:'drptbiradar14.pb@gmail.com',phone:'9970635452',doj:'2019-08-01',dob:'1990-01-14',approved:'No',status:'active'},
-{id:'F007',name:'Vda. Bhandare Alka Kishanrao',code:'AYRS0408',designation:'Professor',dept:'Sharir Rachana',email:'bakreader_10@rediffmail.com',phone:'9834257911',doj:'2014-10-01',dob:'1975-11-20',approved:'Yes',status:'active'},
-{id:'F008',name:'Vda. Thakur Mayuri Udaysingh',code:'AYRS00376',designation:'Reader',dept:'Sharir Rachana',email:'drmuthakur1986@gmail.com',phone:'9822086826',doj:'2016-03-01',dob:'1986-09-15',approved:'Yes',status:'active'},
-{id:'F009',name:'Vd. Jadhav Vishnukant Rameshrao',code:'AYRS01211',designation:'Lecturer',dept:'Sharir Rachana',email:'jadhavvishnu696@gmail.com',phone:'9518356305',doj:'2019-11-01',dob:'1991-04-22',approved:'No',status:'active'},
-{id:'F010',name:'Vda. Varnale Rakhee Gururaj',code:'AYKS00772',designation:'Reader',dept:'Kriya Sharir',email:'rakheesgowda@gmail.com',phone:'8888646429',doj:'2014-10-01',dob:'1984-07-10',approved:'Yes',status:'active'},
-{id:'F011',name:'Vda. Chidre Madhumati Shivraj',code:'AYKS01029',designation:'Lecturer',dept:'Kriya Sharir',email:'madhumatichidre1010@gmail.com',phone:'9730303206',doj:'2020-01-15',dob:'1992-10-10',approved:'No',status:'active'},
-{id:'F012',name:'Vda. Patange Pritee Panjabrao',code:'AYKS01382',designation:'Lecturer',dept:'Kriya Sharir',email:'drpriteepatange@gmail.com',phone:'8779314797',doj:'2022-08-01',dob:'1995-04-20',approved:'No',status:'active'},
-{id:'F013',name:'Vd. Biradar Patil Swapnil Janardhan',code:'AYKS01398',designation:'Lecturer',dept:'Kriya Sharir',email:'shruteeswapnil1608@gmail.com',phone:'9049823497',doj:'2022-09-01',dob:'1996-08-16',approved:'No',status:'active'},
-{id:'F014',name:'Vd. Shrigire Sayaram Ramgonda',code:'AYDG00564',designation:'Professor',dept:'Dravyaguna Vidnyan',email:'sayshrigire@gmail.com',phone:'9503870611',doj:'2008-07-01',dob:'1969-01-01',approved:'Yes',status:'active'},
-{id:'F015',name:'Vda. Ghorband Shital Dattatraya',code:'AYDG01364',designation:'Reader',dept:'Dravyaguna Vidnyan',email:'vdshitaldg@gmail.com',phone:'9503288507',doj:'2018-06-01',dob:'1988-12-25',approved:'Yes',status:'active'},
-{id:'F016',name:'Vda. Bharaswadkar Deepali Manikrao',code:'AYDG02228',designation:'Lecturer',dept:'Dravyaguna Vidnyan',email:'drdipali73@gmail.com',phone:'9422940175',doj:'2023-03-01',dob:'1990-07-03',approved:'No',status:'active'},
-{id:'F017',name:'Vd. Kattewar Balaji Deorao',code:'AYRB00597',designation:'Professor',dept:'Rasashastra B.K.',email:'bdk73prof@gmail.com',phone:'9890125683',doj:'2007-10-01',dob:'1973-06-15',approved:'Yes',status:'active'},
-{id:'F018',name:'Vd. Balutkar Pravin Dattatraya',code:'AYRB01770',designation:'Lecturer',dept:'Rasashastra B.K.',email:'vaidypravin1985@gmail.com',phone:'9028845804',doj:'2022-01-15',dob:'1985-11-20',approved:'No',status:'active'},
-{id:'F019',name:'Vd. Bansode Namdev Manoharrao',code:'AYRN00325',designation:'Professor',dept:'Rognidan V.V.',email:'bansodenamdev78@gmail.com',phone:'8485816726',doj:'2019-11-02',dob:'1978-03-25',approved:'Yes',status:'active'},
-{id:'F020',name:'Vda. Kore Namrata Virnath',code:'AYRN00765',designation:'Lecturer',dept:'Rognidan V.V.',email:'korenamrata123@gmail.com',phone:'9404168828',doj:'2021-06-01',dob:'1993-05-15',approved:'No',status:'active'},
-{id:'F021',name:'Vd. Tale Sachinkumar Vishwanath',code:'AYSV00250',designation:'Reader',dept:'Swasthavritta',email:'sachinkumartale@gmail.com',phone:'9405048466',doj:'2014-10-01',dob:'1982-04-18',approved:'Yes',status:'active'},
-{id:'F022',name:'Vda. Mulgir Kiran Devidas',code:'AYSV00947',designation:'Lecturer',dept:'Swasthavritta',email:'kiranmulgir0707@gmail.com',phone:'8482856808',doj:'2021-08-01',dob:'1994-07-07',approved:'No',status:'active'},
-{id:'F023',name:'Vda. Mulajkar Shailaja Damodhar',code:'AYRB00637',designation:'Professor',dept:'Agadtantra V.A.',email:'mscherekar@gmail.com',phone:'9423776252',doj:'2010-01-15',dob:'1976-08-10',approved:'Yes',status:'active'},
-{id:'F024',name:'Vd. Kadam Meera Shankarrao',code:'AYAT00650',designation:'Lecturer',dept:'Agadtantra V.A.',email:'meerakadam113@gmail.com',phone:'9673565437',doj:'2020-06-01',dob:'1990-01-13',approved:'No',status:'active'},
-{id:'F025',name:'Vd. Biradar Mallikarjun Vishwanath',code:'AYAT00926',designation:'Lecturer',dept:'Agadtantra V.A.',email:'mallikarjundr1966@gmail.com',phone:'9822651995',doj:'2022-01-01',dob:'1966-07-15',approved:'No',status:'active'},
-{id:'F026',name:'Vd. Bharkade Jayshree Govindrao',code:'AYAT00917',designation:'Lecturer',dept:'Agadtantra V.A.',email:'jai7g.bharkade@gmail.com',phone:'7798856306',doj:'2022-03-01',dob:'1993-07-07',approved:'No',status:'active'},
-{id:'F027',name:'Vd. Mundhe Mangesh Gopinathrao',code:'AYPS00366',designation:'Professor',dept:'Prasuti & Striroga',email:'drmangeshmundhe@gmail.com',phone:'9423350673',doj:'2009-10-01',dob:'1974-06-20',approved:'Yes',status:'active'},
-{id:'F028',name:'Vda. Gandge Rashmi Ramchandra',code:'AYPS00416',designation:'Reader',dept:'Prasuti & Striroga',email:'rashmichidre.rc@gmail.com',phone:'9423340006',doj:'2014-10-01',dob:'1983-12-05',approved:'Yes',status:'active'},
-{id:'F029',name:'Vda. Bhadre Deepika Chhandrakant',code:'AYPS01057',designation:'Reader',dept:'Prasuti & Striroga',email:'deepikabolegave@gmail.com',phone:'9405416521',doj:'2018-01-15',dob:'1989-05-25',approved:'Yes',status:'active'},
-{id:'F030',name:'Vda. Devkatte Priyanka Dnyanoba',code:'AYPS01975',designation:'Lecturer',dept:'Prasuti & Striroga',email:'pdevkate23@gmail.com',phone:'8087186702',doj:'2023-04-01',dob:'1996-03-23',approved:'No',status:'active'},
-{id:'F031',name:'Vd. Mirashi Sanskruti Suraj',code:'AYKB00213',designation:'Professor',dept:'Kaumarbhritya',email:'directors@shayanagoa.com',phone:'9890052454',doj:'2012-06-01',dob:'1978-09-15',approved:'Yes',status:'active'},
-{id:'F032',name:'Vda. Bhadre Asmita Ashokrao',code:'AYKB00709',designation:'Lecturer',dept:'Kaumarbhritya',email:'asmita4192@gmail.com',phone:'8408917577',doj:'2022-08-01',dob:'1992-04-01',approved:'No',status:'active'},
-{id:'F033',name:'Vd. Martule Shivkumar Suryakant',code:'AYKB00725',designation:'Lecturer',dept:'Kaumarbhritya',email:'shiv1194@gmail.com',phone:'9404269871',doj:'2022-08-01',dob:'1994-11-01',approved:'No',status:'active'},
-{id:'F034',name:'Vd. Biradar Shivpratap Vinayak',code:'AYKB01247',designation:'Lecturer',dept:'Kaumarbhritya',email:'biradarshivpratap@gmail.com',phone:'7517042103',doj:'2023-07-01',dob:'1997-01-15',approved:'No',status:'active'},
-{id:'F035',name:'Vda. Gawale Pushpa Dagdu',code:'AYKC01184',designation:'Professor',dept:'Kayachikitsa',email:'gawalepushpa@gmail.com',phone:'9420211572',doj:'2010-10-01',dob:'1979-05-12',approved:'Yes',status:'active'},
-{id:'F036',name:'Vda. Patil Snehal Gunderao',code:'AYKC01011',designation:'Reader',dept:'Kayachikitsa',email:'sneha4600@gmail.com',phone:'8600844983',doj:'2018-06-01',dob:'1988-06-04',approved:'Yes',status:'active'},
-{id:'F037',name:'Vda. Chetlure Shivkanta Laxman',code:'AYKC03471',designation:'Lecturer',dept:'Kayachikitsa',email:'shivkantachetlure@gmail.com',phone:'8975362849',doj:'2022-08-01',dob:'1993-02-14',approved:'No',status:'active'},
-{id:'F038',name:'Vda. Navatke Raghini Ramrao',code:'AYKC04182',designation:'Lecturer',dept:'Kayachikitsa',email:'raghini.navatke27@gmail.com',phone:'9028718443',doj:'2024-01-15',dob:'1997-07-27',approved:'No',status:'active'},
-{id:'F039',name:'Vd. Mundhe Vishnukant Dnynoba',code:'AYST00603',designation:'Professor',dept:'Shalyatantra',email:'drvishnukantmundhe@gmail.com',phone:'9890271632',doj:'2009-10-01',dob:'1974-11-10',approved:'Yes',status:'active'},
-{id:'F040',name:'Vd. Surnar Yogeshwar Namdev',code:'AYST00564',designation:'Reader',dept:'Shalyatantra',email:'surnaryogesh@gmail.com',phone:'8208655510',doj:'2014-10-01',dob:'1983-08-20',approved:'Yes',status:'active'},
-{id:'F041',name:'Vd. Patil Amol Shivajirao',code:'AYST02412',designation:'Lecturer',dept:'Shalyatantra',email:'amolpatil523@gmail.com',phone:'9595898725',doj:'2023-01-01',dob:'1995-05-23',approved:'No',status:'active'},
-{id:'F042',name:'Vda. Biradar Madhuri Suryakant',code:'AYST02720',designation:'Lecturer',dept:'Shalyatantra',email:'biradarmadhuri11@gmail.com',phone:'8496982798',doj:'2024-01-01',dob:'1996-11-11',approved:'No',status:'active'},
-{id:'F043',name:'Vd. Patil Ravikant Vinayakrao',code:'AYSK00659',designation:'Professor',dept:'Shalakya Tantra',email:'rvpatil2012@gmail.com',phone:'9422610945',doj:'2008-10-01',dob:'1972-03-15',approved:'Yes',status:'active'},
-{id:'F044',name:'Vd. Jamadar Pramodkumar Bibhishan',code:'AYSK01328',designation:'Lecturer',dept:'Shalakya Tantra',email:'pramodjamadar20041995@gmail.com',phone:'9096258925',doj:'2022-09-01',dob:'1995-04-20',approved:'No',status:'active'},
-{id:'F045',name:'Vd. Lavate Suraj Damodar',code:'AYSK01446',designation:'Lecturer',dept:'Shalakya Tantra',email:'surajlavate18@gmail.com',phone:'8485052595',doj:'2023-03-01',dob:'1996-06-18',approved:'No',status:'active'},
-{id:'F046',name:'Vd. Vansure Shivraj Shriram',code:'AYSK01538',designation:'Lecturer',dept:'Shalakya Tantra',email:'shivrajvansure20@gmail.com',phone:'7304902999',doj:'2023-08-01',dob:'1997-12-20',approved:'No',status:'active'},
-{id:'F047',name:'Vd. Patane Amol Umakant',code:'AYPK00687',designation:'Professor',dept:'Panchakarma',email:'amolpatane@gmail.com',phone:'8983064943',doj:'2012-10-01',dob:'1980-04-10',approved:'Yes',status:'active'},
-{id:'F048',name:'Vd. Chitte Om Virbhadra',code:'AYPK00360',designation:'Reader',dept:'Panchakarma',email:'chitteom555@gmail.com',phone:'9422653735',doj:'2014-10-01',dob:'1982-05-05',approved:'Yes',status:'active'},
-{id:'F049',name:'Vda. Jagtap Prajakta Sudhakar',code:'AYPK00359',designation:'Reader',dept:'Panchakarma',email:'jagtapprajakta1808@gmail.com',phone:'9403670596',doj:'2014-10-01',dob:'1985-08-18',approved:'Yes',status:'active'},
-{id:'F050',name:'Vda. Tiwari Shruti Ramchandra',code:'AYPK01561',designation:'Lecturer',dept:'Panchakarma',email:'shrutijgd18@gmail.com',phone:'7083237773',doj:'2023-05-01',dob:'1997-01-18',approved:'No',status:'active'}
+/* ===== GLOBALS ===== */
+var curYr = '2025';
+var data = [];
+var users = {};
+var currentUser = null; // {username, role, facultyId}
+
+var desigRank = {"PRINCIPAL":1,"PROFESSOR":2,"ASSOCIATE PROFESSOR":3,"READER":3,"ASSISTANT PROFESSOR":4,"LECTURER":4};
+
+/* ===== DEFAULT DATA (Your 42 Faculty from JSON) ===== */
+var DEFAULT_DATA = [
+{"id":1767934321233,"name":"Dr.Patil Dattatraya Vinayakrao","desig":"Principal","dept":"Sanskrit Samhita Siddhant","code":"AYSS00481","doj":"2003-12-23","dob":"1977-05-05","leaves_2025":{"cl":"7","od":"15","lat":"48","ml":"0","el_open":"0"},"leaves_2026":{"el_open":15}},
+{"id":1767955726188,"name":"Dr.Shrigire Sayaram Ramgonda","desig":"Professor","dept":"Dravayaguna Vidnyan","code":"AYDG00564","doj":"2003-01-18","dob":"1969-01-01","leaves_2025":{"cl":"8","ml":"2","od":"7","lat":"84"},"leaves_2026":{"el_open":11}},
+{"id":1767958577405,"name":"Dr.Kattewar Balaji Devrao","desig":"Professor","dept":"RSBK","code":"AYBK","doj":"2003-07-01","dob":"1973-09-11","leaves_2025":{"cl":"8","od":"1","el_u":"2","lat":"12"},"leaves_2026":{"el_open":13}},
+{"id":1767955330141,"name":"Dr. Mundhe Mangesh Gopinath","desig":"Professor","dept":"PTSR","code":"AYPS00366","doj":"2005-03-04","dob":"1975-07-23","leaves_2025":{"cl":"8","od":"10","lat":"180"},"leaves_2026":{"el_open":0}},
+{"id":1768206052606,"name":"Pushpa Dagdu Gawale","desig":"Professor","dept":"Kayachikitsa","code":"AYKC0","doj":"2008-10-20","dob":"","leaves_2025":{"cl":"8","ml":"10","lwp":"4","od":"0","sl":"5","el_u":"15","lat":"138","sd":"0","rh":"0","pat":"0","mat":"0"},"leaves_2026":{}},
+{"id":1767961042431,"name":"Dr.Amol Umakant Patane","desig":"Professor","dept":"Panchakarma","code":"AYPK00687","doj":"2012-12-22","dob":"1982-12-17","leaves_2025":{"cl":"8","ml":"1","od":"5","el_u":"3","lat":"164"},"leaves_2026":{"el_open":0}},
+{"id":1768021186994,"name":"Dr.Bansode Namdev Manohar","desig":"Professor","dept":"Rognidan evum VV","code":"AYRN0325","doj":"2014-09-01","dob":"","leaves_2025":{"cl":"8","ml":"1","od":"4","el_u":"6","lat":"138"},"leaves_2026":{"el_open":15}},
+{"id":1768278195240,"name":"Dr.Ravikant Vinayakrao Patil","desig":"Professor","dept":"Shalakyatantra","code":"AYSK0659","doj":"2018-12-27","dob":"","leaves_2025":{"cl":"7","ml":"0","od":"6","el_u":"6","lat":"176","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0"},"leaves_2026":{}},
+{"id":1768021174955,"name":"Dr.Mundhe Vishnukant Dnyanoba","desig":"Professor","dept":"","code":"","doj":"","dob":"","leaves_2025":{},"leaves_2026":{"el_open":15}},
+{"id":1767959422862,"name":"Dr.Sachinkumar Vishwanath Tale","desig":"Associate Professor","dept":"Swasthavritta","code":"AYSV00250","doj":"2018-01-01","dob":"1990-06-24","leaves_2025":{"cl":"8","ml":"5","od":"4","el_u":"7","lat":"116"},"leaves_2026":{"el_open":0}},
+{"id":1768201062768,"name":"Rashmi Yogiraj Chidre","desig":"Associate Professor","dept":"","code":"AYPS00416","doj":"2018-01-09","dob":"","leaves_2025":{"cl":"8","ml":"10","od":"1","el_u":"15","lat":"157","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0","lwp":"21"},"leaves_2026":{}},
+{"id":1768021173715,"name":"Dr.Mayuri Udaysingh Thakur","desig":"Associate Professor","dept":"Rachana Sharir","code":"AYRS00376","doj":"2018-07-02","dob":"","leaves_2025":{"cl":"8","ml":"10","od":"1","lat":"91","el_u":"0","mat":"56","pat":"0","sl":"0","sd":"0","rh":"0"},"leaves_2026":{"el_open":15}},
+{"id":1767959835263,"name":"Dr.Jagtap Prajakta Sudhakar","desig":"Associate Professor","dept":"Panchakarma","code":"AYPK00359","doj":"2019-02-15","dob":"1991-08-18","leaves_2025":{"cl":"8","ml":"4","el_u":"5","lat":"159"},"leaves_2026":{"el_open":0}},
+{"id":1767957913565,"name":"Dr.Snehal Gunderao Patil","desig":"Associate Professor","dept":"Kayachikitsa","code":"AYKC01011","doj":"2019-02-22","dob":"1986-04-04","leaves_2025":{"cl":"6","ml":"1","el_u":"1","lat":"117","od":"0","mat":"0","pat":"0","sl":"0"},"leaves_2026":{"el_open":8}},
+{"id":1767961462063,"name":"Dr.Surnar Yogeshwar Namdev","desig":"Associate Professor","dept":"Shalyatantra","code":"AYUST1442","doj":"2019-03-01","dob":"1989-11-25","leaves_2025":{"cl":"8","ml":"6","od":"1","el_u":"6","lat":"96"},"leaves_2026":{"el_open":0}},
+{"id":1768021176843,"name":"Dr.Deepika Chandrakant Bhadre","desig":"Associate Professor","dept":"PTSR","code":"AYPS01057","doj":"2020-02-17","dob":"","leaves_2025":{"cl":"8","ml":"8","sl":"3","lat":"190"},"leaves_2026":{"el_open":15}},
+{"id":1767960762214,"name":"Dr.Ghorband Shital Dattatray","desig":"Associate Professor","dept":"Dravayaguna Vidnyan","code":"AYDG","doj":"2020-03-13","dob":"1981-02-23","leaves_2025":{"cl":"8","ml":"10","od":"9","el_u":"15","lat":"146","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0"},"leaves_2026":{"el_open":0}},
+{"id":1768021168209,"name":"Dr.Prashant Tryambakrao Biradar","desig":"Assistant Professor","dept":"Sanskrit Samhita Siddhant","code":"AYSN00048","doj":"2012-02-06","dob":"","leaves_2025":{"lat":"102","cl":"8","ml":"2","od":"10","el_u":"5","mat":"0"},"leaves_2026":{"el_open":"","cl":"","ml":"","od":"","el_u":"","lat":""}},
+{"id":1768021176627,"name":"Dr.Asmita Ashokrao Bhadre","desig":"Assistant Professor","dept":"Kaumarbhritya","code":"AYKB00709","doj":"2021-01-02","dob":"","leaves_2025":{"cl":"8","ml":"1","el_u":"4","lat":"171"},"leaves_2026":{"el_open":15}},
+{"id":1767958840101,"name":"Dr.Martule Shivkumar Surykant","desig":"Assistant Professor","dept":"Kaumarbhritya","code":"AYKB00725","doj":"2021-03-25","dob":"1994-01-01","leaves_2025":{"lat":"141","cl":"8","od":"2","ml":"","el_u":"3"},"leaves_2026":{"el_open":"0"}},
+{"id":1768203668172,"name":"Namrata Virnath Kore","desig":"Assistant Professor","dept":"Rognidan and Vikruti Vigyan","code":"AYRN00765","doj":"2021-03-26","dob":"","leaves_2025":{"lat":"248","mat":"0","ml":"10","lwp":"13","cl":"8","od":"3","el_u":"7","pat":"0","sl":"0","sd":"0","rh":"0"},"leaves_2026":{}},
+{"id":1,"name":"Dr. Jadhav Vishnukant Rameshrao","desig":"Assistant Professor","dept":"Rachana Sharir","code":"AYRS01211","doj":"2022-04-01","dob":"1994-02-13","leaves_2025":{"lat":"116","sl":"0","cl":"8","ml":"0","el_u":"0","rh":"0"},"leaves_2026":{"el_open":8}},
+{"id":1768021164259,"name":"Dr.Pravin Dattatraya Balutkar","desig":"Assistant Professor","dept":"RSBK","code":"AYRB01770","doj":"2022-04-01","dob":"1985-02-02","leaves_2025":{"cl":"8","ml":"10","od":"2","el_u":"11","lat":"124"},"leaves_2026":{"el_open":0}},
+{"id":1767960145014,"name":"Dr.Soppa Madhumati Shrikant","desig":"Assistant Professor","dept":"Kriya Sharir","code":"AYKS01029","doj":"2022-06-20","dob":"1989-10-10","leaves_2025":{"cl":"6","ml":"8","od":"3","lat":"153"},"leaves_2026":{"el_open":0}},
+{"id":1768021168426,"name":"Dr.Amol Shivajirao Patil","desig":"Assistant Professor","dept":"Shalya tantra","code":"AYST02412","doj":"2024-01-19","dob":"","leaves_2025":{"cl":"8","ml":"6","od":"0","el_u":"5","lat":"148","mat":"","pat":"5"},"leaves_2026":{"el_open":"0","cl":"8","ml":"6","od":"0","el_u":"5","lat":"148","pat":"5"}},
+{"id":1767957277181,"name":"Dr.Shruti Rameshchandra Tiwari","desig":"Assistant Professor","dept":"Panchakarma","code":"AYPK94915","doj":"2024-06-01","dob":"1986-08-18","leaves_2025":{"cl":"8","ml":"8","od":"","el_u":"2","lat":"118","rh":"0"},"leaves_2026":{"el_open":0}},
+{"id":1767958307517,"name":"Dr.Meera Shankarrao Kadam","desig":"Assistant Professor","dept":"Agadtantra evum VV","code":"AYAT00650","doj":"2024-08-04","dob":"1991-05-03","leaves_2025":{"od":"","cl":"8","ml":"4","el_u":"7","lat":"130","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0"},"leaves_2026":{"el_open":0}},
+{"id":1767961700895,"name":"Dr.Shivpratap Vinayak Biradar","desig":"Assistant Professor","dept":"Kaumarbhritya","code":"AYKB01247","doj":"2025-04-07","dob":"1995-06-11","leaves_2025":{"cl":"5","lat":"113"},"leaves_2026":{"el_open":12}},
+{"id":1768048121381,"name":"Dr.Raghini Ramrao Navatke","desig":"Assistant Professor","dept":"Kayachikitsa","code":"AYKC04182","doj":"2025-04-23","dob":"","leaves_2025":{"lat":"45","mat":"20","pat":"0","sl":"0","sd":"0","rh":"0","cl":"6","ml":"0","od":"0","el_u":"0"},"leaves_2026":{}},
+{"id":1767960539895,"name":"Dr.Madhuri Suryakant Biradar","desig":"Assistant Professor","dept":"Shalyatntra","code":"AYST02720","doj":"2025-05-17","dob":"1997-06-01","leaves_2025":{"cl":"7","el_u":"0","lat":"90","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0","lwp":"0"},"leaves_2026":{"el_open":13}},
+{"id":1767957034325,"name":"Dr.Bharkade Jayshree Govindrao","desig":"Assistant Professor","dept":"Agadtantra evum VV","code":"AYAT00917","doj":"2025-05-23","dob":"1994-04-14","leaves_2025":{"lat":"86","cl":"8","ml":"2"},"leaves_2026":{"el_open":11}},
+{"id":1768047235877,"name":"Dr.Ketki Rangnath Tarde","desig":"Assistant Professor","dept":"Sanskrit Samhita Siddhant","code":"AYSS02196","doj":"2025-05-24","dob":"","leaves_2025":{"cl":"4","ml":"72","od":"0","el_u":"0","lat":"17","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0","lwp":"0"},"leaves_2026":{}},
+{"id":1767956778629,"name":"Dr.Shivani Tanajirao Patil","desig":"Assistant Professor","dept":"Sanskrit Samhita Siddhant","code":"AYSS02244","doj":"2025-06-04","dob":"1996-08-26","leaves_2025":{"cl":"6.5","lat":"69","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0","lwp":"0"},"leaves_2026":{"el_open":15}},
+{"id":1768047609764,"name":"Dr.Swapnil Janardhan Biradar Patil","desig":"Assistant Professor","dept":"Kriya Sharir","code":"AYKS01398","doj":"2025-06-12","dob":"","leaves_2025":{"cl":"7","ml":"1","lat":"61","mat":"0","el_u":"0","od":"0","pat":"0","sl":"0","sd":"0","rh":"0"},"leaves_2026":{}},
+{"id":1768370893500,"name":"Suraj Damodar Lavate","desig":"Assistant Professor","dept":"Shalakya tantra","code":"AYSK01446","doj":"2025-06-13","dob":"","leaves_2025":{},"leaves_2026":{}},
+{"id":1767959185758,"name":"Dr.Biradar Mallikarjun Vishwanath","desig":"Assistant Professor","dept":"Agadtantra evum VV","code":"AYAT00926","doj":"2025-08-06","dob":"1966-09-01","leaves_2025":{"cl":"8","el_u":"8","lat":"79","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0","lwp":"0"},"leaves_2026":{"el_open":6}},
+{"id":1768021175130,"name":"Dr.Priyanka Dnyanoba Devkatte","desig":"Assistant Professor","dept":"PTSR","code":"AYPS01975","doj":"2025-12-15","dob":"","leaves_2025":{"lat":"8","mat":"0","pat":"0","sl":"1","sd":"0","rh":"0","lwp":"0"},"leaves_2026":{"el_open":15}},
+{"id":1768370845124,"name":"Shivraj Shriram Vansure","desig":"Assistant Professor","dept":"Shalakya tantra","code":"AYSK01538","doj":"2025-12-15","dob":"","leaves_2025":{},"leaves_2026":{}},
+{"id":1768370366020,"name":"Deepali Sanjay Kulkarni","desig":"Assistant Professor","dept":"","code":"","doj":"","dob":"","leaves_2025":{},"leaves_2026":{}},
+{"id":1768021173515,"name":"Dr.Chetlure Shivkanta Laxman","desig":"Assistant Professor","dept":"Kayachikitsa","code":"","doj":"","dob":"","leaves_2025":{},"leaves_2026":{"el_open":15}},
+{"id":1768370657534,"name":"Swapnil Janardhan Biradar Patil","desig":"Assistant Professor","dept":"Kriya Sharir","code":"","doj":"","dob":"","leaves_2025":{},"leaves_2026":{}}
 ];
 
-var DB={get:function(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set:function(k,v){localStorage.setItem(k,JSON.stringify(v))},del:function(k){localStorage.removeItem(k)}};
-var CU=null,CF=null;
+/* ===== INIT ===== */
+window.onload = function() {
+    var today = new Date();
+    document.getElementById('reportDate').value = today.toLocaleDateString('en-GB');
 
-function initDB(){
-var cv='damch_v8';
-if(localStorage.getItem('_dbv')!==cv){localStorage.clear();localStorage.setItem('_dbv',cv);}
-if(!DB.get('_init8')){
-var users=[{username:'admin',password:'Admin@2025',role:'admin',facultyId:null,name:'Administrator',securityAnswer:'cricket'}];
-DEFAULT_FACULTY.forEach(function(f){users.push({username:f.code,password:'damch@'+f.code,role:'faculty',facultyId:f.id,name:f.name,securityAnswer:'cricket'});});
-DB.set('users',users);
-DB.set('faculty',JSON.parse(JSON.stringify(DEFAULT_FACULTY)));
-var leaves={};YEARS.forEach(function(y){leaves[y]={};DEFAULT_FACULTY.forEach(function(f){leaves[y][f.id]={CL:0,ML:0,OD:0,EL:0,Maternity:0,Paternity:0,'Study Leave':0,Sabbatical:0,RH:0,LWP:0,'Late Mark':0};});});
-DB.set('leaves',leaves);DB.set('leaveApplications',[]);
-DB.set('holidays',[{id:'H1',date:'2025-01-14',name:'Makar Sankranti',year:2025,type:'Gazetted'},{id:'H2',date:'2025-01-26',name:'Republic Day',year:2025,type:'National'},{id:'H3',date:'2025-03-14',name:'Holi',year:2025,type:'Gazetted'},{id:'H4',date:'2025-04-10',name:'Ram Navami',year:2025,type:'Gazetted'},{id:'H5',date:'2025-04-14',name:'Dr. Ambedkar Jayanti',year:2025,type:'National'},{id:'H6',date:'2025-05-01',name:'Maharashtra Day',year:2025,type:'State'},{id:'H7',date:'2025-08-15',name:'Independence Day',year:2025,type:'National'},{id:'H8',date:'2025-10-02',name:'Gandhi Jayanti',year:2025,type:'National'},{id:'H9',date:'2025-10-20',name:'Dussehra',year:2025,type:'Gazetted'},{id:'H10',date:'2025-11-12',name:'Diwali',year:2025,type:'Gazetted'},{id:'H11',date:'2025-12-25',name:'Christmas',year:2025,type:'Gazetted'},{id:'H12',date:'2026-01-26',name:'Republic Day',year:2026,type:'National'},{id:'H13',date:'2026-08-15',name:'Independence Day',year:2026,type:'National'},{id:'H14',date:'2026-10-02',name:'Gandhi Jayanti',year:2026,type:'National'},{id:'H15',date:'2027-01-26',name:'Republic Day',year:2027,type:'National'},{id:'H16',date:'2027-08-15',name:'Independence Day',year:2027,type:'National'}]);
-DB.set('_init8',true);
+    // Load data
+    var local = localStorage.getItem('damch_data_v25');
+    if(local) { data = JSON.parse(local); }
+    else { data = JSON.parse(JSON.stringify(DEFAULT_DATA)); }
+
+    // Load users
+    var uLocal = localStorage.getItem('damch_users_v25');
+    if(uLocal) { users = JSON.parse(uLocal); }
+    else { buildDefaultUsers(); }
+
+    // Load logo
+    var logo = localStorage.getItem('damch_logo');
+    if(logo) {
+        document.getElementById('logoImg').src = logo; document.getElementById('logoImg').style.display = 'block'; document.getElementById('logoTxt').style.display = 'none';
+        document.getElementById('loginLogoImg').src = logo; document.getElementById('loginLogoImg').style.display = 'block'; document.getElementById('loginLogoTxt').style.display = 'none';
+    }
+
+    // Check session
+    var sess = sessionStorage.getItem('damch_session');
+    if(sess) { currentUser = JSON.parse(sess); showApp(); }
+
+    document.getElementById('loginPass').addEventListener('keypress', function(e) { if(e.key === 'Enter') doLogin(); });
+    document.getElementById('loginUser').addEventListener('keypress', function(e) { if(e.key === 'Enter') document.getElementById('loginPass').focus(); });
+};
+
+function buildDefaultUsers() {
+    users = {};
+    users['admin'] = { pw: 'Admin@2025', role: 'admin', facultyId: null };
+    data.forEach(function(r) {
+        var code = (r.code || '').trim();
+        if(code && code.length > 2) {
+            users[code] = { pw: 'damch@' + code, role: 'faculty', facultyId: r.id };
+        }
+    });
+    localStorage.setItem('damch_users_v25', JSON.stringify(users));
 }
+
+/* ===== LOGIN / LOGOUT ===== */
+function togglePw() {
+    var f = document.getElementById('loginPass');
+    var s = f.previousElementSibling ? document.querySelector('.toggle-pw') : null;
+    if(f.type === 'password') { f.type = 'text'; document.querySelector('.toggle-pw').textContent = 'Hide Password'; }
+    else { f.type = 'password'; document.querySelector('.toggle-pw').textContent = 'Show Password'; }
 }
 
-function doLogin(){var u=document.getElementById('loginUser').value.trim(),p=document.getElementById('loginPass').value.trim();if(!u||!p)return toast('Enter username and password','error');var users=DB.get('users')||[];var user=null;for(var i=0;i<users.length;i++){if(users[i].username===u&&users[i].password===p){user=users[i];break;}}if(!user)return toast('Invalid username or password','error');CU=user;if(user.role==='faculty'){var fac=DB.get('faculty')||[];CF=null;for(var j=0;j<fac.length;j++){if(fac[j].id===user.facultyId){CF=fac[j];break;}}if(!CF||CF.status==='removed')return toast('Account deactivated','error');}document.getElementById('loginPage').style.display='none';document.getElementById('app').style.display='flex';buildSidebar();showPage('dashboard');toast('Welcome, '+user.name+'!','success');}
-function doLogout(){CU=null;CF=null;document.getElementById('app').style.display='none';document.getElementById('loginPage').style.display='flex';document.getElementById('loginUser').value='';document.getElementById('loginPass').value='';}
-function showForgot(){document.getElementById('loginForm').style.display='none';document.getElementById('forgotForm').style.display='block';}
-function hideForgot(){document.getElementById('loginForm').style.display='block';document.getElementById('forgotForm').style.display='none';}
-function doForgotPassword(){var u=document.getElementById('forgotUser').value.trim(),a=document.getElementById('forgotAnswer').value.trim().toLowerCase();if(!u||!a)return toast('Fill all fields','error');var users=DB.get('users')||[];var user=null;for(var i=0;i<users.length;i++){if(users[i].username===u){user=users[i];break;}}if(!user)return toast('Username not found','error');if(a!=='cricket')return toast('Wrong security answer','error');alert('Your password is: '+user.password);hideForgot();}
-function toast(msg,type){type=type||'info';var c=document.getElementById('toastContainer'),t=document.createElement('div');t.className='toast toast-'+type;t.innerHTML='<i class="fas fa-'+(type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle')+'"></i>'+msg;c.appendChild(t);setTimeout(function(){t.remove();},4000);}
-function openModal(h){document.getElementById('modalContent').innerHTML=h;document.getElementById('modalOverlay').classList.add('show');}
-function closeModal(){document.getElementById('modalOverlay').classList.remove('show');}
-document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===document.getElementById('modalOverlay'))closeModal();});
-function esc(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function fmtDate(d){if(!d)return '-';var dt=new Date(d);return dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}
-function calcExp(doj){if(!doj)return '-';var d=new Date(doj),n=new Date(),y=n.getFullYear()-d.getFullYear(),m=n.getMonth()-d.getMonth();if(m<0){y--;m+=12;}return y+'y '+m+'m';}
-function getActiveFaculty(){return (DB.get('faculty')||[]).filter(function(f){return f.status!=='removed';});}
-function sortFaculty(list){return list.sort(function(a,b){var ra=a.isPrincipal?-1:(DESIG_ORDER[a.designation]!=null?DESIG_ORDER[a.designation]:9);var rb=b.isPrincipal?-1:(DESIG_ORDER[b.designation]!=null?DESIG_ORDER[b.designation]:9);if(ra!==rb)return ra-rb;return new Date(a.doj||'9999')-new Date(b.doj||'9999');});}
-function deptColor(dept){var i=DEPTS.indexOf(dept);return DEPT_COLORS[i>=0?i:0];}
-function genId(){return 'F'+Date.now().toString(36)+Math.random().toString(36).substr(2,4);}
-function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');}
+function doLogin() {
+    var u = document.getElementById('loginUser').value.trim();
+    var p = document.getElementById('loginPass').value;
+    var msg = document.getElementById('loginMsg');
 
-function buildSidebar(){var nav=document.getElementById('sidebarNav'),isA=CU.role==='admin',h='';
-h+='<div class="nav-section">Main</div>';h+=NI('dashboard','fa-th-large','Dashboard');
-if(!isA){h+=NI('myprofile','fa-user-circle','My Profile');h+=NI('myleave','fa-calendar-check','My Leave Record');h+=NI('applyleave','fa-paper-plane','Apply Leave');}
-h+='<div class="nav-section">Information</div>';h+=NI('holidays','fa-umbrella-beach','Holidays');h+=NI('policy','fa-book','Leave Policy');
-if(isA){h+='<div class="nav-section">Administration</div>';h+=NI('facultylist','fa-users','All Faculty');h+=NI('managefaculty','fa-user-cog','Add/Edit/Delete Faculty');h+=NI('leavetable','fa-table','Leave Master Table');h+=NI('applications','fa-file-alt','Leave Applications');h+=NI('manageholidays','fa-calendar-plus','Manage Holidays');h+=NI('manageusers','fa-user-shield','User Management');h+='<div class="nav-section">Reports</div>';h+=NI('reports','fa-chart-bar','Reports & Print');h+=NI('backup','fa-database','Backup & Restore');}
-nav.innerHTML=h;document.getElementById('sidebarUserName').textContent=CU.name;document.getElementById('sidebarUserRole').textContent=isA?'Administrator':'Faculty';document.getElementById('avatarInitial').textContent=CU.name.charAt(0).toUpperCase();
-nav.querySelectorAll('.nav-item').forEach(function(el){el.addEventListener('click',function(){showPage(el.dataset.page);});});}
-function NI(p,ic,lb){return '<div class="nav-item" data-page="'+p+'"><i class="fas '+ic+'"></i><span>'+lb+'</span></div>';}
+    if(!u || !p) { msg.textContent = 'Please enter username and password.'; return; }
+    if(!users[u]) { msg.textContent = 'Invalid username.'; return; }
+    if(users[u].pw !== p) { msg.textContent = 'Incorrect password.'; return; }
 
-function showPage(page){document.querySelectorAll('.nav-item').forEach(function(n){n.classList.toggle('active',n.dataset.page===page);});
-var T={dashboard:'Dashboard',myprofile:'My Profile',myleave:'My Leave Record',applyleave:'Apply Leave',holidays:'Holiday Calendar',policy:'Leave Policy',facultylist:'All Faculty',managefaculty:'Manage Faculty',leavetable:'Leave Master Table',applications:'Leave Applications',manageholidays:'Manage Holidays',manageusers:'User Management',reports:'Reports & Print',backup:'Backup & Restore'};
-document.getElementById('pageTitle').textContent=T[page]||'Dashboard';document.getElementById('breadcrumb').textContent='Home / '+(T[page]||'Dashboard');
-var c=document.getElementById('contentArea'),ph=c.querySelector('.print-header').outerHTML;
-var R={dashboard:pgDash,myprofile:pgProf,myleave:pgMyLv,applyleave:pgApply,holidays:pgHol,policy:pgPol,facultylist:pgFList,managefaculty:pgMFac,leavetable:pgLT,applications:pgApps,manageholidays:pgMHol,manageusers:pgMUsr,reports:pgRep,backup:pgBak};
-var fn=R[page];if(fn){c.innerHTML=ph+'<div class="page active" id="pg"></div>';fn(document.getElementById('pg'));}}
+    currentUser = { username: u, role: users[u].role, facultyId: users[u].facultyId };
+    sessionStorage.setItem('damch_session', JSON.stringify(currentUser));
+    msg.textContent = '';
+    showApp();
+}
 
-function pgDash(el){var fac=getActiveFaculty(),dc={},dg={Professor:0,Reader:0,Lecturer:0},pc=0;
-DEPTS.forEach(function(d){dc[d]=0;});fac.forEach(function(f){if(dc[f.dept]!=null)dc[f.dept]++;if(dg[f.designation]!=null)dg[f.designation]++;if(f.isPrincipal)pc++;});
-var h='<div class="stats-grid"><div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-value">'+fac.length+'</div><div class="stat-label">Total Faculty</div></div><div class="stat-card"><div class="stat-icon"><i class="fas fa-building"></i></div><div class="stat-value">'+DEPTS.length+'</div><div class="stat-label">Departments</div></div><div class="stat-card"><div class="stat-icon"><i class="fas fa-user-tie"></i></div><div class="stat-value">'+dg.Professor+'</div><div class="stat-label">Professors</div></div><div class="stat-card"><div class="stat-icon"><i class="fas fa-user-graduate"></i></div><div class="stat-value">'+dg.Reader+'</div><div class="stat-label">Readers</div></div><div class="stat-card"><div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div><div class="stat-value">'+dg.Lecturer+'</div><div class="stat-label">Lecturers</div></div></div>';
-h+='<div class="charts-grid"><div class="chart-card"><h3><i class="fas fa-chart-bar" style="color:var(--primary);margin-right:8px"></i>Department Faculty Count</h3><canvas id="c1" height="300"></canvas></div><div class="chart-card"><h3><i class="fas fa-chart-pie" style="color:var(--accent);margin-right:8px"></i>Designation Distribution</h3><canvas id="c2" height="300"></canvas></div></div>';
-el.innerHTML=h;
-setTimeout(function(){
-new Chart(document.getElementById('c1'),{type:'bar',data:{labels:DEPTS.map(function(d){return d.length>12?d.substr(0,12)+'..':d;}),datasets:[{label:'Faculty',data:DEPTS.map(function(d){return dc[d];}),backgroundColor:DEPT_COLORS,borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}},x:{ticks:{maxRotation:45,font:{size:9}}}}}});
-new Chart(document.getElementById('c2'),{type:'doughnut',data:{labels:['Principal','Professor','Reader','Lecturer'],datasets:[{data:[pc,dg.Professor-pc,dg.Reader,dg.Lecturer],backgroundColor:['#f59e0b','#3b82f6','#10b981','#8b5cf6'],borderWidth:0}]},options:{responsive:true,cutout:'60%',plugins:{legend:{position:'bottom'}}}});
-},200);}
+function doLogout() {
+    sessionStorage.removeItem('damch_session');
+    currentUser = null;
+    document.getElementById('mainApp').style.display = 'none';
+    document.getElementById('loginPage').style.display = 'flex';
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+}
 
-function pgProf(el){if(!CF)return el.innerHTML='<div class="empty-state"><p>No profile</p></div>';var f=CF;
-el.innerHTML='<div class="profile-hero"><div class="profile-info-grid"><div class="profile-photo">'+(f.photoData?'<img src="'+f.photoData+'">':'<i class="fas fa-user"></i>')+'</div><div class="profile-details"><h2>'+esc(f.name)+'</h2><div class="designation">'+(f.isPrincipal?'Principal & ':'')+'<span class="desig-badge desig-'+f.designation.toLowerCase()+'">'+esc(f.designation)+'</span></div><div class="dept" style="margin-top:8px"><i class="fas fa-building" style="margin-right:6px"></i>'+esc(f.dept)+'</div><div class="dept" style="margin-top:4px"><i class="fas fa-id-badge" style="margin-right:6px"></i>Code: '+esc(f.code)+'</div></div></div></div><div class="profile-cards"><div class="profile-card"><h4>Personal Info</h4><div class="profile-field"><span class="label">DOB</span><span class="value">'+fmtDate(f.dob)+'</span></div><div class="profile-field"><span class="label">DOJ</span><span class="value">'+fmtDate(f.doj)+'</span></div><div class="profile-field"><span class="label">Experience</span><span class="value">'+calcExp(f.doj)+'</span></div><div class="profile-field"><span class="label">Email</span><span class="value">'+esc(f.email)+'</span></div><div class="profile-field"><span class="label">Phone</span><span class="value">'+esc(f.phone)+'</span></div><div class="profile-field"><span class="label">Approved</span><span class="value">'+(f.approved==='Yes'?'<span class="tag-approved">Yes</span>':'<span class="tag-pending">No</span>')+'</span></div></div></div><div style="margin-top:20px"><button class="btn btn-primary no-print" onclick="document.getElementById(\'phoInp\').click()"><i class="fas fa-camera"></i> Upload Photo</button><input type="file" id="phoInp" accept="image/*" style="display:none" onchange="upPhoto(this)"></div>';}
-function upPhoto(inp){var file=inp.files[0];if(!file)return;if(file.size>1048576)return toast('Max 1MB','error');var r=new FileReader();r.onload=function(e){var fac=DB.get('faculty')||[];for(var i=0;i<fac.length;i++){if(fac[i].id===CF.id){fac[i].photoData=e.target.result;break;}}DB.set('faculty',fac);CF.photoData=e.target.result;showPage('myprofile');toast('Photo uploaded','success');};r.readAsDataURL(file);}
+function showApp() {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
 
-function pgMyLv(el){if(!CF)return;var h='<div class="tab-bar">';YEARS.forEach(function(y){h+='<button class="tab-btn'+(y===2025?' active':'')+'" onclick="sLY('+y+',this)">'+y+'</button>';});h+='</div><div id="lyc"></div>';el.innerHTML=h;sLY(2025,el.querySelector('.tab-btn.active'));}
-function sLY(y,btn){if(btn){btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');}var lv=DB.get('leaves')||{},d=(lv[y]&&lv[y][CF.id])||{},t=0,h='<div class="table-container"><table><tr><th>Leave Type</th><th>Days</th></tr>';LEAVE_TYPES.forEach(function(lt){var v=d[lt]||0;t+=v;h+='<tr><td>'+lt+'</td><td style="font-weight:'+(v>0?'700':'400')+'">'+v+'</td></tr>';});h+='<tr style="background:var(--bg)"><td style="font-weight:700">Total</td><td style="font-weight:700;color:var(--danger)">'+t+'</td></tr></table></div>';document.getElementById('lyc').innerHTML=h;}
+    var isAdmin = currentUser.role === 'admin';
+    document.getElementById('dispUserName').textContent = isAdmin ? 'Administrator' : currentUser.username;
+    document.getElementById('dispUserRole').textContent = isAdmin ? 'Role: Admin' : 'Role: Faculty';
 
-function pgApply(el){el.innerHTML='<div class="table-container" style="max-width:600px"><div class="table-header"><h3>Submit Leave Application</h3></div><div style="padding:24px"><div class="form-row"><div class="form-group"><label>Leave Type</label><select id="aT" class="form-select" style="width:100%">'+LEAVE_TYPES.map(function(lt){return '<option>'+lt+'</option>';}).join('')+'</select></div><div class="form-group"><label>Status</label><input type="text" value="Pending" readonly style="background:var(--bg);padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);width:100%"></div></div><div class="form-row"><div class="form-group"><label>From</label><input type="date" id="aF" style="padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);width:100%"></div><div class="form-group"><label>To</label><input type="date" id="aTo" style="padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);width:100%"></div></div><div class="form-group"><label>Reason</label><textarea id="aR" placeholder="Reason..."></textarea></div><button class="btn btn-primary btn-block" onclick="subLA()"><i class="fas fa-paper-plane"></i> Submit</button></div></div>';}
-function subLA(){var ty=document.getElementById('aT').value,fr=document.getElementById('aF').value,to=document.getElementById('aTo').value,re=document.getElementById('aR').value;if(!fr||!to)return toast('Select dates','error');if(new Date(fr)>new Date(to))return toast('Invalid date range','error');var a=DB.get('leaveApplications')||[];a.push({id:'LA'+Date.now(),facultyId:CF.id,facultyName:CF.name,dept:CF.dept,leaveType:ty,fromDate:fr,toDate:to,reason:re,status:'Pending',appliedOn:new Date().toISOString()});DB.set('leaveApplications',a);toast('Application submitted','success');showPage('myleave');}
+    // Show/hide admin features
+    document.getElementById('adminPanel').style.display = isAdmin ? 'flex' : 'none';
+    document.getElementById('adminBtns').style.display = isAdmin ? 'inline' : 'none';
+    document.getElementById('actionColHead').style.display = isAdmin ? '' : 'none';
 
-function pgHol(el){var h='<div class="tab-bar">';YEARS.forEach(function(y){h+='<button class="tab-btn'+(y===2025?' active':'')+'" onclick="sHY('+y+',this)">'+y+'</button>';});h+='</div><div id="hyc"></div>';el.innerHTML=h;sHY(2025,el.querySelector('.tab-btn.active'));}
-function sHY(y,btn){if(btn){btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');}var hs=(DB.get('holidays')||[]).filter(function(h){return h.year===y;}).sort(function(a,b){return new Date(a.date)-new Date(b.date);}),h='<div class="table-container"><table><tr><th>#</th><th>Date</th><th>Day</th><th>Name</th><th>Type</th></tr>';hs.forEach(function(ho,i){var d=new Date(ho.date);h+='<tr><td>'+(i+1)+'</td><td>'+fmtDate(ho.date)+'</td><td>'+d.toLocaleDateString('en-IN',{weekday:'long'})+'</td><td>'+esc(ho.name)+'</td><td>'+esc(ho.type)+'</td></tr>';});h+='</table></div>';document.getElementById('hyc').innerHTML=h;}
+    render();
+}
 
-function pgPol(el){el.innerHTML='<div class="table-container"><div class="table-header"><h3>Leave Policy (MUHS/NCISM)</h3></div><div style="padding:24px;line-height:2;font-size:14px"><p><b>1.</b> 75% minimum attendance (MUHS).</p><p><b>2.</b> CL: 8 days/year.</p><p><b>3.</b> ML: With medical certificate.</p><p><b>4.</b> EL: 30 days/year, carry forward up to 300 days.</p><p><b>5.</b> Maternity: 180 days.</p><p><b>6.</b> Paternity: 15 days.</p><p><b>7.</b> 6 Late Marks = 1 CL deduction (AEBS).</p><p><b>8.</b> OD: Prior approval required.</p><p><b>9.</b> LWP: When all leave exhausted.</p><p><b>10.</b> RH: 2 days/year.</p></div></div>';}
+/* ===== PROFILE ===== */
+function openProfile() {
+    if(currentUser.role === 'admin') { alert('Admin profile: Username=admin. Use this panel to manage all faculty.'); return; }
+    var row = data.find(function(r) { return r.id === currentUser.facultyId; });
+    if(!row) { alert('Profile not found.'); return; }
+
+    document.getElementById('pf_name').value = row.name || '';
+    document.getElementById('pf_desig').value = row.desig || '';
+    document.getElementById('pf_dept').value = row.dept || '';
+    document.getElementById('pf_code').value = row.code || '';
+
+    // DOJ
+    if(row.doj) {
+        var d = new Date(row.doj);
+        if(!isNaN(d)) {
+            document.getElementById('pf_doj_dd').value = String(d.getDate()).padStart(2,'0');
+            document.getElementById('pf_doj_mm').value = String(d.getMonth()+1).padStart(2,'0');
+            document.getElementById('pf_doj_yyyy').value = d.getFullYear();
+        }
+    } else { document.getElementById('pf_doj_dd').value=''; document.getElementById('pf_doj_mm').value=''; document.getElementById('pf_doj_yyyy').value=''; }
+
+    // DOB
+    if(row.dob) {
+        var b = new Date(row.dob);
+        if(!isNaN(b)) {
+            document.getElementById('pf_dob_dd').value = String(b.getDate()).padStart(2,'0');
+            document.getElementById('pf_dob_mm').value = String(b.getMonth()+1).padStart(2,'0');
+            document.getElementById('pf_dob_yyyy').value = b.getFullYear();
+        }
+    } else { document.getElementById('pf_dob_dd').value=''; document.getElementById('pf_dob_mm').value=''; document.getElementById('pf_dob_yyyy').value=''; }
+
+    document.getElementById('pf_newpw').value = '';
+    document.getElementById('profileModal').classList.add('active');
+}
+
+function closeProfile() { document.getElementById('profileModal').classList.remove('active'); }
+
+function autoTab(el, nextId) {
+    if(el.value.length >= parseInt(el.maxLength)) { document.getElementById(nextId).focus(); }
+}
+
+function saveProfile() {
+    var row = data.find(function(r) { return r.id === currentUser.facultyId; });
+    if(!row) return;
+
+    // Parse DOJ
+    var dj_dd = document.getElementById('pf_doj_dd').value.trim();
+    var dj_mm = document.getElementById('pf_doj_mm').value.trim();
+    var dj_yy = document.getElementById('pf_doj_yyyy').value.trim();
+    if(dj_dd && dj_mm && dj_yy) {
+        var djDate = new Date(dj_yy, parseInt(dj_mm)-1, parseInt(dj_dd));
+        if(!isNaN(djDate)) { row.doj = dj_yy + '-' + dj_mm.padStart(2,'0') + '-' + dj_dd.padStart(2,'0'); }
+    }
+
+    // Parse DOB
+    var db_dd = document.getElementById('pf_dob_dd').value.trim();
+    var db_mm = document.getElementById('pf_dob_mm').value.trim();
+    var db_yy = document.getElementById('pf_dob_yyyy').value.trim();
+    if(db_dd && db_mm && db_yy) {
+        var dbDate = new Date(db_yy, parseInt(db_mm)-1, parseInt(db_dd));
+        if(!isNaN(dbDate)) { row.dob = db_yy + '-' + db_mm.padStart(2,'0') + '-' + db_dd.padStart(2,'0'); }
+    }
+
+    // Password change
+    var newPw = document.getElementById('pf_newpw').value;
+    if(newPw && newPw.length >= 4) {
+        users[currentUser.username].pw = newPw;
+        localStorage.setItem('damch_users_v25', JSON.stringify(users));
+    }
+
+    save();
+    render();
+    closeProfile();
+    alert('Profile updated successfully!');
+}
+/* ===== EXPERIENCE CALC ===== */
+function calcExp(dojStr) {
+    if(!dojStr) return "Exp: -";
+    var doj = new Date(dojStr);
+    if(isNaN(doj)) return "Exp: -";
+    var rptDateVal = document.getElementById('reportDate').value;
+    var now = new Date();
+    if(rptDateVal) { var parts = rptDateVal.split('/'); if(parts.length===3) now = new Date(parts[2], parts[1]-1, parts[0]); }
+    var years = now.getFullYear() - doj.getFullYear();
+    var months = now.getMonth() - doj.getMonth();
+    var days = now.getDate() - doj.getDate();
+    if(days < 0) { months--; var pm = new Date(now.getFullYear(), now.getMonth(), 0); days += pm.getDate(); }
+    if(months < 0) { years--; months += 12; }
+    if(years < 0) return "Exp: 0";
+    return years + "Y " + months + "M " + days + "D";
+}
+
+function formatDateDDMMYYYY(isoStr) {
+    if(!isoStr) return '';
+    var d = new Date(isoStr);
+    if(isNaN(d)) return '';
+    return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
+}
+
+/* ===== SORT ===== */
+function sortData() {
+    data.sort(function(a, b) {
+        var dA = (a.desig || "").toUpperCase().trim();
+        var dB = (b.desig || "").toUpperCase().trim();
+        var rA = desigRank[dA] || 99;
+        var rB = desigRank[dB] || 99;
+        if(rA !== rB) return rA - rB;
+        var dateA = a.doj ? new Date(a.doj) : new Date('9999-12-31');
+        var dateB = b.doj ? new Date(b.doj) : new Date('9999-12-31');
+        if(dateA.getTime() !== dateB.getTime()) return dateA - dateB;
+        return (a.name || "").localeCompare(b.name || "");
+    });
+}
+
+/* ===== CALC ROW ===== */
+function calcRow(row, year) {
+    var l = row['leaves_' + year] || {};
+    var v = function(k) { return parseFloat(l[k]) || 0; };
+    var cl_bal = 8 - v('cl');
+    var ml_bal = 10 - v('ml');
+    var rh_bal = 2 - v('rh');
+    var mat_bal = 180 - v('mat');
+    var pat_bal = 15 - v('pat');
+    var sl_bal = 15 - v('sl');
+    var sd_bal = 120 - v('sd');
+    var el_open = parseFloat(l.el_open) || 0;
+    var el_tot_avail = el_open + 15;
+    var el_bal = el_tot_avail - v('el_u');
+    var late_cnt = v('lat');
+    var late_ded = Math.floor(late_cnt / 6);
+    var paid_buffer = cl_bal + el_bal + ml_bal + rh_bal;
+    if(paid_buffer < 0) paid_buffer = 0;
+    var covered = 0, overflow = 0;
+    if(late_ded <= paid_buffer) { covered = late_ded; } else { covered = paid_buffer; overflow = late_ded - paid_buffer; }
+    var tot_paid = v('cl') + v('ml') + v('od') + v('el_u') + v('mat') + v('pat') + v('sl') + v('sd') + v('rh') + covered;
+    var tot_unp = v('lwp') + overflow;
+    var grand_tot = tot_paid + tot_unp;
+    var lwp_display = v('lwp') + overflow;
+    return { cl_bal:cl_bal, ml_bal:ml_bal, rh_bal:rh_bal, mat_bal:mat_bal, pat_bal:pat_bal, sl_bal:sl_bal, sd_bal:sd_bal, el_open:el_open, el_tot_avail:el_tot_avail, el_bal:el_bal, late_ded:late_ded, overflow:overflow, tot_paid:tot_paid, tot_unp:tot_unp, grand_tot:grand_tot, lwp_display:lwp_display, v:v };
+}
+
+/* ===== RENDER ===== */
+function render() {
+    sortData();
+    var tb = document.getElementById('tbody');
+    tb.innerHTML = '';
+    var isAdmin = currentUser && currentUser.role === 'admin';
+
+    data.forEach(function(row, i) {
+        var res = calcRow(row, curYr);
+        var l = row['leaves_' + curYr] || {};
+        var expStr = calcExp(row.doj);
+        var openELVal = l.el_open !== undefined ? l.el_open : 0;
+        var dojDisplay = formatDateDDMMYYYY(row.doj);
+        var dobDisplay = formatDateDDMMYYYY(row.dob);
+
+        var canEdit = isAdmin;
+        var readonlyAttr = canEdit ? '' : 'readonly style="background:#f5f5f5; cursor:not-allowed;"';
+        var disabledNum = canEdit ? '' : 'readonly style="background:#f5f5f5; cursor:not-allowed; width:35px; text-align:center; border:1px solid #333; font-weight:bold; font-size:12px; padding:2px;"';
+
+        var tr = '<td class="col-fix">' + (i+1) + '</td>';
+        tr += '<td class="col-fix-2">';
+        if(canEdit) {
+            tr += '<input type="text" value="' + (row.name||'') + '" onchange="updMeta(' + row.id + ',\'name\',this.value)" placeholder="Name" style="font-weight:bold;">';
+            tr += '<input type="text" value="' + (row.desig||'') + '" onchange="updMeta(' + row.id + ',\'desig\',this.value)" placeholder="Designation" list="desigList">';
+            tr += '<input type="text" value="' + (row.dept||'') + '" onchange="updMeta(' + row.id + ',\'dept\',this.value)" placeholder="Department">';
+            tr += '<div style="display:flex; gap:2px; margin-top:2px;">';
+            tr += '<div><span class="info-label">Code</span><input type="text" value="' + (row.code||'') + '" onchange="updMeta(' + row.id + ',\'code\',this.value)" style="width:55px;"></div>';
+            tr += '<div><span class="info-label">DOJ</span><input type="date" value="' + (row.doj||'') + '" onchange="updMeta(' + row.id + ',\'doj\',this.value)" style="width:75px;"></div>';
+            tr += '<div><span class="info-label">DOB</span><input type="date" value="' + (row.dob||'') + '" onchange="updMeta(' + row.id + ',\'dob\',this.value)" style="width:75px;"></div>';
+            tr += '</div>';
+        } else {
+            tr += '<div style="font-weight:bold; font-size:12px;">' + (row.name||'') + '</div>';
+            tr += '<div style="font-size:10px; color:#555;">' + (row.desig||'') + ' | ' + (row.dept||'') + '</div>';
+            tr += '<div style="font-size:9px; color:#333;">Code: ' + (row.code||'-') + ' | DOJ: ' + (dojDisplay||'-') + ' | DOB: ' + (dobDisplay||'-') + '</div>';
+        }
+        tr += '<div class="exp-tag">' + expStr + '</div>';
+        tr += '</td>';
+
+        // Leave cells
+        if(canEdit) {
+            tr += '<td><input type="number" value="' + (l.cl||'') + '" onchange="upd(' + row.id + ',\'cl\',this.value)"></td>';
+            tr += '<td class="bg-bal">' + res.cl_bal + '</td>';
+            tr += '<td><input type="number" value="' + (l.ml||'') + '" onchange="upd(' + row.id + ',\'ml\',this.value)"></td>';
+            tr += '<td class="bg-bal">' + res.ml_bal + '</td>';
+            tr += '<td><input type="number" value="' + (l.od||'') + '" onchange="upd(' + row.id + ',\'od\',this.value)"></td>';
+            tr += '<td><input type="number" value="' + openELVal + '" onchange="upd(' + row.id + ',\'el_open\',this.value)" style="background:#e3f2fd; width:30px;"></td>';
+            tr += '<td class="bg-bal">15</td>';
+            tr += '<td class="bg-bal">' + res.el_tot_avail + '</td>';
+            tr += '<td><input type="number" value="' + (l.el_u||'') + '" onchange="upd(' + row.id + ',\'el_u\',this.value)"></td>';
+            tr += '<td class="bg-bal" style="background:#bbdefb; border:1px solid #1565c0;">' + res.el_bal + '</td>';
+            tr += '<td><input type="number" value="' + (l.lat||'') + '" onchange="upd(' + row.id + ',\'lat\',this.value)"></td>';
+            tr += '<td class="bg-bal-neg" style="color:#d32f2f;">' + res.late_ded + '</td>';
+            tr += '<td><input type="number" value="' + (l.mat||'') + '" onchange="upd(' + row.id + ',\'mat\',this.value)"></td>';
+            tr += '<td class="bg-bal">' + res.mat_bal + '</td>';
+            tr += '<td><input type="number" value="' + (l.pat||'') + '" onchange="upd(' + row.id + ',\'pat\',this.value)"></td>';
+            tr += '<td class="bg-bal">' + res.pat_bal + '</td>';
+            tr += '<td><input type="number" value="' + (l.sl||'') + '" onchange="upd(' + row.id + ',\'sl\',this.value)"></td>';
+            tr += '<td class="bg-bal">' + res.sl_bal + '</td>';
+            tr += '<td><input type="number" value="' + (l.sd||'') + '" onchange="upd(' + row.id + ',\'sd\',this.value)"></td>';
+            tr += '<td class="bg-bal">' + res.sd_bal + '</td>';
+            tr += '<td><input type="number" value="' + (l.rh||'') + '" onchange="upd(' + row.id + ',\'rh\',this.value)"></td>';
+            tr += '<td class="bg-bal">' + res.rh_bal + '</td>';
+        } else {
+            // Read-only for faculty
+            tr += '<td class="bg-bal">' + (parseFloat(l.cl)||0) + '</td><td class="bg-bal">' + res.cl_bal + '</td>';
+            tr += '<td class="bg-bal">' + (parseFloat(l.ml)||0) + '</td><td class="bg-bal">' + res.ml_bal + '</td>';
+            tr += '<td class="bg-bal">' + (parseFloat(l.od)||0) + '</td>';
+            tr += '<td class="bg-bal">' + openELVal + '</td><td class="bg-bal">15</td><td class="bg-bal">' + res.el_tot_avail + '</td>';
+            tr += '<td class="bg-bal">' + (parseFloat(l.el_u)||0) + '</td>';
+            tr += '<td class="bg-bal" style="background:#bbdefb;">' + res.el_bal + '</td>';
+            tr += '<td class="bg-bal">' + (parseFloat(l.lat)||0) + '</td><td class="bg-bal-neg">' + res.late_ded + '</td>';
+            tr += '<td class="bg-bal">' + (parseFloat(l.mat)||0) + '</td><td class="bg-bal">' + res.mat_bal + '</td>';
+            tr += '<td class="bg-bal">' + (parseFloat(l.pat)||0) + '</td><td class="bg-bal">' + res.pat_bal + '</td>';
+            tr += '<td class="bg-bal">' + (parseFloat(l.sl)||0) + '</td><td class="bg-bal">' + res.sl_bal + '</td>';
+            tr += '<td class="bg-bal">' + (parseFloat(l.sd)||0) + '</td><td class="bg-bal">' + res.sd_bal + '</td>';
+            tr += '<td class="bg-bal">' + (parseFloat(l.rh)||0) + '</td><td class="bg-bal">' + res.rh_bal + '</td>';
+        }
+
+        tr += '<td class="tot-paid-cell">' + res.tot_paid + '</td>';
+
+        if(canEdit) {
+            tr += '<td><input type="number" value="' + (l.lwp||'') + '" onchange="upd(' + row.id + ',\'lwp\',this.value)">';
+            if(res.overflow > 0) tr += '<div style="font-size:8px; color:red; font-weight:bold">(+' + res.overflow + ')</div>';
+            tr += '</td>';
+        } else {
+            tr += '<td class="bg-bal">' + res.lwp_display + '</td>';
+        }
+
+        tr += '<td class="tot-unpaid-cell">' + res.tot_unp + '</td>';
+        tr += '<td class="grand-tot-cell">' + res.grand_tot + '</td>';
+
+        if(isAdmin) {
+            tr += '<td><button class="btn btn-del" onclick="delRow(' + row.id + ')">Del</button></td>';
+        }
+
+        var trEl = document.createElement('tr');
+        trEl.innerHTML = tr;
+        tb.appendChild(trEl);
+    });
+}
+
+/* ===== CARRY FORWARD ===== */
+function calculateCarryForward() {
+    if(!confirm("Calculate 2026 Opening EL from 2025 usage?\nThis will overwrite 'Open' EL in 2026.")) return;
+    data.forEach(function(r) {
+        var res25 = calcRow(r, '2025');
+        var penalty = res25.late_ded;
+        var others_avail = res25.cl_bal + res25.ml_bal + res25.rh_bal;
+        var penalty_eating_el = 0;
+        if(penalty > others_avail) penalty_eating_el = penalty - others_avail;
+        var actual_el_left = res25.el_bal - penalty_eating_el;
+        if(actual_el_left < 0) actual_el_left = 0;
+        if(!r.leaves_2026) r.leaves_2026 = {};
+        r.leaves_2026.el_open = actual_el_left;
+    });
+    alert("Done! Switched to 2026.");
+    swYear('2026');
+    save();
+}
+/* ===== REPORTS ===== */
+function searchFaculty() {
+    var name = prompt("Enter Name to Search:");
+    if(!name) return;
+    var found = data.find(function(r) { return r.name.toLowerCase().indexOf(name.toLowerCase()) !== -1; });
+    if(found) genIndividualReport(null, found.id); else alert("Not found.");
+}
+function askDetailedDeptReport() { var d = prompt("Enter Department:"); if(d !== null) genIndividualReport(d.trim(), null); }
+function askDeptReport() { var d = prompt("Enter Department:"); if(d !== null) genMasterReport(d.trim()); }
+
+function genIndividualReport(filterDept, filterId) {
+    var pSec = document.getElementById('printSection');
+    var h = getPrintHeader();
+    if(filterId) h += '<h4 style="text-align:center; margin:5px 0;">INDIVIDUAL FACULTY LEAVE RECORD</h4>';
+    else if(filterDept) h += '<h4 style="text-align:center; margin:5px 0;">DETAILED DEPT: ' + filterDept.toUpperCase() + '</h4>';
+    else h += '<h4 style="text-align:center; margin:5px 0;">ALL FACULTY DETAILED REPORT</h4>';
+    var found = false;
+    data.forEach(function(r) {
+        if(filterId && r.id !== filterId) return;
+        if(filterDept && (r.dept||"").toUpperCase().trim() !== filterDept.toUpperCase()) return;
+        found = true;
+        var res = calcRow(r, curYr);
+        var v = function(k) { return parseFloat((r['leaves_' + curYr]||{})[k]) || 0; };
+        var expStr = calcExp(r.doj);
+        h += '<div class="ind-card"><div class="ind-header"><span class="ind-title">' + r.name + '</span><span style="font-weight:bold;">' + curYr + '</span></div>';
+        h += '<div class="ind-meta"><div><b>Desig:</b> ' + r.desig + '</div><div><b>Dept:</b> ' + r.dept + '</div><div><b>Code:</b> ' + r.code + '</div><div><b>Exp:</b> ' + expStr + '</div></div>';
+        h += '<div class="ind-sect-title">PAID LEAVES</div>';
+        h += '<table class="ind-table"><thead><tr><th>Type</th><th>Limit</th><th>Used</th><th>Bal</th><th>Type</th><th>Limit</th><th>Used</th><th>Bal</th></tr></thead><tbody>';
+        h += '<tr><td>CL</td><td>8</td><td>' + v('cl') + '</td><td>' + res.cl_bal + '</td><td>ML</td><td>10</td><td>' + v('ml') + '</td><td>' + res.ml_bal + '</td></tr>';
+        h += '<tr><td>EL(Op:' + res.el_open + '+15)</td><td>' + res.el_tot_avail + '</td><td>' + v('el_u') + '</td><td>' + res.el_bal + '</td><td>SL</td><td>15</td><td>' + v('sl') + '</td><td>' + res.sl_bal + '</td></tr>';
+        h += '<tr><td>Mat</td><td>180</td><td>' + v('mat') + '</td><td>' + res.mat_bal + '</td><td>Pat</td><td>15</td><td>' + v('pat') + '</td><td>' + res.pat_bal + '</td></tr>';
+        h += '<tr><td>RH</td><td>2</td><td>' + v('rh') + '</td><td>' + res.rh_bal + '</td><td>OD</td><td>-</td><td>' + v('od') + '</td><td>-</td></tr>';
+        h += '</tbody></table>';
+        h += '<div class="ind-sect-title">LATE PENALTY (1/6)</div>';
+        h += '<table class="ind-table"><tr><td>Late: <b style="color:red">' + v('lat') + '</b></td><td>Penalty: <b style="color:red">' + res.late_ded + '</b></td><td>→ LWP: <b style="color:red">' + res.overflow + '</b></td></tr></table>';
+        h += '<div class="ind-summary"><span>PAID: ' + res.tot_paid + '</span><span style="color:#b71c1c;">UNPAID: ' + res.tot_unp + '</span><span style="background:yellow; padding:0 5px;">TOTAL: ' + res.grand_tot + '</span></div></div>';
+    });
+    if(!found) { alert("No faculty found."); return; }
+    h += '<div class="print-footer">Designed & Developed by Dr. Jadhav V.R. | Contact: 9518356305</div>';
+    pSec.innerHTML = h;
+    window.print();
+}
+
+function genMasterReport(filterDept) {
+    var pSec = document.getElementById('printSection');
+    var h = getPrintHeader();
+    var title = filterDept ? 'DEPT SUMMARY: ' + filterDept.toUpperCase() + ' (' + curYr + ')' : 'MASTER SUMMARY (' + curYr + ')';
+    h += '<h4 style="text-align:center; text-decoration:underline; margin:5px 0;">' + title + '</h4>';
+    var groups = {};
+    data.forEach(function(r) {
+        var d = (r.dept || "Other").toUpperCase().trim();
+        if(filterDept && d !== filterDept.toUpperCase()) return;
+        if(!groups[d]) groups[d] = [];
+        groups[d].push(r);
+    });
+    var depts = Object.keys(groups).sort();
+    if(!depts.length) { alert("No faculty found."); return; }
+    depts.forEach(function(d) {
+        h += '<div class="dept-head">DEPARTMENT: ' + d + '</div>';
+        h += '<table class="rpt-table"><thead><tr><th style="width:5%">Sr</th><th style="width:25%">Name</th><th>CL</th><th>ML</th><th>EL</th><th>OD</th><th>RH</th><th>SL</th><th>Mat</th><th>Pat</th><th>Lat</th><th>LWP</th><th>Tot</th></tr></thead><tbody>';
+        groups[d].forEach(function(r, idx) {
+            var res = calcRow(r, curYr);
+            var v = function(k) { return parseFloat((r['leaves_' + curYr]||{})[k]) || 0; };
+            h += '<tr><td>' + (idx+1) + '</td><td style="text-align:left"><b>' + r.name + '</b></td>';
+            h += '<td>' + res.cl_bal + '</td><td>' + res.ml_bal + '</td><td>' + res.el_bal + '</td><td>' + v('od') + '</td>';
+            h += '<td>' + res.rh_bal + '</td><td>' + res.sl_bal + '</td><td>' + res.mat_bal + '</td><td>' + res.pat_bal + '</td>';
+            h += '<td>' + res.late_ded + '</td><td>' + res.lwp_display + '</td><td><b>' + res.grand_tot + '</b></td></tr>';
+        });
+        h += '</tbody></table>';
+    });
+    h += '<div class="print-footer">Designed & Developed by Dr. Jadhav V.R. | Contact: 9518356305</div>';
+    pSec.innerHTML = h;
+    window.print();
+}
+
+function getPrintHeader() {
+    var tVal = document.getElementById('tHead').innerText;
+    var cVal = document.getElementById('cHead').innerText;
+    var aVal = document.getElementById('cAddr').innerText;
+    var logoSrc = document.getElementById('logoImg').src;
+    var logoDisp = document.getElementById('logoImg').style.display !== 'none' ? '<img src="' + logoSrc + '">' : '';
+    var dVal = document.getElementById('reportDate').value;
+    return '<div class="rpt-header"><div class="rpt-logo">' + logoDisp + '</div><div class="rpt-titles"><h3>' + tVal + '</h3><h2>' + cVal + '</h2><h5>' + aVal + '</h5></div><div style="font-size:10px; font-weight:bold; width:80px; text-align:right;">Date: ' + dVal + '</div></div>';
+}
+
+/* ===== UTILS ===== */
+function upd(id, key, val) {
+    var row = data.find(function(r) { return r.id === id; });
+    if(!row['leaves_' + curYr]) row['leaves_' + curYr] = {};
+    row['leaves_' + curYr][key] = val;
+    save(); render();
+}
+function updMeta(id, key, val) {
+    var row = data.find(function(r) { return r.id === id; });
+    row[key] = val;
+    // If code changed, update users
+    if(key === 'code' && val && val.trim().length > 2) {
+        var oldCode = Object.keys(users).find(function(u) { return users[u].facultyId === id && u !== 'admin'; });
+        if(oldCode) delete users[oldCode];
+        users[val.trim()] = { pw: 'damch@' + val.trim(), role: 'faculty', facultyId: id };
+        localStorage.setItem('damch_users_v25', JSON.stringify(users));
+    }
+    save();
+    if(key === 'desig' || key === 'doj') render();
+}
+function addRow() {
+    data.push({ id: Date.now(), name: "", desig: "", dept: "", code: "", doj: "", dob: "", leaves_2025: {}, leaves_2026: {} });
+    save(); render();
+}
+function delRow(id) {
+    if(confirm('Delete this faculty?')) {
+        data = data.filter(function(r) { return r.id !== id; });
+        // Remove user
+        var uKey = Object.keys(users).find(function(u) { return users[u].facultyId === id; });
+        if(uKey) { delete users[uKey]; localStorage.setItem('damch_users_v25', JSON.stringify(users)); }
+        save(); render();
+    }
+}
+function swYear(y) {
+    curYr = y;
+    document.getElementById('btn25').className = y === '2025' ? 'tab-btn active' : 'tab-btn';
+    document.getElementById('btn26').className = y === '2026' ? 'tab-btn active' : 'tab-btn';
+    document.getElementById('yrTitle').innerText = "Record: " + y;
+    render();
+}
+function save() { localStorage.setItem('damch_data_v25', JSON.stringify(data)); }
+function saveData() { save(); alert("Data saved to browser!"); }
+
+function loadLogo(e) {
+    var r = new FileReader();
+    r.onload = function(ev) { localStorage.setItem('damch_logo', ev.target.result); location.reload(); };
+    r.readAsDataURL(e.target.files[0]);
+}
+function downloadJSON() {
+    var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'DAMCH_Backup_' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+function expCSV() {
+    var csv = "Sr,Name,Desig,Dept,Code,DOJ,Experience,DOB,CL_Bal,ML_Bal,EL_Open,EL_Total,EL_Used,EL_Bal,OD,RH_Bal,SL_Bal,Mat_Bal,Pat_Bal,Late_Ded,LWP_Total,Grand_Total\n";
+    data.forEach(function(r, i) {
+        var res = calcRow(r, curYr);
+        var v = function(k) { return parseFloat((r['leaves_' + curYr]||{})[k]) || 0; };
+        var expStr = calcExp(r.doj).replace(/,/g, '');
+        csv += (i+1) + ',"' + r.name + '","' + r.desig + '","' + (r.dept||'') + '","' + (r.code||'') + '","' + formatDateDDMMYYYY(r.doj) + '","' + expStr + '","' + formatDateDDMMYYYY(r.dob) + '",' + res.cl_bal + ',' + res.ml_bal + ',' + res.el_open + ',' + res.el_tot_avail + ',' + v('el_u') + ',' + res.el_bal + ',' + v('od') + ',' + res.rh_bal + ',' + res.sl_bal + ',' + res.mat_bal + ',' + res.pat_bal + ',' + res.late_ded + ',' + res.lwp_display + ',' + res.grand_tot + '\n';
+    });
+    var blob = new Blob([csv], { type: 'text/csv' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'Leave_Report_' + curYr + '.csv';
+    a.click();
+}
+function restData(e) {
+    var r = new FileReader();
+    r.onload = function(ev) {
+        try { data = JSON.parse(ev.target.result); buildDefaultUsers(); save(); render(); alert("Data Restored!"); }
+        catch(err) { alert("Invalid JSON file."); }
+    };
+    r.readAsText(e.target.files[0]);
+}
 </script>
-<script>
-function pgFList(el){var fac=sortFaculty(getActiveFaculty()),h='<div class="table-container"><div class="table-header"><h3>All Faculty ('+fac.length+')</h3><div class="table-actions"><div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Search..." onkeyup="fFL(this.value)"></div><button class="btn btn-sm btn-outline" onclick="window.print()"><i class="fas fa-print"></i></button></div></div><div style="overflow-x:auto"><table id="flt"><tr><th>#</th><th>Name</th><th>Code</th><th>Designation</th><th>Department</th><th>DOJ</th><th>Exp</th><th>Approved</th></tr>';
-fac.forEach(function(f,i){h+='<tr data-s="'+esc((f.name+f.code+f.dept).toLowerCase())+'"><td>'+(i+1)+'</td><td style="font-weight:600">'+esc(f.name)+(f.isPrincipal?' <span class="desig-badge desig-principal">P</span>':'')+'</td><td><code style="font-size:11px">'+esc(f.code)+'</code></td><td><span class="desig-badge desig-'+f.designation.toLowerCase()+'">'+esc(f.designation)+'</span></td><td style="font-size:12px">'+esc(f.dept)+'</td><td>'+fmtDate(f.doj)+'</td><td>'+calcExp(f.doj)+'</td><td>'+(f.approved==='Yes'?'<span class="tag-approved">Yes</span>':'<span class="tag-pending">No</span>')+'</td></tr>';});
-h+='</table></div></div>';el.innerHTML=h;}
-function fFL(q){q=q.toLowerCase();document.querySelectorAll('#flt tr[data-s]').forEach(function(r){r.style.display=r.dataset.s.indexOf(q)>=0?'':'none';});}
 
-function pgMFac(el){var fac=sortFaculty(getActiveFaculty()),h='<div class="table-container"><div class="table-header"><h3>Manage Faculty</h3><div class="table-actions"><div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Search..." id="mfs" onkeyup="fMF()"></div><button class="btn btn-sm btn-success" onclick="addFM()"><i class="fas fa-user-plus"></i> Add</button></div></div><div style="overflow-x:auto"><table id="mft"><tr><th>#</th><th>Name</th><th>Code</th><th>Designation</th><th>Dept</th><th>Actions</th></tr>';
-fac.forEach(function(f,i){h+='<tr data-s="'+esc((f.name+f.code+f.dept).toLowerCase())+'"><td>'+(i+1)+'</td><td style="font-weight:600">'+esc(f.name)+'</td><td><code>'+esc(f.code)+'</code></td><td><span class="desig-badge desig-'+f.designation.toLowerCase()+'">'+esc(f.designation)+'</span></td><td style="font-size:12px">'+esc(f.dept)+'</td><td class="no-print"><button class="btn btn-sm btn-info" data-a="e" data-f="'+f.id+'"><i class="fas fa-edit"></i></button> <button class="btn btn-sm btn-danger" data-a="d" data-f="'+f.id+'"><i class="fas fa-trash"></i></button></td></tr>';});
-h+='</table></div></div>';el.innerHTML=h;
-el.querySelectorAll('[data-a="e"]').forEach(function(b){b.addEventListener('click',function(){editFM(b.dataset.f);});});
-el.querySelectorAll('[data-a="d"]').forEach(function(b){b.addEventListener('click',function(){delF(b.dataset.f);});});}
-function fMF(){var q=document.getElementById('mfs').value.toLowerCase();document.querySelectorAll('#mft tr[data-s]').forEach(function(r){r.style.display=r.dataset.s.indexOf(q)>=0?'':'none';});}
+<datalist id="desigList">
+    <option value="Principal">
+    <option value="Professor">
+    <option value="Associate Professor">
+    <option value="Assistant Professor">
+</datalist>
 
-function addFM(){openModal('<div class="modal-header"><h3>Add Faculty</h3><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div><div class="modal-body"><div class="form-row"><div class="form-group"><label>Name *</label><input type="text" id="af_n" style="padding-left:14px"></div><div class="form-group"><label>Code *</label><input type="text" id="af_c" style="padding-left:14px"></div></div><div class="form-row"><div class="form-group"><label>Designation</label><select id="af_d" class="form-select" style="width:100%"><option>Professor</option><option>Reader</option><option>Lecturer</option></select></div><div class="form-group"><label>Department</label><select id="af_dp" class="form-select" style="width:100%">'+DEPTS.map(function(d){return '<option>'+d+'</option>';}).join('')+'</select></div></div><div class="form-row"><div class="form-group"><label>DOJ</label><input type="date" id="af_j" style="padding-left:14px"></div><div class="form-group"><label>DOB</label><input type="date" id="af_b" style="padding-left:14px"></div></div><div class="form-row"><div class="form-group"><label>Email</label><input type="email" id="af_e" style="padding-left:14px"></div><div class="form-group"><label>Phone</label><input type="text" id="af_p" style="padding-left:14px"></div></div><div class="form-row"><div class="form-group"><label>Approved</label><select id="af_a" class="form-select" style="width:100%"><option>No</option><option>Yes</option></select></div><div class="form-group"><label>Principal?</label><select id="af_pr" class="form-select" style="width:100%"><option value="0">No</option><option value="1">Yes</option></select></div></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-success" id="af_s"><i class="fas fa-save"></i> Save</button></div>');
-document.getElementById('af_s').addEventListener('click',function(){var nm=document.getElementById('af_n').value.trim(),cd=document.getElementById('af_c').value.trim();if(!nm||!cd)return toast('Name & Code required','error');var fac=DB.get('faculty')||[];for(var i=0;i<fac.length;i++){if(fac[i].code===cd&&fac[i].status!=='removed')return toast('Code exists','error');}var id=genId(),nf={id:id,name:nm,code:cd,designation:document.getElementById('af_d').value,dept:document.getElementById('af_dp').value,doj:document.getElementById('af_j').value,dob:document.getElementById('af_b').value,email:document.getElementById('af_e').value,phone:document.getElementById('af_p').value,approved:document.getElementById('af_a').value,isPrincipal:document.getElementById('af_pr').value==='1',status:'active'};fac.push(nf);DB.set('faculty',fac);var us=DB.get('users')||[];us.push({username:cd,password:'damch@'+cd,role:'faculty',facultyId:id,name:nm,securityAnswer:'cricket'});DB.set('users',us);var lv=DB.get('leaves')||{};YEARS.forEach(function(y){if(!lv[y])lv[y]={};lv[y][id]={CL:0,ML:0,OD:0,EL:0,Maternity:0,Paternity:0,'Study Leave':0,Sabbatical:0,RH:0,LWP:0,'Late Mark':0};});DB.set('leaves',lv);closeModal();toast('Faculty added','success');showPage('managefaculty');});}
-
-function editFM(fid){var fac=DB.get('faculty')||[],f=null;for(var i=0;i<fac.length;i++){if(fac[i].id===fid){f=fac[i];break;}}if(!f)return;
-openModal('<div class="modal-header"><h3>Edit Faculty</h3><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div><div class="modal-body"><div class="form-row"><div class="form-group"><label>Name</label><input type="text" id="ef_n" value="'+esc(f.name)+'" style="padding-left:14px"></div><div class="form-group"><label>Code</label><input type="text" id="ef_c" value="'+esc(f.code)+'" style="padding-left:14px"></div></div><div class="form-row"><div class="form-group"><label>Designation</label><select id="ef_d" class="form-select" style="width:100%">'+['Professor','Reader','Lecturer'].map(function(d){return '<option'+(d===f.designation?' selected':'')+'>'+d+'</option>';}).join('')+'</select></div><div class="form-group"><label>Department</label><select id="ef_dp" class="form-select" style="width:100%">'+DEPTS.map(function(d){return '<option'+(d===f.dept?' selected':'')+'>'+d+'</option>';}).join('')+'</select></div></div><div class="form-row"><div class="form-group"><label>DOJ</label><input type="date" id="ef_j" value="'+(f.doj||'')+'" style="padding-left:14px"></div><div class="form-group"><label>DOB</label><input type="date" id="ef_b" value="'+(f.dob||'')+'" style="padding-left:14px"></div></div><div class="form-row"><div class="form-group"><label>Email</label><input type="email" id="ef_e" value="'+esc(f.email||'')+'" style="padding-left:14px"></div><div class="form-group"><label>Phone</label><input type="text" id="ef_p" value="'+esc(f.phone||'')+'" style="padding-left:14px"></div></div><div class="form-row"><div class="form-group"><label>Approved</label><select id="ef_a" class="form-select" style="width:100%"><option'+(f.approved==='Yes'?' selected':'')+'>Yes</option><option'+(f.approved!=='Yes'?' selected':'')+'>No</option></select></div><div class="form-group"><label>Principal?</label><select id="ef_pr" class="form-select" style="width:100%"><option value="1"'+(f.isPrincipal?' selected':'')+'>Yes</option><option value="0"'+(!f.isPrincipal?' selected':'')+'>No</option></select></div></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="ef_s"><i class="fas fa-save"></i> Update</button></div>');
-document.getElementById('ef_s').addEventListener('click',function(){var fc=DB.get('faculty')||[];for(var i=0;i<fc.length;i++){if(fc[i].id===fid){fc[i].name=document.getElementById('ef_n').value.trim();fc[i].code=document.getElementById('ef_c').value.trim();fc[i].designation=document.getElementById('ef_d').value;fc[i].dept=document.getElementById('ef_dp').value;fc[i].doj=document.getElementById('ef_j').value;fc[i].dob=document.getElementById('ef_b').value;fc[i].email=document.getElementById('ef_e').value;fc[i].phone=document.getElementById('ef_p').value;fc[i].approved=document.getElementById('ef_a').value;fc[i].isPrincipal=document.getElementById('ef_pr').value==='1';break;}}DB.set('faculty',fc);var us=DB.get('users')||[];for(var j=0;j<us.length;j++){if(us[j].facultyId===fid){us[j].name=document.getElementById('ef_n').value.trim();us[j].username=document.getElementById('ef_c').value.trim();break;}}DB.set('users',us);closeModal();toast('Updated','success');showPage('managefaculty');});}
-
-function delF(fid){var fac=DB.get('faculty')||[],f=null;for(var i=0;i<fac.length;i++){if(fac[i].id===fid){f=fac[i];break;}}if(!f)return;if(!confirm('Delete '+f.name+'?'))return;for(var i=0;i<fac.length;i++){if(fac[i].id===fid){fac[i].status='removed';break;}}DB.set('faculty',fac);var us=DB.get('users')||[];us=us.filter(function(u){return u.facultyId!==fid;});DB.set('users',us);toast(f.name+' removed','success');showPage('managefaculty');}
-
-function pgLT(el){var h='<div class="tab-bar">';YEARS.forEach(function(y){h+='<button class="tab-btn'+(y===2025?' active':'')+'" onclick="sLT('+y+',this)">'+y+'</button>';});h+='</div><div id="ltc"></div>';el.innerHTML=h;sLT(2025,el.querySelector('.tab-btn.active'));}
-function sLT(y,btn){if(btn){btn.parentElement.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');}var fac=sortFaculty(getActiveFaculty()),lv=DB.get('leaves')||{};if(!lv[y])lv[y]={};var h='<div class="table-container"><div class="table-header"><h3>Leave Table '+y+'</h3><div class="table-actions"><button class="btn btn-sm btn-success" onclick="svLT('+y+')"><i class="fas fa-save"></i> Save</button><button class="btn btn-sm btn-outline" onclick="window.print()"><i class="fas fa-print"></i></button></div></div><div style="overflow-x:auto"><table id="ltt"><tr><th>#</th><th>Name</th><th>Dept</th>';LEAVE_TYPES.forEach(function(lt){h+='<th style="font-size:10px">'+lt+'</th>';});h+='<th>Total</th></tr>';
-fac.forEach(function(f,i){var d=(lv[y]&&lv[y][f.id])||{},t=0;LEAVE_TYPES.forEach(function(lt){t+=(d[lt]||0);});h+='<tr><td>'+(i+1)+'</td><td style="font-weight:600;font-size:11px;white-space:nowrap">'+esc(f.name)+'</td><td style="font-size:10px">'+esc(f.dept)+'</td>';LEAVE_TYPES.forEach(function(lt){h+='<td><input type="number" min="0" value="'+(d[lt]||0)+'" data-lt="'+lt+'" data-fid="'+f.id+'" style="width:44px;padding:3px;border:1px solid var(--border);border-radius:4px;text-align:center;font-size:11px"></td>';});h+='<td style="font-weight:700">'+t+'</td></tr>';});
-h+='</table></div></div>';document.getElementById('ltc').innerHTML=h;}
-function svLT(y){var lv=DB.get('leaves')||{};if(!lv[y])lv[y]={};document.querySelectorAll('#ltt input[data-lt]').forEach(function(inp){var fid=inp.dataset.fid,lt=inp.dataset.lt;if(!lv[y][fid])lv[y][fid]={};lv[y][fid][lt]=parseInt(inp.value)||0;});DB.set('leaves',lv);toast('Saved for '+y,'success');}
-
-function pgApps(el){var apps=(DB.get('leaveApplications')||[]).sort(function(a,b){return new Date(b.appliedOn)-new Date(a.appliedOn);}),h='<div class="table-container"><div class="table-header"><h3>Applications ('+apps.length+')</h3></div><div style="overflow-x:auto"><table><tr><th>#</th><th>Faculty</th><th>Dept</th><th>Type</th><th>From</th><th>To</th><th>Status</th><th>Actions</th></tr>';
-apps.forEach(function(a,i){h+='<tr><td>'+(i+1)+'</td><td>'+esc(a.facultyName)+'</td><td style="font-size:12px">'+esc(a.dept)+'</td><td>'+esc(a.leaveType)+'</td><td>'+fmtDate(a.fromDate)+'</td><td>'+fmtDate(a.toDate)+'</td><td><span class="desig-badge desig-'+(a.status==='Approved'?'professor':a.status==='Rejected'?'principal':'lecturer')+'">'+a.status+'</span></td><td class="no-print">'+(a.status==='Pending'?'<button class="btn btn-sm btn-success" data-a="ap" data-id="'+a.id+'"><i class="fas fa-check"></i></button> <button class="btn btn-sm btn-danger" data-a="rj" data-id="'+a.id+'"><i class="fas fa-times"></i></button>':'-')+'</td></tr>';});
-h+='</table></div></div>';if(!apps.length)h='<div class="empty-state"><i class="fas fa-inbox"></i><p>No applications</p></div>';el.innerHTML=h;
-el.querySelectorAll('[data-a="ap"]').forEach(function(b){b.addEventListener('click',function(){rvApp(b.dataset.id,'Approved');});});
-el.querySelectorAll('[data-a="rj"]').forEach(function(b){b.addEventListener('click',function(){rvApp(b.dataset.id,'Rejected');});});}
-function rvApp(aid,st){var apps=DB.get('leaveApplications')||[];for(var i=0;i<apps.length;i++){if(apps[i].id===aid){apps[i].status=st;apps[i].reviewedBy=CU.name;break;}}DB.set('leaveApplications',apps);toast('Application '+st,'success');showPage('applications');}
-
-function pgMHol(el){var hs=(DB.get('holidays')||[]).sort(function(a,b){return new Date(a.date)-new Date(b.date);}),h='<div class="table-container"><div class="table-header"><h3>Manage Holidays</h3><button class="btn btn-sm btn-success" onclick="addHM()"><i class="fas fa-plus"></i> Add</button></div><div style="overflow-x:auto"><table><tr><th>#</th><th>Date</th><th>Name</th><th>Year</th><th>Type</th><th>Del</th></tr>';
-hs.forEach(function(ho,i){h+='<tr><td>'+(i+1)+'</td><td>'+fmtDate(ho.date)+'</td><td>'+esc(ho.name)+'</td><td>'+ho.year+'</td><td>'+esc(ho.type)+'</td><td><button class="btn btn-sm btn-danger" data-a="dh" data-id="'+ho.id+'"><i class="fas fa-trash"></i></button></td></tr>';});
-h+='</table></div></div>';el.innerHTML=h;
-el.querySelectorAll('[data-a="dh"]').forEach(function(b){b.addEventListener('click',function(){if(!confirm('Delete?'))return;var hl=DB.get('holidays')||[];hl=hl.filter(function(x){return x.id!==b.dataset.id;});DB.set('holidays',hl);toast('Removed','success');showPage('manageholidays');});});}
-function addHM(){openModal('<div class="modal-header"><h3>Add Holiday</h3><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div><div class="modal-body"><div class="form-row"><div class="form-group"><label>Date</label><input type="date" id="ah_d" style="padding-left:14px"></div><div class="form-group"><label>Name</label><input type="text" id="ah_n" style="padding-left:14px"></div></div><div class="form-row"><div class="form-group"><label>Year</label><select id="ah_y" class="form-select" style="width:100%">'+YEARS.map(function(y){return '<option>'+y+'</option>';}).join('')+'</select></div><div class="form-group"><label>Type</label><select id="ah_t" class="form-select" style="width:100%"><option>National</option><option>State</option><option>Gazetted</option><option>Restricted</option></select></div></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-success" id="ah_s"><i class="fas fa-save"></i> Add</button></div>');
-document.getElementById('ah_s').addEventListener('click',function(){var d=document.getElementById('ah_d').value,n=document.getElementById('ah_n').value.trim();if(!d||!n)return toast('Fill fields','error');var hl=DB.get('holidays')||[];hl.push({id:'H'+Date.now(),date:d,name:n,year:parseInt(document.getElementById('ah_y').value),type:document.getElementById('ah_t').value});DB.set('holidays',hl);closeModal();toast('Added','success');showPage('manageholidays');});}
-
-function pgMUsr(el){var us=(DB.get('users')||[]).sort(function(a,b){return a.role==='admin'?-1:b.role==='admin'?1:a.name.localeCompare(b.name);}),h='<div class="table-container"><div class="table-header"><h3>Users ('+us.length+')</h3><div class="search-box"><i class="fas fa-search"></i><input type="text" placeholder="Search..." onkeyup="fUs(this.value)"></div></div><div style="overflow-x:auto"><table id="ust"><tr><th>#</th><th>Username</th><th>Name</th><th>Role</th><th>Password</th><th>Actions</th></tr>';
-us.forEach(function(u,i){h+='<tr data-s="'+esc((u.username+u.name).toLowerCase())+'"><td>'+(i+1)+'</td><td><code>'+esc(u.username)+'</code></td><td>'+esc(u.name)+'</td><td><span class="desig-badge '+(u.role==='admin'?'desig-principal':'desig-lecturer')+'">'+u.role+'</span></td><td style="font-family:monospace;font-size:12px">'+esc(u.password)+'</td><td class="no-print"><button class="btn btn-sm btn-warning" data-a="cp" data-u="'+esc(u.username)+'"><i class="fas fa-key"></i></button>'+(u.role!=='admin'?' <button class="btn btn-sm btn-danger" data-a="du" data-u="'+esc(u.username)+'"><i class="fas fa-trash"></i></button>':'')+'</td></tr>';});
-h+='</table></div></div>';el.innerHTML=h;
-el.querySelectorAll('[data-a="cp"]').forEach(function(b){b.addEventListener('click',function(){chPwd(b.dataset.u);});});
-el.querySelectorAll('[data-a="du"]').forEach(function(b){b.addEventListener('click',function(){if(!confirm('Delete user '+b.dataset.u+'?'))return;var ul=DB.get('users')||[];ul=ul.filter(function(u){return u.username!==b.dataset.u;});DB.set('users',ul);toast('Deleted','success');showPage('manageusers');});});}
-function fUs(q){q=q.toLowerCase();document.querySelectorAll('#ust tr[data-s]').forEach(function(r){r.style.display=r.dataset.s.indexOf(q)>=0?'':'none';});}
-function chPwd(uid){openModal('<div class="modal-header"><h3>Change Password: '+esc(uid)+'</h3><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div><div class="modal-body"><div class="form-group"><label>Security Answer (favourite sport)</label><input type="text" id="cp_a" placeholder="Answer" style="padding-left:14px"></div><div class="form-group"><label>New Password (min 6)</label><input type="text" id="cp_p" placeholder="New password" style="padding-left:14px"></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="cp_s"><i class="fas fa-save"></i> Change</button></div>');
-document.getElementById('cp_s').addEventListener('click',function(){var ans=document.getElementById('cp_a').value.trim().toLowerCase(),pwd=document.getElementById('cp_p').value.trim();if(ans!=='cricket')return toast('Wrong answer','error');if(pwd.length<6)return toast('Min 6 chars','error');var us=DB.get('users')||[];for(var i=0;i<us.length;i++){if(us[i].username===uid){us[i].password=pwd;break;}}DB.set('users',us);closeModal();toast('Password changed','success');showPage('manageusers');});}
-
-function pgRep(el){el.innerHTML='<div class="stats-grid"><div class="stat-card" style="cursor:pointer" onclick="repMaster()"><div class="stat-icon"><i class="fas fa-table"></i></div><div class="stat-value" style="font-size:18px">Master Report</div><div class="stat-label">All faculty leave data</div></div><div class="stat-card" style="cursor:pointer" onclick="repStaff()"><div class="stat-icon"><i class="fas fa-sitemap"></i></div><div class="stat-value" style="font-size:18px">Staff Status</div><div class="stat-label">Department staff count</div></div><div class="stat-card" style="cursor:pointer" onclick="expCSV()"><div class="stat-icon"><i class="fas fa-file-csv"></i></div><div class="stat-value" style="font-size:18px">Export CSV</div><div class="stat-label">Download as spreadsheet</div></div></div><div id="ro"></div>';}
-function repMaster(){var fac=sortFaculty(getActiveFaculty()),lv=DB.get('leaves')||{},y=2025,h='<div class="table-container"><div class="table-header"><h3>Master Report '+y+'</h3><button class="btn btn-sm btn-outline no-print" onclick="window.print()"><i class="fas fa-print"></i></button></div><div style="overflow-x:auto"><table><tr><th>#</th><th>Name</th><th>Dept</th>';LEAVE_TYPES.forEach(function(lt){h+='<th style="font-size:9px">'+lt+'</th>';});h+='<th>Total</th></tr>';
-fac.forEach(function(f,i){var d=(lv[y]&&lv[y][f.id])||{},t=0;LEAVE_TYPES.forEach(function(lt){t+=(d[lt]||0);});h+='<tr><td>'+(i+1)+'</td><td style="font-size:11px;font-weight:600;white-space:nowrap">'+esc(f.name)+'</td><td style="font-size:10px">'+esc(f.dept)+'</td>';LEAVE_TYPES.forEach(function(lt){var v=d[lt]||0;h+='<td style="text-align:center;font-size:11px;color:'+(v>0?'var(--danger)':'inherit')+'">'+(v||'-')+'</td>';});h+='<td style="font-weight:700;text-align:center">'+(t||'-')+'</td></tr>';});
-h+='</table></div></div>';document.getElementById('ro').innerHTML=h;}
-function repStaff(){var fac=getActiveFaculty(),h='<div class="table-container"><div class="table-header"><h3>Staff Status (100 UG Seats)</h3><button class="btn btn-sm btn-outline no-print" onclick="window.print()"><i class="fas fa-print"></i></button></div><div style="overflow-x:auto"><table><tr><th>#</th><th>Department</th><th>Prof</th><th>Reader</th><th>Lecturer</th><th>Total</th></tr>';
-DEPTS.forEach(function(d,i){var df=fac.filter(function(f){return f.dept===d;});h+='<tr><td>'+(i+1)+'</td><td style="font-weight:600">'+esc(d)+'</td><td style="text-align:center">'+df.filter(function(f){return f.designation==='Professor';}).length+'</td><td style="text-align:center">'+df.filter(function(f){return f.designation==='Reader';}).length+'</td><td style="text-align:center">'+df.filter(function(f){return f.designation==='Lecturer';}).length+'</td><td style="text-align:center;font-weight:700">'+df.length+'</td></tr>';});
-h+='</table></div></div>';document.getElementById('ro').innerHTML=h;}
-function expCSV(){var fac=sortFaculty(getActiveFaculty()),csv='Sr,Name,Code,Designation,Department,DOJ,DOB,Email,Phone,Approved\n';fac.forEach(function(f,i){csv+=(i+1)+',"'+f.name+'","'+f.code+'","'+f.designation+'","'+f.dept+'","'+(f.doj||'')+'","'+(f.dob||'')+'","'+(f.email||'')+'","'+(f.phone||'')+'","'+f.approved+'"\n';});var b=new Blob([csv],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='DAMCH_Faculty.csv';a.click();toast('CSV exported','success');}
-
-function pgBak(el){el.innerHTML='<div class="stats-grid"><div class="stat-card" style="cursor:pointer" onclick="dlBak()"><div class="stat-icon"><i class="fas fa-download"></i></div><div class="stat-value" style="font-size:18px">Download Backup</div><div class="stat-label">Full JSON backup</div></div><div class="stat-card" style="cursor:pointer" onclick="document.getElementById(\'rI\').click()"><div class="stat-icon"><i class="fas fa-upload"></i></div><div class="stat-value" style="font-size:18px">Restore</div><div class="stat-label">Upload JSON file</div></div><div class="stat-card" style="cursor:pointer" onclick="rstAll()"><div class="stat-icon"><i class="fas fa-redo"></i></div><div class="stat-value" style="font-size:18px">Reset</div><div class="stat-label">Factory reset</div></div></div><input type="file" id="rI" accept=".json" style="display:none" onchange="rsBak(this)"><div class="table-container" style="margin-top:20px"><div class="table-header"><h3>Info</h3></div><div style="padding:24px;font-size:14px;line-height:2"><p>Data stored in browser localStorage. Clear browser data = lose everything.</p><p>Download backup weekly to Google Drive or USB.</p><p><b>Records:</b> Users: '+(DB.get('users')||[]).length+' | Faculty: '+(DB.get('faculty')||[]).length+' | Holidays: '+(DB.get('holidays')||[]).length+'</p></div></div>';}
-function dlBak(){var bk={version:'DAMCH_v8',date:new Date().toISOString(),users:DB.get('users'),faculty:DB.get('faculty'),leaves:DB.get('leaves'),leaveApplications:DB.get('leaveApplications'),holidays:DB.get('holidays')},b=new Blob([JSON.stringify(bk,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='DAMCH_Backup_'+new Date().toISOString().split('T')[0]+'.json';a.click();toast('Backup downloaded','success');}
-function rsBak(inp){var file=inp.files[0];if(!file)return;var r=new FileReader();r.onload=function(e){try{var d=JSON.parse(e.target.result);if(!d.users||!d.faculty)throw new Error('Invalid');if(!confirm('Replace ALL data?'))return;DB.set('users',d.users);DB.set('faculty',d.faculty);DB.set('leaves',d.leaves||{});DB.set('leaveApplications',d.leaveApplications||[]);DB.set('holidays',d.holidays||[]);toast('Restored! Refreshing...','success');setTimeout(function(){location.reload();},1500);}catch(err){toast('Invalid file','error');}};r.readAsText(file);inp.value='';}
-function rstAll(){if(!confirm('RESET ALL DATA to defaults?'))return;if(!confirm('Are you sure? Cannot undo!'))return;localStorage.clear();toast('Reset! Refreshing...','success');setTimeout(function(){location.reload();},1500);}
-
-// INIT
-initDB();
-if(window.innerWidth<=768)document.getElementById('menuBtn').style.display='flex';
-window.addEventListener('resize',function(){document.getElementById('menuBtn').style.display=window.innerWidth<=768?'flex':'none';if(window.innerWidth>768)document.getElementById('sidebar').classList.remove('open');});
-document.getElementById('loginPass').addEventListener('keypress',function(e){if(e.key==='Enter')doLogin();});
-document.getElementById('loginUser').addEventListener('keypress',function(e){if(e.key==='Enter')document.getElementById('loginPass').focus();});
-</script>
 </body>
 </html>
