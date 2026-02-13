@@ -1,362 +1,473 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Book & Leave Record - DAMCH Udgir</title>
-    <style>
-        /* ===== GLOBAL ===== */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #e8eaf6; color: #000; font-size: 11px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAMCH - Faculty Leave Management System</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Poppins',sans-serif;background:#f0f2f5;color:#333;font-size:13px}
+:root{--primary:#1a237e;--accent:#b71c1c;--green:#2e7d32;--bg:#f0f2f5;--card:#fff;--shadow:0 2px 12px rgba(0,0,0,.08)}
 
-        /* ===== LOGIN PAGE ===== */
-        .login-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #1a237e 0%, #b71c1c 100%);
-            display: flex; justify-content: center; align-items: center; z-index: 9999;
-        }
-        .login-box {
-            background: #fff; border-radius: 12px; padding: 30px 35px; width: 380px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.4); text-align: center;
-        }
-        .login-box .login-logo { width: 70px; height: 70px; margin: 0 auto 8px; }
-        .login-box .login-logo img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid #b71c1c; }
-        .login-box h2 { color: #b71c1c; font-size: 15px; margin-bottom: 2px; text-transform: uppercase; }
-        .login-box h4 { color: #333; font-size: 11px; margin-bottom: 15px; font-weight: 600; }
-        .login-box input {
-            width: 100%; padding: 10px 12px; margin-bottom: 10px; border: 1.5px solid #bbb;
-            border-radius: 6px; font-size: 13px; outline: none; transition: border 0.3s;
-        }
-        .login-box input:focus { border-color: #b71c1c; background: #fff8e1; }
-        .login-box .login-btn {
-            width: 100%; padding: 11px; background: #b71c1c; color: #fff; border: none;
-            border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer;
-            transition: background 0.3s;
-        }
-        .login-box .login-btn:hover { background: #d32f2f; }
-        .login-msg { color: #b71c1c; font-size: 11px; font-weight: bold; margin-top: 8px; min-height: 16px; }
-        .login-footer { font-size: 9px; color: #888; margin-top: 12px; }
-        .login-footer a { color: #1a237e; }
-        .toggle-pw { font-size: 10px; color: #1a237e; cursor: pointer; text-align: right; display: block; margin: -6px 0 8px; }
+/* LOGIN */
+.login-page{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#1a237e,#283593,#b71c1c);display:flex;justify-content:center;align-items:center;z-index:9999}
+.login-card{background:#fff;border-radius:16px;padding:35px;width:400px;box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center}
+.login-card .logo-circle{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));margin:0 auto 15px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:800}
+.login-card h2{color:var(--accent);font-size:16px;margin-bottom:3px}
+.login-card h4{color:#555;font-size:11px;font-weight:500;margin-bottom:4px}
+.login-card .subtitle{font-size:13px;font-weight:700;color:var(--primary);margin-bottom:18px;padding:6px;background:#e8eaf6;border-radius:8px}
+.login-card input{width:100%;padding:11px 14px;margin-bottom:10px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;font-family:'Poppins';transition:.3s}
+.login-card input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,35,126,.1);outline:none}
+.login-btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--accent),#d32f2f);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Poppins';transition:.3s}
+.login-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(183,28,28,.3)}
+.show-pw{font-size:10px;color:var(--primary);cursor:pointer;text-align:right;display:block;margin:-6px 0 10px}
+.login-msg{color:var(--accent);font-size:11px;font-weight:600;min-height:18px;margin-top:8px}
+.login-footer{font-size:9px;color:#999;margin-top:15px;line-height:1.6}
+.login-footer a{color:var(--primary)}
+.login-footer .dev{color:var(--primary);font-weight:700;font-size:10px}
 
-        /* ===== PROFILE MODAL ===== */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); display: none; justify-content: center;
-            align-items: center; z-index: 8000;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-box {
-            background: #fff; border-radius: 10px; padding: 20px 25px; width: 460px;
-            max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-        .modal-box h3 { color: #b71c1c; border-bottom: 2px solid #b71c1c; padding-bottom: 6px; margin-bottom: 12px; font-size: 15px; }
-        .modal-box label { font-weight: bold; font-size: 11px; color: #333; display: block; margin-top: 8px; }
-        .modal-box input, .modal-box select {
-            width: 100%; padding: 7px 10px; border: 1.5px solid #ccc; border-radius: 5px;
-            font-size: 12px; margin-top: 3px;
-        }
-        .modal-box input:focus, .modal-box select:focus { border-color: #1a237e; background: #e8eaf6; }
-        .modal-box .readonly-field { background: #f5f5f5; color: #555; cursor: not-allowed; }
-        .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .modal-btns { margin-top: 15px; text-align: right; }
-        .modal-btns button { padding: 8px 18px; border: none; border-radius: 5px; font-size: 12px; font-weight: bold; cursor: pointer; margin-left: 8px; }
-        .mbtn-save { background: #2e7d32; color: #fff; }
-        .mbtn-cancel { background: #757575; color: #fff; }
-        .mbtn-save:hover { background: #388e3c; }
-        .mbtn-cancel:hover { background: #888; }
-        .date-input-group { display: flex; gap: 4px; align-items: center; }
-        .date-input-group input { width: 50px; text-align: center; padding: 7px 4px; }
-        .date-input-group input.yr-input { width: 65px; }
-        .date-input-group span { font-weight: bold; color: #999; font-size: 14px; }
+/* SIDEBAR */
+.app-container{display:flex;min-height:100vh}
+.sidebar{width:240px;background:linear-gradient(180deg,#1a237e,#0d1547);color:#fff;padding:0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;transition:.3s}
+.sidebar.collapsed{width:60px}
+.sidebar .sb-header{padding:15px;text-align:center;border-bottom:1px solid rgba(255,255,255,.1)}
+.sidebar .sb-header img{width:50px;height:50px;border-radius:50%;border:2px solid #fff;margin-bottom:5px}
+.sidebar .sb-header h3{font-size:11px;font-weight:600;margin-bottom:2px}
+.sidebar .sb-header p{font-size:9px;opacity:.7}
+.sb-menu{list-style:none;padding:10px 0}
+.sb-menu li{padding:0}
+.sb-menu li a{display:flex;align-items:center;padding:11px 20px;color:rgba(255,255,255,.8);text-decoration:none;font-size:12px;font-weight:500;transition:.2s;gap:12px;border-left:3px solid transparent}
+.sb-menu li a:hover,.sb-menu li a.active{background:rgba(255,255,255,.1);color:#fff;border-left-color:#ff5252}
+.sb-menu li a i{width:20px;text-align:center;font-size:14px}
 
-        /* ===== HEADER ===== */
-        .header-section {
-            display: flex; align-items: center; justify-content: space-between;
-            border-bottom: 4px solid #b71c1c; padding: 8px; background: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .logo-area { width: 60px; height: 60px; border: 2px dashed #555; display: flex; justify-content: center; align-items: center; cursor: pointer; background: #f9f9f9; border-radius: 6px; }
-        .logo-area img { max-width: 100%; max-height: 100%; border-radius: 4px; }
-        .title-area { text-align: center; flex-grow: 1; }
-        .college-name { font-size: 17px; font-weight: 900; color: #b71c1c; text-transform: uppercase; margin: 2px 0 0; }
-        .college-addr { font-size: 11px; font-weight: bold; color: #444; margin-bottom: 3px; }
-        .user-info-bar { text-align: right; font-size: 10px; font-weight: bold; }
-        .user-info-bar .user-name { color: #1a237e; font-size: 12px; }
-        .logout-btn { background: #b71c1c; color: #fff; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: bold; margin-top: 4px; }
-        .profile-btn { background: #1a237e; color: #fff; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: bold; margin-top: 4px; }
+/* MAIN */
+.main-content{margin-left:240px;padding:15px;min-height:100vh;transition:.3s}
 
-        /* ===== CONTROLS ===== */
-        .mgmt-panel {
-            background: #fff; padding: 8px; margin: 8px 5px; border-left: 6px solid #2e7d32;
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .tab-btn { padding: 6px 20px; border: 2px solid #b71c1c; background: #fff; color: #b71c1c; cursor: pointer; font-weight: bold; font-size: 12px; }
-        .tab-btn.active { background: #b71c1c; color: #fff; }
+/* TOP BAR */
+.topbar{background:var(--card);padding:10px 20px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow);margin-bottom:15px}
+.topbar .left h2{font-size:16px;color:var(--primary)}
+.topbar .left p{font-size:11px;color:#888}
+.topbar .right{display:flex;align-items:center;gap:12px}
+.topbar .right .user-badge{background:#e8eaf6;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;color:var(--primary)}
+.topbar .right .btn-logout{background:var(--accent);color:#fff;border:none;padding:7px 16px;border-radius:8px;font-size:11px;cursor:pointer;font-family:'Poppins';font-weight:600}
 
-        /* ===== TABLE ===== */
-        .table-container { overflow-x: auto; background: #fff; border: 2px solid #444; max-height: 78vh; margin: 0 5px; }
-        table.main-table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 1900px; }
-        th, td { border: 1px solid #555; padding: 3px; text-align: center; vertical-align: middle; color: #000; }
-        thead th { position: sticky; top: 0; z-index: 10; height: 32px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.3px; }
-        .head-paid { background-color: #1b5e20; color: #fff; border-color: #fff; }
-        .head-unpaid { background-color: #b71c1c; color: #fff; border-color: #fff; }
-        .th-paid { background-color: #2e7d32; color: #fff; }
-        .th-unpaid { background-color: #d32f2f; color: #fff; }
-        .th-late { background-color: #000; color: #fff; }
-        .th-tot { background-color: #212121; color: #fff; }
-        .col-fix { position: sticky; left: 0; background: #eee; z-index: 5; width: 35px; border-right: 2px solid #000; font-weight: bold; }
-        .col-fix-2 { position: sticky; left: 35px; background: #eee; z-index: 5; width: 240px; text-align: left; border-right: 2px solid #000; padding-left: 5px; }
-        input[type="number"] { width: 35px; text-align: center; border: 1px solid #333; background: #fff; color: #000; font-weight: bold; font-size: 12px; padding: 2px; }
-        input[type="text"], input[type="date"] { width: 96%; font-size: 11px; border: 1px solid #555; margin-bottom: 2px; font-weight: 600; color: #000; background: #fff; padding: 1px; }
-        input:focus { background: #fff9c4; outline: 2px solid #000; }
-        .info-label { font-size: 9px; color: #333; font-weight: bold; display: block; }
-        .exp-tag { font-size: 10px; color: #0d47a1; font-weight: bold; background: #e3f2fd; padding: 2px; border-radius: 3px; border: 1px solid #bbdefb; display: block; margin-top: 2px; text-align: center; }
-        .bg-bal { background: #e0e0e0; font-weight: 900; color: #000; font-size: 11px; }
-        .bg-bal-neg { background: #ffcdd2; color: #b71c1c; font-weight: 900; border: 1px solid #b71c1c; }
-        .tot-paid-cell { background: #a5d6a7; border: 2px solid #1b5e20 !important; font-weight: 900; color: #000; font-size: 12px; }
-        .tot-unpaid-cell { background: #ef9a9a; border: 2px solid #b71c1c !important; font-weight: 900; color: #000; font-size: 12px; }
-        .grand-tot-cell { background: #fff176; border: 2px solid #f57f17 !important; font-weight: 900; font-size: 14px; color: #000; }
+/* CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:15px}
+.stat-card{background:var(--card);border-radius:12px;padding:16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;transition:.3s}
+.stat-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.stat-card .icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff}
+.stat-card .info h3{font-size:22px;font-weight:800;line-height:1}
+.stat-card .info p{font-size:10px;color:#888;font-weight:500}
 
-        /* ===== BUTTONS ===== */
-        .btn { border: 1px solid #333; padding: 5px 10px; color: #fff; cursor: pointer; border-radius: 4px; font-size: 10px; font-weight: bold; margin-left: 4px; box-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
-        .btn-del { background: #d32f2f; }
-        .btn-save { background: #0277bd; }
-        .btn-print-ind { background: #455a64; }
-        .btn-print-mst { background: #e65100; }
-        .btn-search { background: #6a1b9a; }
-        .btn-calc { background: #d84315; border: 2px solid #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.2); animation: pulse 2s infinite; }
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+/* CHARTS */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px}
+.chart-card{background:var(--card);border-radius:12px;padding:18px;box-shadow:var(--shadow)}
+.chart-card h4{font-size:13px;font-weight:700;color:var(--primary);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #e8eaf6}
 
-        /* ===== FOOTER ===== */
-        .dev-footer { text-align: center; padding: 8px; font-size: 10px; color: #555; margin-top: 10px; border-top: 1px solid #ccc; background: #f5f5f5; }
-        .dev-footer b { color: #1a237e; }
+/* TABLES */
+.data-card{background:var(--card);border-radius:12px;padding:18px;box-shadow:var(--shadow);margin-bottom:15px}
+.data-card h4{font-size:14px;font-weight:700;color:var(--primary);margin-bottom:12px}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{background:var(--primary);color:#fff;padding:10px 8px;font-size:11px;font-weight:600;text-transform:uppercase;text-align:left}
+.data-table td{padding:9px 8px;border-bottom:1px solid #eee;font-size:11px}
+.data-table tr:hover{background:#f5f5f5}
+.data-table .badge{padding:3px 10px;border-radius:12px;font-size:10px;font-weight:600;display:inline-block}
+.badge-pending{background:#fff3e0;color:#e65100}
+.badge-approved{background:#e8f5e9;color:#2e7d32}
+.badge-rejected{background:#ffebee;color:#c62828}
+.badge-principal{background:#e8eaf6;color:#1a237e}
+.badge-professor{background:#e0f2f1;color:#00695c}
+.badge-assoc{background:#fff8e1;color:#f57f17}
+.badge-asst{background:#fce4ec;color:#880e4f}
 
-        /* ===== PRINT ===== */
-        #printSection { display: none; }
-        @media print {
-            body { background: white; color: black; -webkit-print-color-adjust: exact; }
-            .screen-only { display: none !important; }
-            #printSection { display: block !important; width: 100%; }
-            @page { size: A4 portrait; margin: 0.5cm; }
-            .rpt-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 8px; table-layout: fixed; border: 2px solid #000 !important; }
-            .rpt-table th, .rpt-table td { border: 1px solid #000 !important; padding: 2px 1px; text-align: center; color: black; word-wrap: break-word; }
-            .rpt-table th { background-color: #ddd !important; font-weight: bold; }
-            .rpt-header { display: flex; align-items: center; border-bottom: 2px solid black !important; padding-bottom: 5px; margin-bottom: 10px; }
-            .rpt-logo { width: 60px; height: 60px; margin-right: 10px; }
-            .rpt-logo img { max-width: 100%; max-height: 100%; }
-            .rpt-titles { text-align: center; flex-grow: 1; }
-            .rpt-titles h3 { margin: 2px 0; font-size: 14px; }
-            .rpt-titles h2 { margin: 2px 0; font-size: 16px; font-weight: 900; }
-            .rpt-titles h5 { margin: 2px 0; font-size: 10px; }
-            .dept-head { background-color: #eee; font-weight: bold; text-align: left; padding: 3px; font-size: 10px; border: 1px solid #000 !important; margin-top: 5px; }
-            .ind-card { border: 1px solid #000 !important; padding: 5px; margin-bottom: 10px; page-break-inside: avoid; width: 99%; }
-            .ind-header { border-bottom: 1px solid #000 !important; padding-bottom: 2px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
-            .ind-title { font-size: 12px; font-weight: bold; }
-            .ind-meta { font-size: 9px; margin-bottom: 5px; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 2px; }
-            .ind-table { width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 2px; }
-            .ind-table th, .ind-table td { border: 1px solid #000 !important; padding: 2px; text-align: center; color: black; }
-            .ind-table th { background: #eee !important; font-weight: bold; }
-            .ind-sect-title { font-size: 9px; font-weight: bold; background: #333; color: white; padding: 1px 3px; margin-top: 3px; -webkit-print-color-adjust: exact; }
-            .ind-summary { margin-top: 2px; border-top: 1px solid #000 !important; padding-top: 2px; display: flex; justify-content: flex-end; gap: 10px; font-weight: bold; font-size: 10px; }
-            .print-footer { text-align: center; font-size: 8px; color: #555; margin-top: 10px; border-top: 1px solid #999; padding-top: 4px; }
-        }
-    </style>
+/* SECTION PAGES (hidden by default) */
+.page-section{display:none}
+.page-section.active{display:block}
+
+/* BUTTONS */
+.btn{padding:7px 16px;border:none;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Poppins';transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-success{background:var(--green);color:#fff}
+.btn-danger{background:var(--accent);color:#fff}
+.btn-warning{background:#f57f17;color:#fff}
+.btn-info{background:#0277bd;color:#fff}
+.btn-sm{padding:5px 10px;font-size:10px}
+
+/* FORMS */
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:11px;font-weight:600;color:#555;margin-bottom:4px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:12px;font-family:'Poppins';transition:.3s}
+.form-group input:focus,.form-group select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,35,126,.08);outline:none}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.date-group{display:flex;gap:4px;align-items:center}
+.date-group input{width:48px;text-align:center;padding:9px 4px}
+.date-group input.yy{width:68px}
+.date-group span{color:#999;font-weight:700}
+
+/* MODAL */
+.modal-bg{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);display:none;justify-content:center;align-items:center;z-index:8000}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:14px;padding:24px;width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 15px 50px rgba(0,0,0,.25)}
+.modal h3{font-size:16px;color:var(--primary);border-bottom:2px solid #e8eaf6;padding-bottom:8px;margin-bottom:14px}
+.modal-footer{margin-top:16px;text-align:right;display:flex;justify-content:flex-end;gap:8px}
+
+/* LEAVE RECORD TABLE */
+.leave-table{width:100%;border-collapse:collapse;font-size:10px}
+.leave-table th,.leave-table td{border:1px solid #ccc;padding:4px 3px;text-align:center}
+.leave-table thead th{background:var(--primary);color:#fff;font-size:9px;position:sticky;top:0;z-index:5}
+.leave-table .sub-head th{background:#37474f;color:#fff;font-size:8px}
+.leave-table .grp-paid{background:#1b5e20;color:#fff}
+.leave-table .grp-unpaid{background:#b71c1c;color:#fff}
+.leave-table input[type=number]{width:36px;text-align:center;border:1px solid #999;font-size:11px;font-weight:700;padding:2px;font-family:'Poppins'}
+.leave-table .bal{background:#e0e0e0;font-weight:800}
+.leave-table .bal-neg{background:#ffcdd2;color:#b71c1c;font-weight:800}
+.leave-table .tot-paid{background:#a5d6a7;font-weight:900;font-size:12px;border:2px solid #1b5e20!important}
+.leave-table .tot-unpaid{background:#ef9a9a;font-weight:900;font-size:12px;border:2px solid #b71c1c!important}
+.leave-table .grand{background:#fff176;font-weight:900;font-size:13px;border:2px solid #f57f17!important}
+.leave-table .name-cell{text-align:left;padding-left:5px;min-width:180px;position:sticky;left:0;background:#fff;z-index:4;border-right:2px solid #333}
+.leave-table thead th:first-child,.leave-table .name-cell{position:sticky;left:0;z-index:6}
+.leave-table .exp-tag{font-size:9px;color:#0d47a1;background:#e3f2fd;padding:1px 4px;border-radius:3px;display:inline-block;margin-top:2px}
+
+/* FOOTER */
+.app-footer{text-align:center;padding:12px;font-size:10px;color:#888;border-top:1px solid #e0e0e0;margin-top:20px}
+.app-footer b{color:var(--primary)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+.sidebar{width:60px}.sidebar .sb-header h3,.sidebar .sb-header p,.sb-menu li a span{display:none}
+.main-content{margin-left:60px}.charts-row,.form-row{grid-template-columns:1fr}.stats-row{grid-template-columns:repeat(2,1fr)}
+}
+
+/* PRINT */
+@media print{
+.sidebar,.topbar,.app-footer,.no-print{display:none!important}
+.main-content{margin-left:0!important;padding:5px!important}
+.page-section{display:block!important}
+.data-card,.chart-card,.stat-card{box-shadow:none!important;break-inside:avoid}
+.print-footer{text-align:center;font-size:9px;color:#555;border-top:1px solid #999;padding-top:5px;margin-top:15px}
+}
+</style>
 </head>
 <body>
-
-<!-- ===== LOGIN PAGE ===== -->
-<div class="login-overlay" id="loginPage">
-    <div class="login-box">
-        <div class="login-logo" id="loginLogoArea"><img id="loginLogoImg" src="" style="display:none"><span id="loginLogoTxt" style="font-size:28px; color:#b71c1c; font-weight:900;">DAMCH</span></div>
-        <h2>Dhanwantari Ayurved Medical College</h2>
-        <h4>Tq. Udgir, Dist. Latur, Maharashtra</h4>
-        <p style="font-size:12px; font-weight:bold; color:#1a237e; margin-bottom:12px;">Faculty Service Book & Leave Record</p>
-        <input type="text" id="loginUser" placeholder="Username (Teacher Code or admin)" autocomplete="off">
-        <input type="password" id="loginPass" placeholder="Password">
-        <span class="toggle-pw" onclick="togglePw()">Show Password</span>
-        <button class="login-btn" onclick="doLogin()">LOGIN</button>
-        <div class="login-msg" id="loginMsg"></div>
-        <div class="login-footer">
-            Phone: (02385) 259825 | Email: contact@damchudgir.edu.in<br>
-            <a href="http://www.damchudgir.edu.in" target="_blank">www.damchudgir.edu.in</a><br><br>
-            <b style="color:#1a237e;">Designed & Developed by Dr. Jadhav V.R.</b>
-        </div>
-    </div>
+<!-- LOGIN PAGE -->
+<div class="login-page" id="loginPage">
+<div class="login-card">
+<div class="logo-circle">D</div>
+<h2>Dhanwantari Ayurved Medical College & Hospital</h2>
+<h4>Tq. Udgir, Dist. Latur, Maharashtra</h4>
+<div class="subtitle"><i class="fas fa-book-open"></i> Faculty Leave Management System</div>
+<input type="text" id="loginUser" placeholder="&#xf007; Username (Teacher Code / admin)" style="font-family:'Poppins',FontAwesome" autocomplete="off">
+<input type="password" id="loginPass" placeholder="&#xf023; Password" style="font-family:'Poppins',FontAwesome">
+<span class="show-pw" onclick="togglePw()"><i class="fas fa-eye"></i> Show Password</span>
+<button class="login-btn" onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> LOGIN</button>
+<div class="login-msg" id="loginMsg"></div>
+<div class="login-footer">
+<i class="fas fa-phone"></i> (02385) 259825 | <i class="fas fa-envelope"></i> contact@damchudgir.edu.in<br>
+<a href="http://www.damchudgir.edu.in" target="_blank"><i class="fas fa-globe"></i> www.damchudgir.edu.in</a><br><br>
+<span class="dev"><i class="fas fa-code"></i> Designed & Developed by Dr. Jadhav V.R.</span>
 </div>
-<!-- ===== MAIN APP (hidden until login) ===== -->
-<div class="screen-only" id="mainApp" style="display:none; padding:5px;">
+</div>
+</div>
+<!-- APP CONTAINER -->
+<div class="app-container" id="appContainer" style="display:none">
 
-    <div class="header-section">
-        <div class="logo-area" onclick="document.getElementById('logoInput').click()">
-            <img id="logoImg" style="display:none">
-            <span id="logoTxt" style="font-weight:bold; color:#000; font-size:9px;">UPLOAD<br>LOGO</span>
-        </div>
-        <input type="file" id="logoInput" style="display:none" accept="image/*" onchange="loadLogo(event)">
-
-        <div class="title-area">
-            <div contenteditable="true" id="tHead" style="font-size:12px; font-weight:bold; color:#333;">Bal Bhagwan Shikshan Prasarak Mandal Ahmedpur's</div>
-            <div contenteditable="true" class="college-name" id="cHead">Dhanwantari Ayurved Medical College & Charitable Hospital</div>
-            <div contenteditable="true" class="college-addr" id="cAddr">Tq. Udgir Dist. Latur Maharashtra State</div>
-            <div style="font-size:13px; font-weight:bold; color:#333;">Faculty Service Book & Leave Record</div>
-        </div>
-
-        <div class="user-info-bar">
-            Date: <input type="text" id="reportDate" onchange="render()" style="border:none; border-bottom:1px dashed #333; background:transparent; font-weight:bold; font-size:11px; width:90px; text-align:center;" placeholder="DD/MM/YYYY"><br>
-            <span class="user-name" id="dispUserName"></span><br>
-            <span id="dispUserRole" style="color:#555; font-size:9px;"></span><br>
-            <button class="profile-btn" onclick="openProfile()">My Profile</button>
-            <button class="logout-btn" onclick="doLogout()">Logout</button>
-        </div>
-    </div>
-
-    <div style="text-align:center; margin:5px 0;">
-        <button class="tab-btn active" id="btn25" onclick="swYear('2025')">2025</button>
-        <button class="tab-btn" id="btn26" onclick="swYear('2026')">2026</button>
-    </div>
-
-    <div class="mgmt-panel" id="adminPanel">
-        <div>
-            <b style="color:#2e7d32;">Manage Faculty</b>
-            <button class="btn" style="background:#2e7d32;" onclick="addRow()">+ Add Faculty</button>
-            <button class="btn btn-search" onclick="searchFaculty()">Search</button>
-        </div>
-        <div>
-            <button class="btn btn-calc" onclick="calculateCarryForward()" title="Calc EL from 2025 to 2026">Auto EL Carry Forward (2025→2026)</button>
-        </div>
-        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
-            <div>
-                <span class="info-label" style="display:inline;">Detailed:</span>
-                <button class="btn btn-print-ind" onclick="genIndividualReport(null)">All Faculty</button>
-                <button class="btn btn-print-ind" style="background:#00838f;" onclick="askDetailedDeptReport()">Dept Wise</button>
-            </div>
-            <div>
-                <span class="info-label" style="display:inline;">Summary:</span>
-                <button class="btn btn-print-mst" onclick="genMasterReport(null)">Master All</button>
-                <button class="btn btn-print-mst" style="background:#f57f17; color:#000;" onclick="askDeptReport()">Dept Wise</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="table-container">
-        <h3 id="yrTitle" style="text-align:center; margin:5px; color:#000; font-weight:900;">Record: 2025</h3>
-        <table class="main-table" id="mainTable">
-            <thead>
-                <tr>
-                    <th rowspan="3" class="col-fix">Sr</th>
-                    <th rowspan="3" class="col-fix-2">Faculty Details & Experience</th>
-                    <th colspan="23" class="head-paid">PAID LEAVE SECTION</th>
-                    <th colspan="2" class="head-unpaid">UNPAID</th>
-                    <th rowspan="3" class="th-tot">GRAND<br>TOTAL</th>
-                    <th rowspan="3" id="actionColHead" style="width:50px; background:#333; color:white;">ACT</th>
-                </tr>
-                <tr>
-                    <th colspan="2" class="th-paid">CL(8)</th>
-                    <th colspan="2" class="th-paid">ML(10)</th>
-                    <th colspan="1" class="th-paid">OD</th>
-                    <th colspan="5" class="th-paid" style="background:#1565c0;">EL (Earned)</th>
-                    <th colspan="2" class="th-late">Late(1/6)</th>
-                    <th colspan="2" class="th-paid">Mat(180)</th>
-                    <th colspan="2" class="th-paid" style="background:#004d40;">Pat(15)</th>
-                    <th colspan="2" class="th-paid">SL(15)</th>
-                    <th colspan="2" class="th-paid">Sp.Dis(120)</th>
-                    <th colspan="2" class="th-paid">RH(2)</th>
-                    <th rowspan="2" class="th-tot">PAID<br>USED</th>
-                    <th colspan="1" class="th-unpaid" style="background:#8e0000;">LWP</th>
-                    <th rowspan="2" class="th-unpaid">TOT<br>UNPD</th>
-                </tr>
-                <tr style="font-size:10px; background:#424242; color:white;">
-                    <th>Used</th><th>Bal</th>
-                    <th>Used</th><th>Bal</th>
-                    <th>Used</th>
-                    <th>Open</th><th>New</th><th>Tot</th><th>Used</th><th style="background:#1565c0;">Bal</th>
-                    <th>Cnt</th><th>Ded</th>
-                    <th>Used</th><th>Bal</th>
-                    <th>Used</th><th>Bal</th>
-                    <th>Used</th><th>Bal</th>
-                    <th>Used</th><th>Bal</th>
-                    <th>Used</th><th>Bal</th>
-                    <th>Used</th>
-                </tr>
-            </thead>
-            <tbody id="tbody"></tbody>
-        </table>
-    </div>
-
-    <div style="margin-top:8px; text-align:right; padding:0 5px;">
-        <span id="adminBtns">
-            <button class="btn btn-save" onclick="saveData()">Save to Browser</button>
-            <button class="btn btn-save" style="background:#5e35b1;" onclick="downloadJSON()">Download JSON</button>
-            <button class="btn btn-save" style="background:#00695c;" onclick="expCSV()">Export Excel</button>
-            <span style="border-left:2px solid #555; margin:0 5px; height:20px; display:inline-block; vertical-align:middle;"></span>
-            <input type="file" id="restFile" style="display:none" accept=".json" onchange="restData(event)">
-            <button class="btn btn-save" style="background:#6a1b9a;" onclick="document.getElementById('restFile').click()">Restore Data</button>
-        </span>
-    </div>
-
-    <div class="dev-footer">Designed & Developed by <b>Dr. Jadhav V.R.</b> | Contact: 9518356305</div>
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+<div class="sb-header">
+<img id="sbLogo" src="" alt="Logo" style="display:none">
+<div id="sbLogoText" style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#ff5252,#ff1744);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:800;margin:0 auto 5px">D</div>
+<h3>DAMCH Udgir</h3>
+<p id="sbUserName">Admin</p>
+</div>
+<ul class="sb-menu">
+<li><a href="#" class="active" onclick="showPage('dashboard',this)"><i class="fas fa-chart-pie"></i><span>Dashboard</span></a></li>
+<li><a href="#" onclick="showPage('leaveRecord',this)"><i class="fas fa-table"></i><span>Leave Record</span></a></li>
+<li><a href="#" onclick="showPage('applyLeave',this)"><i class="fas fa-paper-plane"></i><span>Apply Leave</span></a></li>
+<li><a href="#" onclick="showPage('applications',this)"><i class="fas fa-inbox"></i><span>Applications</span></a></li>
+<li><a href="#" onclick="showPage('faculty',this)"><i class="fas fa-users"></i><span>Faculty List</span></a></li>
+<li><a href="#" onclick="showPage('profile',this)"><i class="fas fa-user-cog"></i><span>My Profile</span></a></li>
+<li><a href="#" onclick="showPage('reports',this)"><i class="fas fa-file-alt"></i><span>Reports</span></a></li>
+<li><a href="#" onclick="showPage('settings',this)"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+<li><a href="#" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+</ul>
 </div>
 
-<!-- ===== PROFILE MODAL ===== -->
-<div class="modal-overlay" id="profileModal">
-    <div class="modal-box">
-        <h3>My Profile</h3>
-        <label>Name</label>
-        <input type="text" id="pf_name" class="readonly-field" readonly>
-        <label>Designation</label>
-        <input type="text" id="pf_desig" class="readonly-field" readonly>
-        <label>Department</label>
-        <input type="text" id="pf_dept" class="readonly-field" readonly>
-        <label>Teacher Code</label>
-        <input type="text" id="pf_code" class="readonly-field" readonly>
-
-        <div class="modal-row">
-            <div>
-                <label>Date of Joining (DD/MM/YYYY)</label>
-                <div class="date-input-group">
-                    <input type="text" id="pf_doj_dd" maxlength="2" placeholder="DD" oninput="autoTab(this,'pf_doj_mm')">
-                    <span>/</span>
-                    <input type="text" id="pf_doj_mm" maxlength="2" placeholder="MM" oninput="autoTab(this,'pf_doj_yyyy')">
-                    <span>/</span>
-                    <input type="text" id="pf_doj_yyyy" class="yr-input" maxlength="4" placeholder="YYYY">
-                </div>
-            </div>
-            <div>
-                <label>Date of Birth (DD/MM/YYYY)</label>
-                <div class="date-input-group">
-                    <input type="text" id="pf_dob_dd" maxlength="2" placeholder="DD" oninput="autoTab(this,'pf_dob_mm')">
-                    <span>/</span>
-                    <input type="text" id="pf_dob_mm" maxlength="2" placeholder="MM" oninput="autoTab(this,'pf_dob_yyyy')">
-                    <span>/</span>
-                    <input type="text" id="pf_dob_yyyy" class="yr-input" maxlength="4" placeholder="YYYY">
-                </div>
-            </div>
-        </div>
-
-        <label>Change Password</label>
-        <input type="password" id="pf_newpw" placeholder="Leave blank to keep current">
-
-        <div class="modal-btns">
-            <button class="mbtn-cancel" onclick="closeProfile()">Cancel</button>
-            <button class="mbtn-save" onclick="saveProfile()">Save Changes</button>
-        </div>
-    </div>
+<!-- MAIN CONTENT -->
+<div class="main-content">
+<div class="topbar">
+<div class="left">
+<h2 id="pageTitle"><i class="fas fa-chart-pie"></i> Dashboard</h2>
+<p id="pageSubtitle">Overview & Statistics</p>
+</div>
+<div class="right">
+<span class="user-badge" id="topUserBadge"><i class="fas fa-user"></i> Admin</span>
+<input type="date" id="reportDate" style="padding:5px 8px;border:1.5px solid #ddd;border-radius:8px;font-size:11px;font-family:'Poppins'">
+<button class="btn-logout" onclick="doLogout()"><i class="fas fa-power-off"></i> Logout</button>
+</div>
 </div>
 
-<div id="printSection"></div>
+<!-- ====== PAGE: DASHBOARD ====== -->
+<div class="page-section active" id="pg_dashboard">
+<div class="stats-row" id="statsRow"></div>
+<div class="charts-row">
+<div class="chart-card"><h4><i class="fas fa-building"></i> Faculty by Department</h4><canvas id="chartDept" height="220"></canvas></div>
+<div class="chart-card"><h4><i class="fas fa-graduation-cap"></i> Faculty by Designation</h4><canvas id="chartDesig" height="220"></canvas></div>
+</div>
+<div class="charts-row">
+<div class="chart-card"><h4><i class="fas fa-check-circle"></i> Leave Application Status</h4><canvas id="chartStatus" height="220"></canvas></div>
+<div class="chart-card"><h4><i class="fas fa-calendar-alt"></i> Monthly Leave Trend</h4><canvas id="chartTrend" height="220"></canvas></div>
+</div>
+<div class="data-card">
+<h4><i class="fas fa-clock"></i> Recent Leave Applications</h4>
+<div style="overflow-x:auto"><table class="data-table" id="recentAppsTable"><thead><tr><th>Date</th><th>Faculty</th><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Status</th></tr></thead><tbody></tbody></table></div>
+</div>
+</div>
+<!-- ====== PAGE: LEAVE RECORD ====== -->
+<div class="page-section" id="pg_leaveRecord">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+<div>
+<button class="btn btn-primary" id="btnYr25" onclick="swYear('2025')"><i class="fas fa-calendar"></i> 2025</button>
+<button class="btn" style="background:#555;color:#fff" id="btnYr26" onclick="swYear('2026')"><i class="fas fa-calendar"></i> 2026</button>
+</div>
+<div id="adminLeaveControls">
+<button class="btn btn-success" onclick="addRow()"><i class="fas fa-plus"></i> Add Faculty</button>
+<button class="btn btn-warning" onclick="calcCarryForward()"><i class="fas fa-calculator"></i> EL Carry Forward 2025→2026</button>
+<button class="btn btn-info" onclick="searchFac()"><i class="fas fa-search"></i> Search</button>
+</div>
+</div>
+<div class="data-card" style="padding:8px">
+<h4 id="lrTitle" style="text-align:center;margin-bottom:8px">Leave Record: 2025</h4>
+<div style="overflow-x:auto;max-height:75vh">
+<table class="leave-table" id="leaveTable">
+<thead>
+<tr>
+<th rowspan="3" style="width:30px;position:sticky;left:0;z-index:7;background:#1a237e">Sr</th>
+<th rowspan="3" class="name-cell" style="background:#1a237e;color:#fff;z-index:7">Faculty & Experience</th>
+<th colspan="23" class="grp-paid">PAID LEAVE</th>
+<th colspan="2" class="grp-unpaid">UNPAID</th>
+<th rowspan="3" style="background:#212121;color:#fff">GRAND<br>TOTAL</th>
+<th rowspan="3" style="background:#333;color:#fff" id="actColH">ACT</th>
+</tr>
+<tr>
+<th colspan="2" style="background:#2e7d32;color:#fff">CL(8)</th>
+<th colspan="2" style="background:#2e7d32;color:#fff">ML(10)</th>
+<th style="background:#2e7d32;color:#fff">OD</th>
+<th colspan="5" style="background:#1565c0;color:#fff">EL(Earned)</th>
+<th colspan="2" style="background:#000;color:#fff">Late(1/6)</th>
+<th colspan="2" style="background:#2e7d32;color:#fff">Mat(180)</th>
+<th colspan="2" style="background:#004d40;color:#fff">Pat(15)</th>
+<th colspan="2" style="background:#2e7d32;color:#fff">SL(15)</th>
+<th colspan="2" style="background:#2e7d32;color:#fff">SD(120)</th>
+<th colspan="2" style="background:#2e7d32;color:#fff">RH(2)</th>
+<th style="background:#212121;color:#fff">PAID<br>TOT</th>
+<th style="background:#8e0000;color:#fff">LWP</th>
+<th style="background:#b71c1c;color:#fff">UNPD<br>TOT</th>
+</tr>
+<tr class="sub-head">
+<th>U</th><th>B</th><th>U</th><th>B</th><th>U</th>
+<th>Op</th><th>Nw</th><th>Tt</th><th>U</th><th>B</th>
+<th>Cn</th><th>Dd</th>
+<th>U</th><th>B</th><th>U</th><th>B</th><th>U</th><th>B</th><th>U</th><th>B</th><th>U</th><th>B</th>
+<th>U</th>
+</tr>
+</thead>
+<tbody id="lrBody"></tbody>
+</table>
+</div>
+</div>
+<div style="text-align:right;margin-top:8px" id="adminSaveArea">
+<button class="btn btn-info" onclick="saveAll()"><i class="fas fa-save"></i> Save</button>
+<button class="btn" style="background:#5e35b1;color:#fff" onclick="downloadJSON()"><i class="fas fa-download"></i> JSON Backup</button>
+<button class="btn btn-success" onclick="expCSV()"><i class="fas fa-file-excel"></i> Excel</button>
+<input type="file" id="restFile" style="display:none" accept=".json" onchange="restoreJSON(event)">
+<button class="btn" style="background:#6a1b9a;color:#fff" onclick="document.getElementById('restFile').click()"><i class="fas fa-upload"></i> Restore</button>
+</div>
+</div>
+
+<!-- ====== PAGE: APPLY LEAVE ====== -->
+<div class="page-section" id="pg_applyLeave">
+<div class="data-card" style="max-width:600px;margin:0 auto">
+<h4><i class="fas fa-paper-plane"></i> Apply for Leave</h4>
+<div class="form-row">
+<div class="form-group"><label>Leave Type</label>
+<select id="appType"><option value="CL">Casual Leave (CL)</option><option value="ML">Medical Leave (ML)</option><option value="EL">Earned Leave (EL)</option><option value="OD">On Duty (OD)</option><option value="Mat">Maternity Leave</option><option value="Pat">Paternity Leave</option><option value="SL">Special Leave</option><option value="RH">Restricted Holiday</option><option value="LWP">Leave Without Pay</option></select></div>
+<div class="form-group"><label>Total Days</label><input type="number" id="appDays" min="1" value="1"></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>From Date</label><input type="date" id="appFrom"></div>
+<div class="form-group"><label>To Date</label><input type="date" id="appTo"></div>
+</div>
+<div class="form-group"><label>Reason</label><textarea id="appReason" rows="3" style="width:100%;padding:9px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:12px;font-family:'Poppins'"></textarea></div>
+<button class="btn btn-success" onclick="submitLeaveApp()" style="width:100%;padding:12px;font-size:14px"><i class="fas fa-paper-plane"></i> Submit Application</button>
+</div>
+
+<div class="data-card" style="margin-top:15px">
+<h4><i class="fas fa-history"></i> My Applications</h4>
+<div style="overflow-x:auto"><table class="data-table" id="myAppsTable"><thead><tr><th>Date</th><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Reason</th><th>Status</th></tr></thead><tbody></tbody></table></div>
+</div>
+</div>
+
+<!-- ====== PAGE: APPLICATIONS (Admin) ====== -->
+<div class="page-section" id="pg_applications">
+<div class="data-card">
+<h4><i class="fas fa-inbox"></i> All Leave Applications <span class="badge badge-pending" id="pendingCount" style="font-size:12px;margin-left:8px"></span></h4>
+<div style="margin-bottom:10px">
+<button class="btn btn-sm btn-warning" onclick="filterApps('all')">All</button>
+<button class="btn btn-sm" style="background:#ff9800;color:#fff" onclick="filterApps('Pending')">Pending</button>
+<button class="btn btn-sm btn-success" onclick="filterApps('Approved')">Approved</button>
+<button class="btn btn-sm btn-danger" onclick="filterApps('Rejected')">Rejected</button>
+</div>
+<div style="overflow-x:auto"><table class="data-table" id="allAppsTable"><thead><tr><th>Date</th><th>Faculty</th><th>Code</th><th>Dept</th><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead><tbody></tbody></table></div>
+</div>
+</div>
+<!-- ====== PAGE: FACULTY LIST ====== -->
+<div class="page-section" id="pg_faculty">
+<div class="data-card">
+<h4><i class="fas fa-users"></i> Faculty Directory</h4>
+<input type="text" id="facSearch" placeholder="Search by name, code, department..." style="width:100%;padding:9px 14px;border:1.5px solid #ddd;border-radius:8px;margin-bottom:12px;font-family:'Poppins';font-size:12px" oninput="renderFacultyList()">
+<div style="overflow-x:auto"><table class="data-table" id="facListTable"><thead><tr><th>Sr</th><th>Name</th><th>Designation</th><th>Department</th><th>Code</th><th>DOJ</th><th>Experience</th></tr></thead><tbody></tbody></table></div>
+</div>
+</div>
+
+<!-- ====== PAGE: PROFILE ====== -->
+<div class="page-section" id="pg_profile">
+<div class="data-card" style="max-width:600px;margin:0 auto">
+<h4><i class="fas fa-user-cog"></i> My Profile</h4>
+<div class="form-row">
+<div class="form-group"><label>Name</label><input type="text" id="pName" readonly style="background:#f5f5f5"></div>
+<div class="form-group"><label>Teacher Code</label><input type="text" id="pCode" readonly style="background:#f5f5f5"></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>Designation</label><input type="text" id="pDesig" readonly style="background:#f5f5f5"></div>
+<div class="form-group"><label>Department</label><input type="text" id="pDept" readonly style="background:#f5f5f5"></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>Date of Joining (DD/MM/YYYY)</label>
+<div class="date-group"><input type="text" id="pDojD" maxlength="2" placeholder="DD" oninput="autoTab(this,'pDojM')"><span>/</span><input type="text" id="pDojM" maxlength="2" placeholder="MM" oninput="autoTab(this,'pDojY')"><span>/</span><input type="text" id="pDojY" class="yy" maxlength="4" placeholder="YYYY"></div></div>
+<div class="form-group"><label>Date of Birth (DD/MM/YYYY)</label>
+<div class="date-group"><input type="text" id="pDobD" maxlength="2" placeholder="DD" oninput="autoTab(this,'pDobM')"><span>/</span><input type="text" id="pDobM" maxlength="2" placeholder="MM" oninput="autoTab(this,'pDobY')"><span>/</span><input type="text" id="pDobY" class="yy" maxlength="4" placeholder="YYYY"></div></div>
+</div>
+<div class="form-group"><label>New Password (leave blank to keep current)</label><input type="password" id="pNewPw" placeholder="Enter new password"></div>
+<button class="btn btn-success" onclick="saveMyProfile()" style="width:100%;padding:11px;font-size:13px;margin-top:8px"><i class="fas fa-save"></i> Save Profile</button>
+</div>
+</div>
+
+<!-- ====== PAGE: REPORTS ====== -->
+<div class="page-section" id="pg_reports">
+<div class="stats-row">
+<div class="stat-card" onclick="genAllDetailedRpt()" style="cursor:pointer"><div class="icon" style="background:linear-gradient(135deg,#1a237e,#3949ab)"><i class="fas fa-file-alt"></i></div><div class="info"><h3 style="font-size:14px">All Faculty</h3><p>Detailed Report</p></div></div>
+<div class="stat-card" onclick="genMasterRpt(null)" style="cursor:pointer"><div class="icon" style="background:linear-gradient(135deg,#e65100,#ff6d00)"><i class="fas fa-list"></i></div><div class="info"><h3 style="font-size:14px">Master Summary</h3><p>All Departments</p></div></div>
+<div class="stat-card" onclick="askDeptDetailRpt()" style="cursor:pointer"><div class="icon" style="background:linear-gradient(135deg,#00838f,#00acc1)"><i class="fas fa-building"></i></div><div class="info"><h3 style="font-size:14px">Dept Detailed</h3><p>Select Department</p></div></div>
+<div class="stat-card" onclick="askDeptSummaryRpt()" style="cursor:pointer"><div class="icon" style="background:linear-gradient(135deg,#f57f17,#ffb300)"><i class="fas fa-chart-bar"></i></div><div class="info"><h3 style="font-size:14px">Dept Summary</h3><p>Select Department</p></div></div>
+</div>
+</div>
+
+<!-- ====== PAGE: SETTINGS ====== -->
+<div class="page-section" id="pg_settings">
+<div class="data-card" style="max-width:600px;margin:0 auto">
+<h4><i class="fas fa-cog"></i> Settings & Backup</h4>
+<div class="form-group"><label>College Name</label><input type="text" id="setColName" value="Dhanwantari Ayurved Medical College & Charitable Hospital"></div>
+<div class="form-group"><label>Address</label><input type="text" id="setAddr" value="Tq. Udgir Dist. Latur Maharashtra State"></div>
+<div class="form-group"><label>Upload Logo</label><input type="file" id="setLogo" accept="image/*" onchange="uploadLogo(event)"></div>
+<hr style="margin:15px 0">
+<h4 style="margin-bottom:10px"><i class="fas fa-database"></i> Data Management</h4>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-info" onclick="saveAll()"><i class="fas fa-save"></i> Save to Browser</button>
+<button class="btn" style="background:#5e35b1;color:#fff" onclick="downloadJSON()"><i class="fas fa-download"></i> Download Backup</button>
+<button class="btn" style="background:#6a1b9a;color:#fff" onclick="document.getElementById('restFile2').click()"><i class="fas fa-upload"></i> Restore Backup</button>
+<input type="file" id="restFile2" style="display:none" accept=".json" onchange="restoreJSON(event)">
+<button class="btn btn-danger" onclick="resetData()"><i class="fas fa-trash"></i> Reset All Data</button>
+</div>
+</div>
+</div>
+
+<div class="app-footer">
+<b>Designed & Developed by Dr. Jadhav V.R.</b> | Contact: 9518356305 | &copy; 2025 DAMCH Udgir
+</div>
+
+</div><!-- end main-content -->
+</div><!-- end app-container -->
+
+<div id="printArea" style="display:none"></div>
+<!-- ====== PAGE: FACULTY LIST ====== -->
+<div class="page-section" id="pg_faculty">
+<div class="data-card">
+<h4><i class="fas fa-users"></i> Faculty Directory</h4>
+<input type="text" id="facSearch" placeholder="Search by name, code, department..." style="width:100%;padding:9px 14px;border:1.5px solid #ddd;border-radius:8px;margin-bottom:12px;font-family:'Poppins';font-size:12px" oninput="renderFacultyList()">
+<div style="overflow-x:auto"><table class="data-table" id="facListTable"><thead><tr><th>Sr</th><th>Name</th><th>Designation</th><th>Department</th><th>Code</th><th>DOJ</th><th>Experience</th></tr></thead><tbody></tbody></table></div>
+</div>
+</div>
+
+<!-- ====== PAGE: PROFILE ====== -->
+<div class="page-section" id="pg_profile">
+<div class="data-card" style="max-width:600px;margin:0 auto">
+<h4><i class="fas fa-user-cog"></i> My Profile</h4>
+<div class="form-row">
+<div class="form-group"><label>Name</label><input type="text" id="pName" readonly style="background:#f5f5f5"></div>
+<div class="form-group"><label>Teacher Code</label><input type="text" id="pCode" readonly style="background:#f5f5f5"></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>Designation</label><input type="text" id="pDesig" readonly style="background:#f5f5f5"></div>
+<div class="form-group"><label>Department</label><input type="text" id="pDept" readonly style="background:#f5f5f5"></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>Date of Joining (DD/MM/YYYY)</label>
+<div class="date-group"><input type="text" id="pDojD" maxlength="2" placeholder="DD" oninput="autoTab(this,'pDojM')"><span>/</span><input type="text" id="pDojM" maxlength="2" placeholder="MM" oninput="autoTab(this,'pDojY')"><span>/</span><input type="text" id="pDojY" class="yy" maxlength="4" placeholder="YYYY"></div></div>
+<div class="form-group"><label>Date of Birth (DD/MM/YYYY)</label>
+<div class="date-group"><input type="text" id="pDobD" maxlength="2" placeholder="DD" oninput="autoTab(this,'pDobM')"><span>/</span><input type="text" id="pDobM" maxlength="2" placeholder="MM" oninput="autoTab(this,'pDobY')"><span>/</span><input type="text" id="pDobY" class="yy" maxlength="4" placeholder="YYYY"></div></div>
+</div>
+<div class="form-group"><label>New Password (leave blank to keep current)</label><input type="password" id="pNewPw" placeholder="Enter new password"></div>
+<button class="btn btn-success" onclick="saveMyProfile()" style="width:100%;padding:11px;font-size:13px;margin-top:8px"><i class="fas fa-save"></i> Save Profile</button>
+</div>
+</div>
+
+<!-- ====== PAGE: REPORTS ====== -->
+<div class="page-section" id="pg_reports">
+<div class="stats-row">
+<div class="stat-card" onclick="genAllDetailedRpt()" style="cursor:pointer"><div class="icon" style="background:linear-gradient(135deg,#1a237e,#3949ab)"><i class="fas fa-file-alt"></i></div><div class="info"><h3 style="font-size:14px">All Faculty</h3><p>Detailed Report</p></div></div>
+<div class="stat-card" onclick="genMasterRpt(null)" style="cursor:pointer"><div class="icon" style="background:linear-gradient(135deg,#e65100,#ff6d00)"><i class="fas fa-list"></i></div><div class="info"><h3 style="font-size:14px">Master Summary</h3><p>All Departments</p></div></div>
+<div class="stat-card" onclick="askDeptDetailRpt()" style="cursor:pointer"><div class="icon" style="background:linear-gradient(135deg,#00838f,#00acc1)"><i class="fas fa-building"></i></div><div class="info"><h3 style="font-size:14px">Dept Detailed</h3><p>Select Department</p></div></div>
+<div class="stat-card" onclick="askDeptSummaryRpt()" style="cursor:pointer"><div class="icon" style="background:linear-gradient(135deg,#f57f17,#ffb300)"><i class="fas fa-chart-bar"></i></div><div class="info"><h3 style="font-size:14px">Dept Summary</h3><p>Select Department</p></div></div>
+</div>
+</div>
+
+<!-- ====== PAGE: SETTINGS ====== -->
+<div class="page-section" id="pg_settings">
+<div class="data-card" style="max-width:600px;margin:0 auto">
+<h4><i class="fas fa-cog"></i> Settings & Backup</h4>
+<div class="form-group"><label>College Name</label><input type="text" id="setColName" value="Dhanwantari Ayurved Medical College & Charitable Hospital"></div>
+<div class="form-group"><label>Address</label><input type="text" id="setAddr" value="Tq. Udgir Dist. Latur Maharashtra State"></div>
+<div class="form-group"><label>Upload Logo</label><input type="file" id="setLogo" accept="image/*" onchange="uploadLogo(event)"></div>
+<hr style="margin:15px 0">
+<h4 style="margin-bottom:10px"><i class="fas fa-database"></i> Data Management</h4>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-info" onclick="saveAll()"><i class="fas fa-save"></i> Save to Browser</button>
+<button class="btn" style="background:#5e35b1;color:#fff" onclick="downloadJSON()"><i class="fas fa-download"></i> Download Backup</button>
+<button class="btn" style="background:#6a1b9a;color:#fff" onclick="document.getElementById('restFile2').click()"><i class="fas fa-upload"></i> Restore Backup</button>
+<input type="file" id="restFile2" style="display:none" accept=".json" onchange="restoreJSON(event)">
+<button class="btn btn-danger" onclick="resetData()"><i class="fas fa-trash"></i> Reset All Data</button>
+</div>
+</div>
+</div>
+
+<div class="app-footer">
+<b>Designed & Developed by Dr. Jadhav V.R.</b> | Contact: 9518356305 | &copy; 2025 DAMCH Udgir
+</div>
+
+</div><!-- end main-content -->
+</div><!-- end app-container -->
+
+<div id="printArea" style="display:none"></div>
 <script>
-/* ===== GLOBALS ===== */
-var curYr = '2025';
-var data = [];
-var users = {};
-var currentUser = null; // {username, role, facultyId}
+var curYr='2025',data=[],users={},apps=[],currentUser=null,chartDept=null,chartDesig=null,chartStatus=null,chartTrend=null,appFilter='all';
+var desigRank={"PRINCIPAL":1,"PROFESSOR":2,"ASSOCIATE PROFESSOR":3,"READER":3,"ASSISTANT PROFESSOR":4,"LECTURER":4};
 
-var desigRank = {"PRINCIPAL":1,"PROFESSOR":2,"ASSOCIATE PROFESSOR":3,"READER":3,"ASSISTANT PROFESSOR":4,"LECTURER":4};
-
-/* ===== DEFAULT DATA (Your 42 Faculty from JSON) ===== */
-var DEFAULT_DATA = [
+var DEFAULT_DATA=[
 {"id":1767934321233,"name":"Dr.Patil Dattatraya Vinayakrao","desig":"Principal","dept":"Sanskrit Samhita Siddhant","code":"AYSS00481","doj":"2003-12-23","dob":"1977-05-05","leaves_2025":{"cl":"7","od":"15","lat":"48","ml":"0","el_open":"0"},"leaves_2026":{"el_open":15}},
 {"id":1767955726188,"name":"Dr.Shrigire Sayaram Ramgonda","desig":"Professor","dept":"Dravayaguna Vidnyan","code":"AYDG00564","doj":"2003-01-18","dob":"1969-01-01","leaves_2025":{"cl":"8","ml":"2","od":"7","lat":"84"},"leaves_2026":{"el_open":11}},
 {"id":1767958577405,"name":"Dr.Kattewar Balaji Devrao","desig":"Professor","dept":"RSBK","code":"AYBK","doj":"2003-07-01","dob":"1973-09-11","leaves_2025":{"cl":"8","od":"1","el_u":"2","lat":"12"},"leaves_2026":{"el_open":13}},
@@ -364,562 +475,173 @@ var DEFAULT_DATA = [
 {"id":1768206052606,"name":"Pushpa Dagdu Gawale","desig":"Professor","dept":"Kayachikitsa","code":"AYKC0","doj":"2008-10-20","dob":"","leaves_2025":{"cl":"8","ml":"10","lwp":"4","od":"0","sl":"5","el_u":"15","lat":"138","sd":"0","rh":"0","pat":"0","mat":"0"},"leaves_2026":{}},
 {"id":1767961042431,"name":"Dr.Amol Umakant Patane","desig":"Professor","dept":"Panchakarma","code":"AYPK00687","doj":"2012-12-22","dob":"1982-12-17","leaves_2025":{"cl":"8","ml":"1","od":"5","el_u":"3","lat":"164"},"leaves_2026":{"el_open":0}},
 {"id":1768021186994,"name":"Dr.Bansode Namdev Manohar","desig":"Professor","dept":"Rognidan evum VV","code":"AYRN0325","doj":"2014-09-01","dob":"","leaves_2025":{"cl":"8","ml":"1","od":"4","el_u":"6","lat":"138"},"leaves_2026":{"el_open":15}},
-{"id":1768278195240,"name":"Dr.Ravikant Vinayakrao Patil","desig":"Professor","dept":"Shalakyatantra","code":"AYSK0659","doj":"2018-12-27","dob":"","leaves_2025":{"cl":"7","ml":"0","od":"6","el_u":"6","lat":"176","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0"},"leaves_2026":{}},
+{"id":1768278195240,"name":"Dr.Ravikant Vinayakrao Patil","desig":"Professor","dept":"Shalakyatantra","code":"AYSK0659","doj":"2018-12-27","dob":"","leaves_2025":{"cl":"7","ml":"0","od":"6","el_u":"6","lat":"176"},"leaves_2026":{}},
 {"id":1768021174955,"name":"Dr.Mundhe Vishnukant Dnyanoba","desig":"Professor","dept":"","code":"","doj":"","dob":"","leaves_2025":{},"leaves_2026":{"el_open":15}},
 {"id":1767959422862,"name":"Dr.Sachinkumar Vishwanath Tale","desig":"Associate Professor","dept":"Swasthavritta","code":"AYSV00250","doj":"2018-01-01","dob":"1990-06-24","leaves_2025":{"cl":"8","ml":"5","od":"4","el_u":"7","lat":"116"},"leaves_2026":{"el_open":0}},
-{"id":1768201062768,"name":"Rashmi Yogiraj Chidre","desig":"Associate Professor","dept":"","code":"AYPS00416","doj":"2018-01-09","dob":"","leaves_2025":{"cl":"8","ml":"10","od":"1","el_u":"15","lat":"157","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0","lwp":"21"},"leaves_2026":{}},
-{"id":1768021173715,"name":"Dr.Mayuri Udaysingh Thakur","desig":"Associate Professor","dept":"Rachana Sharir","code":"AYRS00376","doj":"2018-07-02","dob":"","leaves_2025":{"cl":"8","ml":"10","od":"1","lat":"91","el_u":"0","mat":"56","pat":"0","sl":"0","sd":"0","rh":"0"},"leaves_2026":{"el_open":15}},
+{"id":1768201062768,"name":"Rashmi Yogiraj Chidre","desig":"Associate Professor","dept":"PTSR","code":"AYPS00416","doj":"2018-01-09","dob":"","leaves_2025":{"cl":"8","ml":"10","od":"1","el_u":"15","lat":"157","lwp":"21"},"leaves_2026":{}},
+{"id":1768021173715,"name":"Dr.Mayuri Udaysingh Thakur","desig":"Associate Professor","dept":"Rachana Sharir","code":"AYRS00376","doj":"2018-07-02","dob":"","leaves_2025":{"cl":"8","ml":"10","od":"1","lat":"91","el_u":"0","mat":"56"},"leaves_2026":{"el_open":15}},
 {"id":1767959835263,"name":"Dr.Jagtap Prajakta Sudhakar","desig":"Associate Professor","dept":"Panchakarma","code":"AYPK00359","doj":"2019-02-15","dob":"1991-08-18","leaves_2025":{"cl":"8","ml":"4","el_u":"5","lat":"159"},"leaves_2026":{"el_open":0}},
-{"id":1767957913565,"name":"Dr.Snehal Gunderao Patil","desig":"Associate Professor","dept":"Kayachikitsa","code":"AYKC01011","doj":"2019-02-22","dob":"1986-04-04","leaves_2025":{"cl":"6","ml":"1","el_u":"1","lat":"117","od":"0","mat":"0","pat":"0","sl":"0"},"leaves_2026":{"el_open":8}},
+{"id":1767957913565,"name":"Dr.Snehal Gunderao Patil","desig":"Associate Professor","dept":"Kayachikitsa","code":"AYKC01011","doj":"2019-02-22","dob":"1986-04-04","leaves_2025":{"cl":"6","ml":"1","el_u":"1","lat":"117","od":"0"},"leaves_2026":{"el_open":8}},
 {"id":1767961462063,"name":"Dr.Surnar Yogeshwar Namdev","desig":"Associate Professor","dept":"Shalyatantra","code":"AYUST1442","doj":"2019-03-01","dob":"1989-11-25","leaves_2025":{"cl":"8","ml":"6","od":"1","el_u":"6","lat":"96"},"leaves_2026":{"el_open":0}},
 {"id":1768021176843,"name":"Dr.Deepika Chandrakant Bhadre","desig":"Associate Professor","dept":"PTSR","code":"AYPS01057","doj":"2020-02-17","dob":"","leaves_2025":{"cl":"8","ml":"8","sl":"3","lat":"190"},"leaves_2026":{"el_open":15}},
-{"id":1767960762214,"name":"Dr.Ghorband Shital Dattatray","desig":"Associate Professor","dept":"Dravayaguna Vidnyan","code":"AYDG","doj":"2020-03-13","dob":"1981-02-23","leaves_2025":{"cl":"8","ml":"10","od":"9","el_u":"15","lat":"146","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0"},"leaves_2026":{"el_open":0}},
-{"id":1768021168209,"name":"Dr.Prashant Tryambakrao Biradar","desig":"Assistant Professor","dept":"Sanskrit Samhita Siddhant","code":"AYSN00048","doj":"2012-02-06","dob":"","leaves_2025":{"lat":"102","cl":"8","ml":"2","od":"10","el_u":"5","mat":"0"},"leaves_2026":{"el_open":"","cl":"","ml":"","od":"","el_u":"","lat":""}},
+{"id":1767960762214,"name":"Dr.Ghorband Shital Dattatray","desig":"Associate Professor","dept":"Dravayaguna Vidnyan","code":"AYDG","doj":"2020-03-13","dob":"1981-02-23","leaves_2025":{"cl":"8","ml":"10","od":"9","el_u":"15","lat":"146"},"leaves_2026":{"el_open":0}},
+{"id":1768021168209,"name":"Dr.Prashant Tryambakrao Biradar","desig":"Assistant Professor","dept":"Sanskrit Samhita Siddhant","code":"AYSN00048","doj":"2012-02-06","dob":"","leaves_2025":{"lat":"102","cl":"8","ml":"2","od":"10","el_u":"5"},"leaves_2026":{}},
 {"id":1768021176627,"name":"Dr.Asmita Ashokrao Bhadre","desig":"Assistant Professor","dept":"Kaumarbhritya","code":"AYKB00709","doj":"2021-01-02","dob":"","leaves_2025":{"cl":"8","ml":"1","el_u":"4","lat":"171"},"leaves_2026":{"el_open":15}},
-{"id":1767958840101,"name":"Dr.Martule Shivkumar Surykant","desig":"Assistant Professor","dept":"Kaumarbhritya","code":"AYKB00725","doj":"2021-03-25","dob":"1994-01-01","leaves_2025":{"lat":"141","cl":"8","od":"2","ml":"","el_u":"3"},"leaves_2026":{"el_open":"0"}},
-{"id":1768203668172,"name":"Namrata Virnath Kore","desig":"Assistant Professor","dept":"Rognidan and Vikruti Vigyan","code":"AYRN00765","doj":"2021-03-26","dob":"","leaves_2025":{"lat":"248","mat":"0","ml":"10","lwp":"13","cl":"8","od":"3","el_u":"7","pat":"0","sl":"0","sd":"0","rh":"0"},"leaves_2026":{}},
-{"id":1,"name":"Dr. Jadhav Vishnukant Rameshrao","desig":"Assistant Professor","dept":"Rachana Sharir","code":"AYRS01211","doj":"2022-04-01","dob":"1994-02-13","leaves_2025":{"lat":"116","sl":"0","cl":"8","ml":"0","el_u":"0","rh":"0"},"leaves_2026":{"el_open":8}},
+{"id":1767958840101,"name":"Dr.Martule Shivkumar Surykant","desig":"Assistant Professor","dept":"Kaumarbhritya","code":"AYKB00725","doj":"2021-03-25","dob":"1994-01-01","leaves_2025":{"lat":"141","cl":"8","od":"2","el_u":"3"},"leaves_2026":{"el_open":"0"}},
+{"id":1768203668172,"name":"Namrata Virnath Kore","desig":"Assistant Professor","dept":"Rognidan and Vikruti Vigyan","code":"AYRN00765","doj":"2021-03-26","dob":"","leaves_2025":{"lat":"248","ml":"10","lwp":"13","cl":"8","od":"3","el_u":"7"},"leaves_2026":{}},
+{"id":1,"name":"Dr. Jadhav Vishnukant Rameshrao","desig":"Assistant Professor","dept":"Rachana Sharir","code":"AYRS01211","doj":"2022-04-01","dob":"1994-02-13","leaves_2025":{"lat":"116","cl":"8","ml":"0","el_u":"0"},"leaves_2026":{"el_open":8}},
 {"id":1768021164259,"name":"Dr.Pravin Dattatraya Balutkar","desig":"Assistant Professor","dept":"RSBK","code":"AYRB01770","doj":"2022-04-01","dob":"1985-02-02","leaves_2025":{"cl":"8","ml":"10","od":"2","el_u":"11","lat":"124"},"leaves_2026":{"el_open":0}},
 {"id":1767960145014,"name":"Dr.Soppa Madhumati Shrikant","desig":"Assistant Professor","dept":"Kriya Sharir","code":"AYKS01029","doj":"2022-06-20","dob":"1989-10-10","leaves_2025":{"cl":"6","ml":"8","od":"3","lat":"153"},"leaves_2026":{"el_open":0}},
-{"id":1768021168426,"name":"Dr.Amol Shivajirao Patil","desig":"Assistant Professor","dept":"Shalya tantra","code":"AYST02412","doj":"2024-01-19","dob":"","leaves_2025":{"cl":"8","ml":"6","od":"0","el_u":"5","lat":"148","mat":"","pat":"5"},"leaves_2026":{"el_open":"0","cl":"8","ml":"6","od":"0","el_u":"5","lat":"148","pat":"5"}},
-{"id":1767957277181,"name":"Dr.Shruti Rameshchandra Tiwari","desig":"Assistant Professor","dept":"Panchakarma","code":"AYPK94915","doj":"2024-06-01","dob":"1986-08-18","leaves_2025":{"cl":"8","ml":"8","od":"","el_u":"2","lat":"118","rh":"0"},"leaves_2026":{"el_open":0}},
-{"id":1767958307517,"name":"Dr.Meera Shankarrao Kadam","desig":"Assistant Professor","dept":"Agadtantra evum VV","code":"AYAT00650","doj":"2024-08-04","dob":"1991-05-03","leaves_2025":{"od":"","cl":"8","ml":"4","el_u":"7","lat":"130","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0"},"leaves_2026":{"el_open":0}},
+{"id":1768021168426,"name":"Dr.Amol Shivajirao Patil","desig":"Assistant Professor","dept":"Shalya tantra","code":"AYST02412","doj":"2024-01-19","dob":"","leaves_2025":{"cl":"8","ml":"6","od":"0","el_u":"5","lat":"148","pat":"5"},"leaves_2026":{"el_open":"0"}},
+{"id":1767957277181,"name":"Dr.Shruti Rameshchandra Tiwari","desig":"Assistant Professor","dept":"Panchakarma","code":"AYPK94915","doj":"2024-06-01","dob":"1986-08-18","leaves_2025":{"cl":"8","ml":"8","el_u":"2","lat":"118"},"leaves_2026":{"el_open":0}},
+{"id":1767958307517,"name":"Dr.Meera Shankarrao Kadam","desig":"Assistant Professor","dept":"Agadtantra evum VV","code":"AYAT00650","doj":"2024-08-04","dob":"1991-05-03","leaves_2025":{"cl":"8","ml":"4","el_u":"7","lat":"130"},"leaves_2026":{"el_open":0}},
 {"id":1767961700895,"name":"Dr.Shivpratap Vinayak Biradar","desig":"Assistant Professor","dept":"Kaumarbhritya","code":"AYKB01247","doj":"2025-04-07","dob":"1995-06-11","leaves_2025":{"cl":"5","lat":"113"},"leaves_2026":{"el_open":12}},
-{"id":1768048121381,"name":"Dr.Raghini Ramrao Navatke","desig":"Assistant Professor","dept":"Kayachikitsa","code":"AYKC04182","doj":"2025-04-23","dob":"","leaves_2025":{"lat":"45","mat":"20","pat":"0","sl":"0","sd":"0","rh":"0","cl":"6","ml":"0","od":"0","el_u":"0"},"leaves_2026":{}},
-{"id":1767960539895,"name":"Dr.Madhuri Suryakant Biradar","desig":"Assistant Professor","dept":"Shalyatntra","code":"AYST02720","doj":"2025-05-17","dob":"1997-06-01","leaves_2025":{"cl":"7","el_u":"0","lat":"90","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0","lwp":"0"},"leaves_2026":{"el_open":13}},
+{"id":1768048121381,"name":"Dr.Raghini Ramrao Navatke","desig":"Assistant Professor","dept":"Kayachikitsa","code":"AYKC04182","doj":"2025-04-23","dob":"","leaves_2025":{"lat":"45","mat":"20","cl":"6","ml":"0","od":"0","el_u":"0"},"leaves_2026":{}},
+{"id":1767960539895,"name":"Dr.Madhuri Suryakant Biradar","desig":"Assistant Professor","dept":"Shalyatntra","code":"AYST02720","doj":"2025-05-17","dob":"1997-06-01","leaves_2025":{"cl":"7","el_u":"0","lat":"90"},"leaves_2026":{"el_open":13}},
 {"id":1767957034325,"name":"Dr.Bharkade Jayshree Govindrao","desig":"Assistant Professor","dept":"Agadtantra evum VV","code":"AYAT00917","doj":"2025-05-23","dob":"1994-04-14","leaves_2025":{"lat":"86","cl":"8","ml":"2"},"leaves_2026":{"el_open":11}},
-{"id":1768047235877,"name":"Dr.Ketki Rangnath Tarde","desig":"Assistant Professor","dept":"Sanskrit Samhita Siddhant","code":"AYSS02196","doj":"2025-05-24","dob":"","leaves_2025":{"cl":"4","ml":"72","od":"0","el_u":"0","lat":"17","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0","lwp":"0"},"leaves_2026":{}},
-{"id":1767956778629,"name":"Dr.Shivani Tanajirao Patil","desig":"Assistant Professor","dept":"Sanskrit Samhita Siddhant","code":"AYSS02244","doj":"2025-06-04","dob":"1996-08-26","leaves_2025":{"cl":"6.5","lat":"69","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0","lwp":"0"},"leaves_2026":{"el_open":15}},
-{"id":1768047609764,"name":"Dr.Swapnil Janardhan Biradar Patil","desig":"Assistant Professor","dept":"Kriya Sharir","code":"AYKS01398","doj":"2025-06-12","dob":"","leaves_2025":{"cl":"7","ml":"1","lat":"61","mat":"0","el_u":"0","od":"0","pat":"0","sl":"0","sd":"0","rh":"0"},"leaves_2026":{}},
+{"id":1768047235877,"name":"Dr.Ketki Rangnath Tarde","desig":"Assistant Professor","dept":"Sanskrit Samhita Siddhant","code":"AYSS02196","doj":"2025-05-24","dob":"","leaves_2025":{"cl":"4","ml":"72","od":"0","el_u":"0","lat":"17"},"leaves_2026":{}},
+{"id":1767956778629,"name":"Dr.Shivani Tanajirao Patil","desig":"Assistant Professor","dept":"Sanskrit Samhita Siddhant","code":"AYSS02244","doj":"2025-06-04","dob":"1996-08-26","leaves_2025":{"cl":"6.5","lat":"69"},"leaves_2026":{"el_open":15}},
+{"id":1768047609764,"name":"Dr.Swapnil Janardhan Biradar Patil","desig":"Assistant Professor","dept":"Kriya Sharir","code":"AYKS01398","doj":"2025-06-12","dob":"","leaves_2025":{"cl":"7","ml":"1","lat":"61","el_u":"0","od":"0"},"leaves_2026":{}},
 {"id":1768370893500,"name":"Suraj Damodar Lavate","desig":"Assistant Professor","dept":"Shalakya tantra","code":"AYSK01446","doj":"2025-06-13","dob":"","leaves_2025":{},"leaves_2026":{}},
-{"id":1767959185758,"name":"Dr.Biradar Mallikarjun Vishwanath","desig":"Assistant Professor","dept":"Agadtantra evum VV","code":"AYAT00926","doj":"2025-08-06","dob":"1966-09-01","leaves_2025":{"cl":"8","el_u":"8","lat":"79","mat":"0","pat":"0","sl":"0","sd":"0","rh":"0","lwp":"0"},"leaves_2026":{"el_open":6}},
-{"id":1768021175130,"name":"Dr.Priyanka Dnyanoba Devkatte","desig":"Assistant Professor","dept":"PTSR","code":"AYPS01975","doj":"2025-12-15","dob":"","leaves_2025":{"lat":"8","mat":"0","pat":"0","sl":"1","sd":"0","rh":"0","lwp":"0"},"leaves_2026":{"el_open":15}},
+{"id":1767959185758,"name":"Dr.Biradar Mallikarjun Vishwanath","desig":"Assistant Professor","dept":"Agadtantra evum VV","code":"AYAT00926","doj":"2025-08-06","dob":"1966-09-01","leaves_2025":{"cl":"8","el_u":"8","lat":"79"},"leaves_2026":{"el_open":6}},
+{"id":1768021175130,"name":"Dr.Priyanka Dnyanoba Devkatte","desig":"Assistant Professor","dept":"PTSR","code":"AYPS01975","doj":"2025-12-15","dob":"","leaves_2025":{"lat":"8","sl":"1"},"leaves_2026":{"el_open":15}},
 {"id":1768370845124,"name":"Shivraj Shriram Vansure","desig":"Assistant Professor","dept":"Shalakya tantra","code":"AYSK01538","doj":"2025-12-15","dob":"","leaves_2025":{},"leaves_2026":{}},
 {"id":1768370366020,"name":"Deepali Sanjay Kulkarni","desig":"Assistant Professor","dept":"","code":"","doj":"","dob":"","leaves_2025":{},"leaves_2026":{}},
 {"id":1768021173515,"name":"Dr.Chetlure Shivkanta Laxman","desig":"Assistant Professor","dept":"Kayachikitsa","code":"","doj":"","dob":"","leaves_2025":{},"leaves_2026":{"el_open":15}},
 {"id":1768370657534,"name":"Swapnil Janardhan Biradar Patil","desig":"Assistant Professor","dept":"Kriya Sharir","code":"","doj":"","dob":"","leaves_2025":{},"leaves_2026":{}}
 ];
 
-/* ===== INIT ===== */
-window.onload = function() {
-    var today = new Date();
-    document.getElementById('reportDate').value = today.toLocaleDateString('en-GB');
-
-    // Load data
-    var local = localStorage.getItem('damch_data_v25');
-    if(local) { data = JSON.parse(local); }
-    else { data = JSON.parse(JSON.stringify(DEFAULT_DATA)); }
-
-    // Load users
-    var uLocal = localStorage.getItem('damch_users_v25');
-    if(uLocal) { users = JSON.parse(uLocal); }
-    else { buildDefaultUsers(); }
-
-    // Load logo
-    var logo = localStorage.getItem('damch_logo');
-    if(logo) {
-        document.getElementById('logoImg').src = logo; document.getElementById('logoImg').style.display = 'block'; document.getElementById('logoTxt').style.display = 'none';
-        document.getElementById('loginLogoImg').src = logo; document.getElementById('loginLogoImg').style.display = 'block'; document.getElementById('loginLogoTxt').style.display = 'none';
-    }
-
-    // Check session
-    var sess = sessionStorage.getItem('damch_session');
-    if(sess) { currentUser = JSON.parse(sess); showApp(); }
-
-    document.getElementById('loginPass').addEventListener('keypress', function(e) { if(e.key === 'Enter') doLogin(); });
-    document.getElementById('loginUser').addEventListener('keypress', function(e) { if(e.key === 'Enter') document.getElementById('loginPass').focus(); });
+/* INIT */
+window.onload=function(){
+document.getElementById('reportDate').valueAsDate=new Date();
+var ld=localStorage.getItem('damch_v30_data');data=ld?JSON.parse(ld):JSON.parse(JSON.stringify(DEFAULT_DATA));
+var lu=localStorage.getItem('damch_v30_users');users=lu?JSON.parse(lu):buildUsers();
+var la=localStorage.getItem('damch_v30_apps');apps=la?JSON.parse(la):[]; 
+var logo=localStorage.getItem('damch_logo');
+if(logo){try{document.getElementById('sbLogo').src=logo;document.getElementById('sbLogo').style.display='block';document.getElementById('sbLogoText').style.display='none';}catch(e){}}
+var s=sessionStorage.getItem('damch_session');if(s){currentUser=JSON.parse(s);enterApp();}
+document.getElementById('loginPass').onkeypress=function(e){if(e.key==='Enter')doLogin()};
+document.getElementById('loginUser').onkeypress=function(e){if(e.key==='Enter')document.getElementById('loginPass').focus()};
 };
+function buildUsers(){var u={'admin':{pw:'Admin@2025',role:'admin',fid:null}};data.forEach(function(r){var c=(r.code||'').trim();if(c.length>2)u[c]={pw:'damch@'+c,role:'faculty',fid:r.id}});localStorage.setItem('damch_v30_users',JSON.stringify(u));return u;}
+function togglePw(){var f=document.getElementById('loginPass');if(f.type==='password'){f.type='text';document.querySelector('.show-pw').innerHTML='<i class="fas fa-eye-slash"></i> Hide Password'}else{f.type='password';document.querySelector('.show-pw').innerHTML='<i class="fas fa-eye"></i> Show Password'}}
+function doLogin(){var u=document.getElementById('loginUser').value.trim(),p=document.getElementById('loginPass').value,m=document.getElementById('loginMsg');if(!u||!p){m.textContent='Enter username & password';return}if(!users[u]){m.textContent='Invalid username';return}if(users[u].pw!==p){m.textContent='Wrong password';return}currentUser={username:u,role:users[u].role,fid:users[u].fid};sessionStorage.setItem('damch_session',JSON.stringify(currentUser));m.textContent='';enterApp()}
+function doLogout(){sessionStorage.removeItem('damch_session');currentUser=null;document.getElementById('appContainer').style.display='none';document.getElementById('loginPage').style.display='flex';document.getElementById('loginUser').value='';document.getElementById('loginPass').value=''}
+function enterApp(){document.getElementById('loginPage').style.display='none';document.getElementById('appContainer').style.display='flex';var isA=currentUser.role==='admin';var nm=isA?'Administrator':currentUser.username;document.getElementById('sbUserName').textContent=nm;document.getElementById('topUserBadge').innerHTML='<i class="fas fa-user"></i> '+nm;
+if(!isA){document.getElementById('adminLeaveControls').style.display='none';document.getElementById('adminSaveArea').style.display='none';document.getElementById('actColH').style.display='none';}else{document.getElementById('adminLeaveControls').style.display='';document.getElementById('adminSaveArea').style.display='';document.getElementById('actColH').style.display='';}
+showPage('dashboard',document.querySelector('.sb-menu li a'));}
 
-function buildDefaultUsers() {
-    users = {};
-    users['admin'] = { pw: 'Admin@2025', role: 'admin', facultyId: null };
-    data.forEach(function(r) {
-        var code = (r.code || '').trim();
-        if(code && code.length > 2) {
-            users[code] = { pw: 'damch@' + code, role: 'faculty', facultyId: r.id };
-        }
-    });
-    localStorage.setItem('damch_users_v25', JSON.stringify(users));
+function showPage(pg,el){document.querySelectorAll('.page-section').forEach(function(s){s.classList.remove('active')});var t=document.getElementById('pg_'+pg);if(t)t.classList.add('active');document.querySelectorAll('.sb-menu li a').forEach(function(a){a.classList.remove('active')});if(el)el.classList.add('active');
+var titles={'dashboard':['<i class="fas fa-chart-pie"></i> Dashboard','Overview & Statistics'],'leaveRecord':['<i class="fas fa-table"></i> Leave Record','Annual Leave Details'],'applyLeave':['<i class="fas fa-paper-plane"></i> Apply Leave','Submit Leave Application'],'applications':['<i class="fas fa-inbox"></i> Applications','Manage Leave Requests'],'faculty':['<i class="fas fa-users"></i> Faculty','Directory & Details'],'profile':['<i class="fas fa-user-cog"></i> Profile','My Information'],'reports':['<i class="fas fa-file-alt"></i> Reports','Generate & Print'],'settings':['<i class="fas fa-cog"></i> Settings','Configuration & Backup']};
+var ti=titles[pg]||['',''];document.getElementById('pageTitle').innerHTML=ti[0];document.getElementById('pageSubtitle').textContent=ti[1];
+if(pg==='dashboard')renderDashboard();if(pg==='leaveRecord')renderLeaveRecord();if(pg==='applyLeave')renderMyApps();if(pg==='applications')renderAllApps();if(pg==='faculty')renderFacultyList();if(pg==='profile')loadProfile();}
+/* DASHBOARD */
+function renderDashboard(){
+sortData();var totFac=data.length,totPrin=0,totProf=0,totAssoc=0,totAsst=0,pendApps=0,totLeaveDays=0;
+data.forEach(function(r){var d=(r.desig||'').toUpperCase();if(d==='PRINCIPAL')totPrin++;else if(d==='PROFESSOR')totProf++;else if(d==='ASSOCIATE PROFESSOR'||d==='READER')totAssoc++;else totAsst++;var res=calcRow(r,curYr);totLeaveDays+=res.grand_tot});
+apps.forEach(function(a){if(a.status==='Pending')pendApps++});
+document.getElementById('statsRow').innerHTML='<div class="stat-card"><div class="icon" style="background:linear-gradient(135deg,#1a237e,#3949ab)"><i class="fas fa-users"></i></div><div class="info"><h3>'+totFac+'</h3><p>Total Faculty</p></div></div><div class="stat-card"><div class="icon" style="background:linear-gradient(135deg,#2e7d32,#43a047)"><i class="fas fa-user-tie"></i></div><div class="info"><h3>'+totProf+'</h3><p>Professors</p></div></div><div class="stat-card"><div class="icon" style="background:linear-gradient(135deg,#e65100,#ff6d00)"><i class="fas fa-clock"></i></div><div class="info"><h3>'+pendApps+'</h3><p>Pending Applications</p></div></div><div class="stat-card"><div class="icon" style="background:linear-gradient(135deg,#b71c1c,#d32f2f)"><i class="fas fa-calendar-minus"></i></div><div class="info"><h3>'+totLeaveDays+'</h3><p>Total Leave Days ('+curYr+')</p></div></div>';
+
+/* Dept Chart */
+var deptMap={};data.forEach(function(r){var d=r.dept||'Other';deptMap[d]=(deptMap[d]||0)+1});var dL=Object.keys(deptMap),dV=Object.values(deptMap);var colors=['#1a237e','#b71c1c','#2e7d32','#e65100','#6a1b9a','#00838f','#f57f17','#4e342e','#37474f','#880e4f','#1b5e20','#ff6f00','#0d47a1','#4a148c','#263238'];
+if(chartDept)chartDept.destroy();chartDept=new Chart(document.getElementById('chartDept'),{type:'bar',data:{labels:dL,datasets:[{label:'Faculty',data:dV,backgroundColor:colors.slice(0,dL.length)}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:8},maxRotation:45}},y:{beginAtZero:true,ticks:{stepSize:1}}}}});
+
+/* Desig Chart */
+var desigMap={};data.forEach(function(r){var d=r.desig||'Other';desigMap[d]=(desigMap[d]||0)+1});
+if(chartDesig)chartDesig.destroy();chartDesig=new Chart(document.getElementById('chartDesig'),{type:'doughnut',data:{labels:Object.keys(desigMap),datasets:[{data:Object.values(desigMap),backgroundColor:['#1a237e','#2e7d32','#e65100','#b71c1c','#6a1b9a']}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}}}});
+
+/* Status Chart */
+var stMap={'Pending':0,'Approved':0,'Rejected':0};apps.forEach(function(a){stMap[a.status]=(stMap[a.status]||0)+1});
+if(chartStatus)chartStatus.destroy();chartStatus=new Chart(document.getElementById('chartStatus'),{type:'pie',data:{labels:['Pending','Approved','Rejected'],datasets:[{data:[stMap.Pending,stMap.Approved,stMap.Rejected],backgroundColor:['#ff9800','#4caf50','#f44336']}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}}}});
+
+/* Trend Chart */
+var mLabels=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],mData=new Array(12).fill(0);
+apps.forEach(function(a){if(a.year==curYr&&a.status==='Approved'){var m=parseInt(a.fromDate.split('-')[1])-1;if(m>=0&&m<12)mData[m]+=a.days||1}});
+if(chartTrend)chartTrend.destroy();chartTrend=new Chart(document.getElementById('chartTrend'),{type:'line',data:{labels:mLabels,datasets:[{label:'Approved Leaves',data:mData,borderColor:'#1a237e',backgroundColor:'rgba(26,35,126,.1)',fill:true,tension:.4}]},options:{responsive:true,scales:{y:{beginAtZero:true,ticks:{stepSize:1}}},plugins:{legend:{display:false}}}});
+
+/* Recent apps */
+var recent=apps.slice(-10).reverse();var rb=document.querySelector('#recentAppsTable tbody');rb.innerHTML='';
+recent.forEach(function(a){var fac=data.find(function(r){return r.id===a.fid})||{name:'?'};var badge=a.status==='Pending'?'badge-pending':a.status==='Approved'?'badge-approved':'badge-rejected';rb.innerHTML+='<tr><td>'+a.date+'</td><td>'+fac.name+'</td><td>'+a.type+'</td><td>'+a.fromDate+'</td><td>'+a.toDate+'</td><td>'+a.days+'</td><td><span class="badge '+badge+'">'+a.status+'</span></td></tr>'});
 }
 
-/* ===== LOGIN / LOGOUT ===== */
-function togglePw() {
-    var f = document.getElementById('loginPass');
-    var s = f.previousElementSibling ? document.querySelector('.toggle-pw') : null;
-    if(f.type === 'password') { f.type = 'text'; document.querySelector('.toggle-pw').textContent = 'Hide Password'; }
-    else { f.type = 'password'; document.querySelector('.toggle-pw').textContent = 'Show Password'; }
+/* LEAVE RECORD */
+function sortData(){data.sort(function(a,b){var rA=desigRank[(a.desig||'').toUpperCase().trim()]||99,rB=desigRank[(b.desig||'').toUpperCase().trim()]||99;if(rA!==rB)return rA-rB;var dA=a.doj?new Date(a.doj):new Date('9999-12-31'),dB=b.doj?new Date(b.doj):new Date('9999-12-31');if(dA.getTime()!==dB.getTime())return dA-dB;return(a.name||'').localeCompare(b.name||'')})}
+function calcExp(d){if(!d)return'-';var dj=new Date(d);if(isNaN(dj))return'-';var n=new Date();var y=n.getFullYear()-dj.getFullYear(),m=n.getMonth()-dj.getMonth(),dy=n.getDate()-dj.getDate();if(dy<0){m--;dy+=new Date(n.getFullYear(),n.getMonth(),0).getDate()}if(m<0){y--;m+=12}return y<0?'0':y+'Y '+m+'M '+dy+'D'}
+function fmtDt(s){if(!s)return'';var d=new Date(s);return isNaN(d)?'':String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear()}
+function calcRow(r,yr){var l=r['leaves_'+yr]||{},v=function(k){return parseFloat(l[k])||0};var cl_b=8-v('cl'),ml_b=10-v('ml'),rh_b=2-v('rh'),mat_b=180-v('mat'),pat_b=15-v('pat'),sl_b=15-v('sl'),sd_b=120-v('sd');var elo=parseFloat(l.el_open)||0,elt=elo+15,el_b=elt-v('el_u');var ld=Math.floor(v('lat')/6);var buf=cl_b+el_b+ml_b+rh_b;if(buf<0)buf=0;var cov=0,ovf=0;if(ld<=buf)cov=ld;else{cov=buf;ovf=ld-buf}var tp=v('cl')+v('ml')+v('od')+v('el_u')+v('mat')+v('pat')+v('sl')+v('sd')+v('rh')+cov;var tu=v('lwp')+ovf;return{cl_b:cl_b,ml_b:ml_b,rh_b:rh_b,mat_b:mat_b,pat_b:pat_b,sl_b:sl_b,sd_b:sd_b,elo:elo,elt:elt,el_b:el_b,ld:ld,ovf:ovf,tp:tp,tu:tu,gt:tp+tu,lwpd:v('lwp')+ovf,v:v}}
+
+function renderLeaveRecord(){
+sortData();var tb=document.getElementById('lrBody');tb.innerHTML='';document.getElementById('lrTitle').textContent='Leave Record: '+curYr;var isA=currentUser&&currentUser.role==='admin';
+data.forEach(function(r,i){var res=calcRow(r,curYr),l=r['leaves_'+curYr]||{},elo=l.el_open!==undefined?l.el_open:0,exp=calcExp(r.doj);
+var h='<td style="position:sticky;left:0;z-index:4;background:#fff;border-right:2px solid #333;font-weight:700;text-align:center">'+(i+1)+'</td>';
+h+='<td class="name-cell"><div style="font-weight:700;font-size:11px">'+r.name+'</div><div style="font-size:9px;color:#666">'+(r.desig||'')+' | '+(r.dept||'')+'</div><div style="font-size:8px;color:#888">Code: '+(r.code||'-')+' | DOJ: '+fmtDt(r.doj)+'</div><div class="exp-tag">'+exp+'</div></td>';
+if(isA){
+h+='<td><input type="number" value="'+(l.cl||'')+'" onchange="upd('+r.id+',\'cl\',this.value)"></td><td class="bal">'+res.cl_b+'</td>';
+h+='<td><input type="number" value="'+(l.ml||'')+'" onchange="upd('+r.id+',\'ml\',this.value)"></td><td class="bal">'+res.ml_b+'</td>';
+h+='<td><input type="number" value="'+(l.od||'')+'" onchange="upd('+r.id+',\'od\',this.value)"></td>';
+h+='<td><input type="number" value="'+elo+'" onchange="upd('+r.id+',\'el_open\',this.value)" style="background:#e3f2fd"></td>';
+h+='<td class="bal">15</td><td class="bal">'+res.elt+'</td>';
+h+='<td><input type="number" value="'+(l.el_u||'')+'" onchange="upd('+r.id+',\'el_u\',this.value)"></td><td class="bal" style="background:#bbdefb">'+res.el_b+'</td>';
+h+='<td><input type="number" value="'+(l.lat||'')+'" onchange="upd('+r.id+',\'lat\',this.value)"></td><td class="bal-neg">'+res.ld+'</td>';
+h+='<td><input type="number" value="'+(l.mat||'')+'" onchange="upd('+r.id+',\'mat\',this.value)"></td><td class="bal">'+res.mat_b+'</td>';
+h+='<td><input type="number" value="'+(l.pat||'')+'" onchange="upd('+r.id+',\'pat\',this.value)"></td><td class="bal">'+res.pat_b+'</td>';
+h+='<td><input type="number" value="'+(l.sl||'')+'" onchange="upd('+r.id+',\'sl\',this.value)"></td><td class="bal">'+res.sl_b+'</td>';
+h+='<td><input type="number" value="'+(l.sd||'')+'" onchange="upd('+r.id+',\'sd\',this.value)"></td><td class="bal">'+res.sd_b+'</td>';
+h+='<td><input type="number" value="'+(l.rh||'')+'" onchange="upd('+r.id+',\'rh\',this.value)"></td><td class="bal">'+res.rh_b+'</td>';
+}else{
+h+='<td class="bal">'+(parseFloat(l.cl)||0)+'</td><td class="bal">'+res.cl_b+'</td>';
+h+='<td class="bal">'+(parseFloat(l.ml)||0)+'</td><td class="bal">'+res.ml_b+'</td>';
+h+='<td class="bal">'+(parseFloat(l.od)||0)+'</td>';
+h+='<td class="bal">'+elo+'</td><td class="bal">15</td><td class="bal">'+res.elt+'</td>';
+h+='<td class="bal">'+(parseFloat(l.el_u)||0)+'</td><td class="bal" style="background:#bbdefb">'+res.el_b+'</td>';
+h+='<td class="bal">'+(parseFloat(l.lat)||0)+'</td><td class="bal-neg">'+res.ld+'</td>';
+h+='<td class="bal">'+(parseFloat(l.mat)||0)+'</td><td class="bal">'+res.mat_b+'</td>';
+h+='<td class="bal">'+(parseFloat(l.pat)||0)+'</td><td class="bal">'+res.pat_b+'</td>';
+h+='<td class="bal">'+(parseFloat(l.sl)||0)+'</td><td class="bal">'+res.sl_b+'</td>';
+h+='<td class="bal">'+(parseFloat(l.sd)||0)+'</td><td class="bal">'+res.sd_b+'</td>';
+h+='<td class="bal">'+(parseFloat(l.rh)||0)+'</td><td class="bal">'+res.rh_b+'</td>';
 }
+h+='<td class="tot-paid">'+res.tp+'</td>';
+if(isA){h+='<td><input type="number" value="'+(l.lwp||'')+'" onchange="upd('+r.id+',\'lwp\',this.value)">'+(res.ovf>0?'<div style="font-size:7px;color:red;font-weight:700">(+'+res.ovf+')</div>':'')+'</td>';}else{h+='<td class="bal">'+res.lwpd+'</td>'}
+h+='<td class="tot-unpaid">'+res.tu+'</td><td class="grand">'+res.gt+'</td>';
+if(isA)h+='<td><button class="btn btn-sm btn-danger" onclick="delRow('+r.id+')"><i class="fas fa-trash"></i></button></td>';
+var tr=document.createElement('tr');tr.innerHTML=h;tb.appendChild(tr)});}
 
-function doLogin() {
-    var u = document.getElementById('loginUser').value.trim();
-    var p = document.getElementById('loginPass').value;
-    var msg = document.getElementById('loginMsg');
+/* LEAVE APPLICATION */
+function submitLeaveApp(){if(!currentUser||currentUser.role==='admin'){alert('Only faculty can apply');return}var type=document.getElementById('appType').value,days=parseInt(document.getElementById('appDays').value)||1,from=document.getElementById('appFrom').value,to=document.getElementById('appTo').value,reason=document.getElementById('appReason').value;if(!from||!to||!reason){alert('Fill all fields');return}
+var app={id:Date.now(),fid:currentUser.fid,username:currentUser.username,type:type,days:days,fromDate:from,toDate:to,reason:reason,status:'Pending',date:new Date().toISOString().slice(0,10),year:from.split('-')[0]};
+apps.push(app);localStorage.setItem('damch_v30_apps',JSON.stringify(apps));alert('Leave application submitted!');document.getElementById('appReason').value='';renderMyApps()}
+function renderMyApps(){var tb=document.querySelector('#myAppsTable tbody');tb.innerHTML='';var my=apps.filter(function(a){return a.fid===currentUser.fid}).reverse();my.forEach(function(a){var badge=a.status==='Pending'?'badge-pending':a.status==='Approved'?'badge-approved':'badge-rejected';tb.innerHTML+='<tr><td>'+a.date+'</td><td>'+a.type+'</td><td>'+a.fromDate+'</td><td>'+a.toDate+'</td><td>'+a.days+'</td><td>'+a.reason+'</td><td><span class="badge '+badge+'">'+a.status+'</span></td></tr>'})}
+function renderAllApps(){var tb=document.querySelector('#allAppsTable tbody');tb.innerHTML='';var list=appFilter==='all'?apps:apps.filter(function(a){return a.status===appFilter});var pc=apps.filter(function(a){return a.status==='Pending'}).length;document.getElementById('pendingCount').textContent=pc>0?pc+' Pending':'';list.slice().reverse().forEach(function(a){var fac=data.find(function(r){return r.id===a.fid})||{name:'?',code:'?',dept:'?'};var badge=a.status==='Pending'?'badge-pending':a.status==='Approved'?'badge-approved':'badge-rejected';var actBtns=a.status==='Pending'?'<button class="btn btn-sm btn-success" onclick="actApp('+a.id+',\'Approved\')"><i class="fas fa-check"></i></button> <button class="btn btn-sm btn-danger" onclick="actApp('+a.id+',\'Rejected\')"><i class="fas fa-times"></i></button>':'<span style="font-size:10px;color:#888">Done</span>';tb.innerHTML+='<tr><td>'+a.date+'</td><td>'+fac.name+'</td><td>'+fac.code+'</td><td>'+fac.dept+'</td><td>'+a.type+'</td><td>'+a.fromDate+'</td><td>'+a.toDate+'</td><td>'+a.days+'</td><td>'+a.reason+'</td><td><span class="badge '+badge+'">'+a.status+'</span></td><td>'+actBtns+'</td></tr>'})}
+function filterApps(f){appFilter=f;renderAllApps()}
+function actApp(id,status){var a=apps.find(function(x){return x.id===id});if(a){a.status=status;localStorage.setItem('damch_v30_apps',JSON.stringify(apps));renderAllApps();renderDashboard()}}
+/* FACULTY LIST */
+function renderFacultyList(){sortData();var tb=document.querySelector('#facListTable tbody');tb.innerHTML='';var q=(document.getElementById('facSearch').value||'').toLowerCase();data.forEach(function(r,i){if(q&&(r.name||'').toLowerCase().indexOf(q)===-1&&(r.code||'').toLowerCase().indexOf(q)===-1&&(r.dept||'').toLowerCase().indexOf(q)===-1)return;var dBadge=r.desig==='Principal'?'badge-principal':r.desig==='Professor'?'badge-professor':(r.desig||'').indexOf('Associate')>-1?'badge-assoc':'badge-asst';tb.innerHTML+='<tr><td>'+(i+1)+'</td><td><b>'+r.name+'</b></td><td><span class="badge '+dBadge+'">'+r.desig+'</span></td><td>'+r.dept+'</td><td>'+r.code+'</td><td>'+fmtDt(r.doj)+'</td><td>'+calcExp(r.doj)+'</td></tr>'})}
 
-    if(!u || !p) { msg.textContent = 'Please enter username and password.'; return; }
-    if(!users[u]) { msg.textContent = 'Invalid username.'; return; }
-    if(users[u].pw !== p) { msg.textContent = 'Incorrect password.'; return; }
+/* PROFILE */
+function autoTab(el,nxt){if(el.value.length>=parseInt(el.maxLength))document.getElementById(nxt).focus()}
+function loadProfile(){if(currentUser.role==='admin'){document.getElementById('pName').value='Administrator';document.getElementById('pCode').value='admin';document.getElementById('pDesig').value='Admin';document.getElementById('pDept').value='All';return}var r=data.find(function(x){return x.id===currentUser.fid});if(!r)return;document.getElementById('pName').value=r.name||'';document.getElementById('pCode').value=r.code||'';document.getElementById('pDesig').value=r.desig||'';document.getElementById('pDept').value=r.dept||'';if(r.doj){var d=new Date(r.doj);if(!isNaN(d)){document.getElementById('pDojD').value=String(d.getDate()).padStart(2,'0');document.getElementById('pDojM').value=String(d.getMonth()+1).padStart(2,'0');document.getElementById('pDojY').value=d.getFullYear()}}else{document.getElementById('pDojD').value='';document.getElementById('pDojM').value='';document.getElementById('pDojY').value=''}
+if(r.dob){var b=new Date(r.dob);if(!isNaN(b)){document.getElementById('pDobD').value=String(b.getDate()).padStart(2,'0');document.getElementById('pDobM').value=String(b.getMonth()+1).padStart(2,'0');document.getElementById('pDobY').value=b.getFullYear()}}else{document.getElementById('pDobD').value='';document.getElementById('pDobM').value='';document.getElementById('pDobY').value=''}document.getElementById('pNewPw').value=''}
+function saveMyProfile(){if(currentUser.role==='admin'){alert('Admin profile saved');return}var r=data.find(function(x){return x.id===currentUser.fid});if(!r)return;var dd=document.getElementById('pDojD').value.trim(),mm=document.getElementById('pDojM').value.trim(),yy=document.getElementById('pDojY').value.trim();if(dd&&mm&&yy){r.doj=yy+'-'+mm.padStart(2,'0')+'-'+dd.padStart(2,'0')}var dd2=document.getElementById('pDobD').value.trim(),mm2=document.getElementById('pDobM').value.trim(),yy2=document.getElementById('pDobY').value.trim();if(dd2&&mm2&&yy2){r.dob=yy2+'-'+mm2.padStart(2,'0')+'-'+dd2.padStart(2,'0')}var np=document.getElementById('pNewPw').value;if(np&&np.length>=4){users[currentUser.username].pw=np;localStorage.setItem('damch_v30_users',JSON.stringify(users))}saveAll();alert('Profile saved!')}
 
-    currentUser = { username: u, role: users[u].role, facultyId: users[u].facultyId };
-    sessionStorage.setItem('damch_session', JSON.stringify(currentUser));
-    msg.textContent = '';
-    showApp();
-}
+/* REPORTS */
+function genAllDetailedRpt(){genDetailRpt(null)}function askDeptDetailRpt(){var d=prompt('Enter Department:');if(d)genDetailRpt(d.trim())}function askDeptSummaryRpt(){var d=prompt('Enter Department:');if(d)genMasterRpt(d.trim())}
+function genDetailRpt(dept){var pa=document.getElementById('printArea');var h='<div style="font-family:Poppins,sans-serif;font-size:10px"><div style="text-align:center;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:10px"><h3 style="margin:2px 0">Bal Bhagwan Shikshan Prasarak Mandal Ahmedpur\'s</h3><h2 style="margin:2px 0;color:#b71c1c">DHANWANTARI AYURVED MEDICAL COLLEGE & HOSPITAL UDGIR</h2><h4 style="margin:2px 0">Faculty Detailed Leave Report - '+curYr+'</h4></div>';data.forEach(function(r){if(dept&&(r.dept||'').toUpperCase()!==dept.toUpperCase())return;var res=calcRow(r,curYr),v=function(k){return parseFloat((r['leaves_'+curYr]||{})[k])||0};h+='<div style="border:1px solid #000;padding:6px;margin-bottom:8px;page-break-inside:avoid"><div style="display:flex;justify-content:space-between;border-bottom:1px solid #000;padding-bottom:3px;margin-bottom:5px"><b>'+r.name+'</b><span>'+curYr+'</span></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:3px;font-size:9px;margin-bottom:5px"><div><b>Desig:</b> '+r.desig+'</div><div><b>Dept:</b> '+r.dept+'</div><div><b>Code:</b> '+r.code+'</div><div><b>Exp:</b> '+calcExp(r.doj)+'</div></div><table style="width:100%;border-collapse:collapse;font-size:9px"><tr style="background:#ddd"><th style="border:1px solid #000;padding:2px">Type</th><th style="border:1px solid #000">Limit</th><th style="border:1px solid #000">Used</th><th style="border:1px solid #000">Bal</th><th style="border:1px solid #000">Type</th><th style="border:1px solid #000">Limit</th><th style="border:1px solid #000">Used</th><th style="border:1px solid #000">Bal</th></tr><tr><td style="border:1px solid #000">CL</td><td style="border:1px solid #000">8</td><td style="border:1px solid #000">'+v('cl')+'</td><td style="border:1px solid #000">'+res.cl_b+'</td><td style="border:1px solid #000">ML</td><td style="border:1px solid #000">10</td><td style="border:1px solid #000">'+v('ml')+'</td><td style="border:1px solid #000">'+res.ml_b+'</td></tr><tr><td style="border:1px solid #000">EL</td><td style="border:1px solid #000">'+res.elt+'</td><td style="border:1px solid #000">'+v('el_u')+'</td><td style="border:1px solid #000">'+res.el_b+'</td><td style="border:1px solid #000">SL</td><td style="border:1px solid #000">15</td><td style="border:1px solid #000">'+v('sl')+'</td><td style="border:1px solid #000">'+res.sl_b+'</td></tr></table><div style="text-align:right;margin-top:3px;font-weight:700;font-size:10px">Late:'+v('lat')+' Pen:'+res.ld+' | PAID:'+res.tp+' UNPAID:'+res.tu+' | <span style="background:yellow;padding:0 4px">TOTAL:'+res.gt+'</span></div></div>'});h+='<div style="text-align:center;font-size:8px;border-top:1px solid #999;padding-top:4px;margin-top:10px">Designed & Developed by Dr. Jadhav V.R. | 9518356305</div></div>';pa.innerHTML=h;pa.style.display='block';window.print();pa.style.display='none'}
+function genMasterRpt(dept){var pa=document.getElementById('printArea');var h='<div style="font-family:Poppins,sans-serif;font-size:9px"><div style="text-align:center;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:10px"><h3>Bal Bhagwan Shikshan Prasarak Mandal Ahmedpur\'s</h3><h2 style="color:#b71c1c">DHANWANTARI AYURVED MEDICAL COLLEGE & HOSPITAL</h2><h4>Master Summary Report - '+curYr+(dept?' | Dept: '+dept:'')+'</h4></div>';var grp={};data.forEach(function(r){var d=(r.dept||'Other').toUpperCase();if(dept&&d!==dept.toUpperCase())return;if(!grp[d])grp[d]=[];grp[d].push(r)});Object.keys(grp).sort().forEach(function(d){h+='<div style="background:#eee;font-weight:700;padding:3px;border:1px solid #000;margin-top:5px">'+d+'</div><table style="width:100%;border-collapse:collapse;font-size:8px"><tr style="background:#ddd"><th style="border:1px solid #000;padding:2px">Sr</th><th style="border:1px solid #000">Name</th><th style="border:1px solid #000">CL</th><th style="border:1px solid #000">ML</th><th style="border:1px solid #000">EL</th><th style="border:1px solid #000">OD</th><th style="border:1px solid #000">Late</th><th style="border:1px solid #000">LWP</th><th style="border:1px solid #000">Total</th></tr>';grp[d].forEach(function(r,i){var res=calcRow(r,curYr),v=function(k){return parseFloat((r['leaves_'+curYr]||{})[k])||0};h+='<tr><td style="border:1px solid #000">'+(i+1)+'</td><td style="border:1px solid #000;text-align:left"><b>'+r.name+'</b></td><td style="border:1px solid #000">'+res.cl_b+'</td><td style="border:1px solid #000">'+res.ml_b+'</td><td style="border:1px solid #000">'+res.el_b+'</td><td style="border:1px solid #000">'+v('od')+'</td><td style="border:1px solid #000">'+res.ld+'</td><td style="border:1px solid #000">'+res.lwpd+'</td><td style="border:1px solid #000"><b>'+res.gt+'</b></td></tr>'});h+='</table>'});h+='<div style="text-align:center;font-size:8px;border-top:1px solid #999;padding-top:4px;margin-top:10px">Designed & Developed by Dr. Jadhav V.R. | 9518356305</div></div>';pa.innerHTML=h;pa.style.display='block';window.print();pa.style.display='none'}
 
-function doLogout() {
-    sessionStorage.removeItem('damch_session');
-    currentUser = null;
-    document.getElementById('mainApp').style.display = 'none';
-    document.getElementById('loginPage').style.display = 'flex';
-    document.getElementById('loginUser').value = '';
-    document.getElementById('loginPass').value = '';
-}
-
-function showApp() {
-    document.getElementById('loginPage').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'block';
-
-    var isAdmin = currentUser.role === 'admin';
-    document.getElementById('dispUserName').textContent = isAdmin ? 'Administrator' : currentUser.username;
-    document.getElementById('dispUserRole').textContent = isAdmin ? 'Role: Admin' : 'Role: Faculty';
-
-    // Show/hide admin features
-    document.getElementById('adminPanel').style.display = isAdmin ? 'flex' : 'none';
-    document.getElementById('adminBtns').style.display = isAdmin ? 'inline' : 'none';
-    document.getElementById('actionColHead').style.display = isAdmin ? '' : 'none';
-
-    render();
-}
-
-/* ===== PROFILE ===== */
-function openProfile() {
-    if(currentUser.role === 'admin') { alert('Admin profile: Username=admin. Use this panel to manage all faculty.'); return; }
-    var row = data.find(function(r) { return r.id === currentUser.facultyId; });
-    if(!row) { alert('Profile not found.'); return; }
-
-    document.getElementById('pf_name').value = row.name || '';
-    document.getElementById('pf_desig').value = row.desig || '';
-    document.getElementById('pf_dept').value = row.dept || '';
-    document.getElementById('pf_code').value = row.code || '';
-
-    // DOJ
-    if(row.doj) {
-        var d = new Date(row.doj);
-        if(!isNaN(d)) {
-            document.getElementById('pf_doj_dd').value = String(d.getDate()).padStart(2,'0');
-            document.getElementById('pf_doj_mm').value = String(d.getMonth()+1).padStart(2,'0');
-            document.getElementById('pf_doj_yyyy').value = d.getFullYear();
-        }
-    } else { document.getElementById('pf_doj_dd').value=''; document.getElementById('pf_doj_mm').value=''; document.getElementById('pf_doj_yyyy').value=''; }
-
-    // DOB
-    if(row.dob) {
-        var b = new Date(row.dob);
-        if(!isNaN(b)) {
-            document.getElementById('pf_dob_dd').value = String(b.getDate()).padStart(2,'0');
-            document.getElementById('pf_dob_mm').value = String(b.getMonth()+1).padStart(2,'0');
-            document.getElementById('pf_dob_yyyy').value = b.getFullYear();
-        }
-    } else { document.getElementById('pf_dob_dd').value=''; document.getElementById('pf_dob_mm').value=''; document.getElementById('pf_dob_yyyy').value=''; }
-
-    document.getElementById('pf_newpw').value = '';
-    document.getElementById('profileModal').classList.add('active');
-}
-
-function closeProfile() { document.getElementById('profileModal').classList.remove('active'); }
-
-function autoTab(el, nextId) {
-    if(el.value.length >= parseInt(el.maxLength)) { document.getElementById(nextId).focus(); }
-}
-
-function saveProfile() {
-    var row = data.find(function(r) { return r.id === currentUser.facultyId; });
-    if(!row) return;
-
-    // Parse DOJ
-    var dj_dd = document.getElementById('pf_doj_dd').value.trim();
-    var dj_mm = document.getElementById('pf_doj_mm').value.trim();
-    var dj_yy = document.getElementById('pf_doj_yyyy').value.trim();
-    if(dj_dd && dj_mm && dj_yy) {
-        var djDate = new Date(dj_yy, parseInt(dj_mm)-1, parseInt(dj_dd));
-        if(!isNaN(djDate)) { row.doj = dj_yy + '-' + dj_mm.padStart(2,'0') + '-' + dj_dd.padStart(2,'0'); }
-    }
-
-    // Parse DOB
-    var db_dd = document.getElementById('pf_dob_dd').value.trim();
-    var db_mm = document.getElementById('pf_dob_mm').value.trim();
-    var db_yy = document.getElementById('pf_dob_yyyy').value.trim();
-    if(db_dd && db_mm && db_yy) {
-        var dbDate = new Date(db_yy, parseInt(db_mm)-1, parseInt(db_dd));
-        if(!isNaN(dbDate)) { row.dob = db_yy + '-' + db_mm.padStart(2,'0') + '-' + db_dd.padStart(2,'0'); }
-    }
-
-    // Password change
-    var newPw = document.getElementById('pf_newpw').value;
-    if(newPw && newPw.length >= 4) {
-        users[currentUser.username].pw = newPw;
-        localStorage.setItem('damch_users_v25', JSON.stringify(users));
-    }
-
-    save();
-    render();
-    closeProfile();
-    alert('Profile updated successfully!');
-}
-/* ===== EXPERIENCE CALC ===== */
-function calcExp(dojStr) {
-    if(!dojStr) return "Exp: -";
-    var doj = new Date(dojStr);
-    if(isNaN(doj)) return "Exp: -";
-    var rptDateVal = document.getElementById('reportDate').value;
-    var now = new Date();
-    if(rptDateVal) { var parts = rptDateVal.split('/'); if(parts.length===3) now = new Date(parts[2], parts[1]-1, parts[0]); }
-    var years = now.getFullYear() - doj.getFullYear();
-    var months = now.getMonth() - doj.getMonth();
-    var days = now.getDate() - doj.getDate();
-    if(days < 0) { months--; var pm = new Date(now.getFullYear(), now.getMonth(), 0); days += pm.getDate(); }
-    if(months < 0) { years--; months += 12; }
-    if(years < 0) return "Exp: 0";
-    return years + "Y " + months + "M " + days + "D";
-}
-
-function formatDateDDMMYYYY(isoStr) {
-    if(!isoStr) return '';
-    var d = new Date(isoStr);
-    if(isNaN(d)) return '';
-    return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
-}
-
-/* ===== SORT ===== */
-function sortData() {
-    data.sort(function(a, b) {
-        var dA = (a.desig || "").toUpperCase().trim();
-        var dB = (b.desig || "").toUpperCase().trim();
-        var rA = desigRank[dA] || 99;
-        var rB = desigRank[dB] || 99;
-        if(rA !== rB) return rA - rB;
-        var dateA = a.doj ? new Date(a.doj) : new Date('9999-12-31');
-        var dateB = b.doj ? new Date(b.doj) : new Date('9999-12-31');
-        if(dateA.getTime() !== dateB.getTime()) return dateA - dateB;
-        return (a.name || "").localeCompare(b.name || "");
-    });
-}
-
-/* ===== CALC ROW ===== */
-function calcRow(row, year) {
-    var l = row['leaves_' + year] || {};
-    var v = function(k) { return parseFloat(l[k]) || 0; };
-    var cl_bal = 8 - v('cl');
-    var ml_bal = 10 - v('ml');
-    var rh_bal = 2 - v('rh');
-    var mat_bal = 180 - v('mat');
-    var pat_bal = 15 - v('pat');
-    var sl_bal = 15 - v('sl');
-    var sd_bal = 120 - v('sd');
-    var el_open = parseFloat(l.el_open) || 0;
-    var el_tot_avail = el_open + 15;
-    var el_bal = el_tot_avail - v('el_u');
-    var late_cnt = v('lat');
-    var late_ded = Math.floor(late_cnt / 6);
-    var paid_buffer = cl_bal + el_bal + ml_bal + rh_bal;
-    if(paid_buffer < 0) paid_buffer = 0;
-    var covered = 0, overflow = 0;
-    if(late_ded <= paid_buffer) { covered = late_ded; } else { covered = paid_buffer; overflow = late_ded - paid_buffer; }
-    var tot_paid = v('cl') + v('ml') + v('od') + v('el_u') + v('mat') + v('pat') + v('sl') + v('sd') + v('rh') + covered;
-    var tot_unp = v('lwp') + overflow;
-    var grand_tot = tot_paid + tot_unp;
-    var lwp_display = v('lwp') + overflow;
-    return { cl_bal:cl_bal, ml_bal:ml_bal, rh_bal:rh_bal, mat_bal:mat_bal, pat_bal:pat_bal, sl_bal:sl_bal, sd_bal:sd_bal, el_open:el_open, el_tot_avail:el_tot_avail, el_bal:el_bal, late_ded:late_ded, overflow:overflow, tot_paid:tot_paid, tot_unp:tot_unp, grand_tot:grand_tot, lwp_display:lwp_display, v:v };
-}
-
-/* ===== RENDER ===== */
-function render() {
-    sortData();
-    var tb = document.getElementById('tbody');
-    tb.innerHTML = '';
-    var isAdmin = currentUser && currentUser.role === 'admin';
-
-    data.forEach(function(row, i) {
-        var res = calcRow(row, curYr);
-        var l = row['leaves_' + curYr] || {};
-        var expStr = calcExp(row.doj);
-        var openELVal = l.el_open !== undefined ? l.el_open : 0;
-        var dojDisplay = formatDateDDMMYYYY(row.doj);
-        var dobDisplay = formatDateDDMMYYYY(row.dob);
-
-        var canEdit = isAdmin;
-        var readonlyAttr = canEdit ? '' : 'readonly style="background:#f5f5f5; cursor:not-allowed;"';
-        var disabledNum = canEdit ? '' : 'readonly style="background:#f5f5f5; cursor:not-allowed; width:35px; text-align:center; border:1px solid #333; font-weight:bold; font-size:12px; padding:2px;"';
-
-        var tr = '<td class="col-fix">' + (i+1) + '</td>';
-        tr += '<td class="col-fix-2">';
-        if(canEdit) {
-            tr += '<input type="text" value="' + (row.name||'') + '" onchange="updMeta(' + row.id + ',\'name\',this.value)" placeholder="Name" style="font-weight:bold;">';
-            tr += '<input type="text" value="' + (row.desig||'') + '" onchange="updMeta(' + row.id + ',\'desig\',this.value)" placeholder="Designation" list="desigList">';
-            tr += '<input type="text" value="' + (row.dept||'') + '" onchange="updMeta(' + row.id + ',\'dept\',this.value)" placeholder="Department">';
-            tr += '<div style="display:flex; gap:2px; margin-top:2px;">';
-            tr += '<div><span class="info-label">Code</span><input type="text" value="' + (row.code||'') + '" onchange="updMeta(' + row.id + ',\'code\',this.value)" style="width:55px;"></div>';
-            tr += '<div><span class="info-label">DOJ</span><input type="date" value="' + (row.doj||'') + '" onchange="updMeta(' + row.id + ',\'doj\',this.value)" style="width:75px;"></div>';
-            tr += '<div><span class="info-label">DOB</span><input type="date" value="' + (row.dob||'') + '" onchange="updMeta(' + row.id + ',\'dob\',this.value)" style="width:75px;"></div>';
-            tr += '</div>';
-        } else {
-            tr += '<div style="font-weight:bold; font-size:12px;">' + (row.name||'') + '</div>';
-            tr += '<div style="font-size:10px; color:#555;">' + (row.desig||'') + ' | ' + (row.dept||'') + '</div>';
-            tr += '<div style="font-size:9px; color:#333;">Code: ' + (row.code||'-') + ' | DOJ: ' + (dojDisplay||'-') + ' | DOB: ' + (dobDisplay||'-') + '</div>';
-        }
-        tr += '<div class="exp-tag">' + expStr + '</div>';
-        tr += '</td>';
-
-        // Leave cells
-        if(canEdit) {
-            tr += '<td><input type="number" value="' + (l.cl||'') + '" onchange="upd(' + row.id + ',\'cl\',this.value)"></td>';
-            tr += '<td class="bg-bal">' + res.cl_bal + '</td>';
-            tr += '<td><input type="number" value="' + (l.ml||'') + '" onchange="upd(' + row.id + ',\'ml\',this.value)"></td>';
-            tr += '<td class="bg-bal">' + res.ml_bal + '</td>';
-            tr += '<td><input type="number" value="' + (l.od||'') + '" onchange="upd(' + row.id + ',\'od\',this.value)"></td>';
-            tr += '<td><input type="number" value="' + openELVal + '" onchange="upd(' + row.id + ',\'el_open\',this.value)" style="background:#e3f2fd; width:30px;"></td>';
-            tr += '<td class="bg-bal">15</td>';
-            tr += '<td class="bg-bal">' + res.el_tot_avail + '</td>';
-            tr += '<td><input type="number" value="' + (l.el_u||'') + '" onchange="upd(' + row.id + ',\'el_u\',this.value)"></td>';
-            tr += '<td class="bg-bal" style="background:#bbdefb; border:1px solid #1565c0;">' + res.el_bal + '</td>';
-            tr += '<td><input type="number" value="' + (l.lat||'') + '" onchange="upd(' + row.id + ',\'lat\',this.value)"></td>';
-            tr += '<td class="bg-bal-neg" style="color:#d32f2f;">' + res.late_ded + '</td>';
-            tr += '<td><input type="number" value="' + (l.mat||'') + '" onchange="upd(' + row.id + ',\'mat\',this.value)"></td>';
-            tr += '<td class="bg-bal">' + res.mat_bal + '</td>';
-            tr += '<td><input type="number" value="' + (l.pat||'') + '" onchange="upd(' + row.id + ',\'pat\',this.value)"></td>';
-            tr += '<td class="bg-bal">' + res.pat_bal + '</td>';
-            tr += '<td><input type="number" value="' + (l.sl||'') + '" onchange="upd(' + row.id + ',\'sl\',this.value)"></td>';
-            tr += '<td class="bg-bal">' + res.sl_bal + '</td>';
-            tr += '<td><input type="number" value="' + (l.sd||'') + '" onchange="upd(' + row.id + ',\'sd\',this.value)"></td>';
-            tr += '<td class="bg-bal">' + res.sd_bal + '</td>';
-            tr += '<td><input type="number" value="' + (l.rh||'') + '" onchange="upd(' + row.id + ',\'rh\',this.value)"></td>';
-            tr += '<td class="bg-bal">' + res.rh_bal + '</td>';
-        } else {
-            // Read-only for faculty
-            tr += '<td class="bg-bal">' + (parseFloat(l.cl)||0) + '</td><td class="bg-bal">' + res.cl_bal + '</td>';
-            tr += '<td class="bg-bal">' + (parseFloat(l.ml)||0) + '</td><td class="bg-bal">' + res.ml_bal + '</td>';
-            tr += '<td class="bg-bal">' + (parseFloat(l.od)||0) + '</td>';
-            tr += '<td class="bg-bal">' + openELVal + '</td><td class="bg-bal">15</td><td class="bg-bal">' + res.el_tot_avail + '</td>';
-            tr += '<td class="bg-bal">' + (parseFloat(l.el_u)||0) + '</td>';
-            tr += '<td class="bg-bal" style="background:#bbdefb;">' + res.el_bal + '</td>';
-            tr += '<td class="bg-bal">' + (parseFloat(l.lat)||0) + '</td><td class="bg-bal-neg">' + res.late_ded + '</td>';
-            tr += '<td class="bg-bal">' + (parseFloat(l.mat)||0) + '</td><td class="bg-bal">' + res.mat_bal + '</td>';
-            tr += '<td class="bg-bal">' + (parseFloat(l.pat)||0) + '</td><td class="bg-bal">' + res.pat_bal + '</td>';
-            tr += '<td class="bg-bal">' + (parseFloat(l.sl)||0) + '</td><td class="bg-bal">' + res.sl_bal + '</td>';
-            tr += '<td class="bg-bal">' + (parseFloat(l.sd)||0) + '</td><td class="bg-bal">' + res.sd_bal + '</td>';
-            tr += '<td class="bg-bal">' + (parseFloat(l.rh)||0) + '</td><td class="bg-bal">' + res.rh_bal + '</td>';
-        }
-
-        tr += '<td class="tot-paid-cell">' + res.tot_paid + '</td>';
-
-        if(canEdit) {
-            tr += '<td><input type="number" value="' + (l.lwp||'') + '" onchange="upd(' + row.id + ',\'lwp\',this.value)">';
-            if(res.overflow > 0) tr += '<div style="font-size:8px; color:red; font-weight:bold">(+' + res.overflow + ')</div>';
-            tr += '</td>';
-        } else {
-            tr += '<td class="bg-bal">' + res.lwp_display + '</td>';
-        }
-
-        tr += '<td class="tot-unpaid-cell">' + res.tot_unp + '</td>';
-        tr += '<td class="grand-tot-cell">' + res.grand_tot + '</td>';
-
-        if(isAdmin) {
-            tr += '<td><button class="btn btn-del" onclick="delRow(' + row.id + ')">Del</button></td>';
-        }
-
-        var trEl = document.createElement('tr');
-        trEl.innerHTML = tr;
-        tb.appendChild(trEl);
-    });
-}
-
-/* ===== CARRY FORWARD ===== */
-function calculateCarryForward() {
-    if(!confirm("Calculate 2026 Opening EL from 2025 usage?\nThis will overwrite 'Open' EL in 2026.")) return;
-    data.forEach(function(r) {
-        var res25 = calcRow(r, '2025');
-        var penalty = res25.late_ded;
-        var others_avail = res25.cl_bal + res25.ml_bal + res25.rh_bal;
-        var penalty_eating_el = 0;
-        if(penalty > others_avail) penalty_eating_el = penalty - others_avail;
-        var actual_el_left = res25.el_bal - penalty_eating_el;
-        if(actual_el_left < 0) actual_el_left = 0;
-        if(!r.leaves_2026) r.leaves_2026 = {};
-        r.leaves_2026.el_open = actual_el_left;
-    });
-    alert("Done! Switched to 2026.");
-    swYear('2026');
-    save();
-}
-/* ===== REPORTS ===== */
-function searchFaculty() {
-    var name = prompt("Enter Name to Search:");
-    if(!name) return;
-    var found = data.find(function(r) { return r.name.toLowerCase().indexOf(name.toLowerCase()) !== -1; });
-    if(found) genIndividualReport(null, found.id); else alert("Not found.");
-}
-function askDetailedDeptReport() { var d = prompt("Enter Department:"); if(d !== null) genIndividualReport(d.trim(), null); }
-function askDeptReport() { var d = prompt("Enter Department:"); if(d !== null) genMasterReport(d.trim()); }
-
-function genIndividualReport(filterDept, filterId) {
-    var pSec = document.getElementById('printSection');
-    var h = getPrintHeader();
-    if(filterId) h += '<h4 style="text-align:center; margin:5px 0;">INDIVIDUAL FACULTY LEAVE RECORD</h4>';
-    else if(filterDept) h += '<h4 style="text-align:center; margin:5px 0;">DETAILED DEPT: ' + filterDept.toUpperCase() + '</h4>';
-    else h += '<h4 style="text-align:center; margin:5px 0;">ALL FACULTY DETAILED REPORT</h4>';
-    var found = false;
-    data.forEach(function(r) {
-        if(filterId && r.id !== filterId) return;
-        if(filterDept && (r.dept||"").toUpperCase().trim() !== filterDept.toUpperCase()) return;
-        found = true;
-        var res = calcRow(r, curYr);
-        var v = function(k) { return parseFloat((r['leaves_' + curYr]||{})[k]) || 0; };
-        var expStr = calcExp(r.doj);
-        h += '<div class="ind-card"><div class="ind-header"><span class="ind-title">' + r.name + '</span><span style="font-weight:bold;">' + curYr + '</span></div>';
-        h += '<div class="ind-meta"><div><b>Desig:</b> ' + r.desig + '</div><div><b>Dept:</b> ' + r.dept + '</div><div><b>Code:</b> ' + r.code + '</div><div><b>Exp:</b> ' + expStr + '</div></div>';
-        h += '<div class="ind-sect-title">PAID LEAVES</div>';
-        h += '<table class="ind-table"><thead><tr><th>Type</th><th>Limit</th><th>Used</th><th>Bal</th><th>Type</th><th>Limit</th><th>Used</th><th>Bal</th></tr></thead><tbody>';
-        h += '<tr><td>CL</td><td>8</td><td>' + v('cl') + '</td><td>' + res.cl_bal + '</td><td>ML</td><td>10</td><td>' + v('ml') + '</td><td>' + res.ml_bal + '</td></tr>';
-        h += '<tr><td>EL(Op:' + res.el_open + '+15)</td><td>' + res.el_tot_avail + '</td><td>' + v('el_u') + '</td><td>' + res.el_bal + '</td><td>SL</td><td>15</td><td>' + v('sl') + '</td><td>' + res.sl_bal + '</td></tr>';
-        h += '<tr><td>Mat</td><td>180</td><td>' + v('mat') + '</td><td>' + res.mat_bal + '</td><td>Pat</td><td>15</td><td>' + v('pat') + '</td><td>' + res.pat_bal + '</td></tr>';
-        h += '<tr><td>RH</td><td>2</td><td>' + v('rh') + '</td><td>' + res.rh_bal + '</td><td>OD</td><td>-</td><td>' + v('od') + '</td><td>-</td></tr>';
-        h += '</tbody></table>';
-        h += '<div class="ind-sect-title">LATE PENALTY (1/6)</div>';
-        h += '<table class="ind-table"><tr><td>Late: <b style="color:red">' + v('lat') + '</b></td><td>Penalty: <b style="color:red">' + res.late_ded + '</b></td><td>→ LWP: <b style="color:red">' + res.overflow + '</b></td></tr></table>';
-        h += '<div class="ind-summary"><span>PAID: ' + res.tot_paid + '</span><span style="color:#b71c1c;">UNPAID: ' + res.tot_unp + '</span><span style="background:yellow; padding:0 5px;">TOTAL: ' + res.grand_tot + '</span></div></div>';
-    });
-    if(!found) { alert("No faculty found."); return; }
-    h += '<div class="print-footer">Designed & Developed by Dr. Jadhav V.R. | Contact: 9518356305</div>';
-    pSec.innerHTML = h;
-    window.print();
-}
-
-function genMasterReport(filterDept) {
-    var pSec = document.getElementById('printSection');
-    var h = getPrintHeader();
-    var title = filterDept ? 'DEPT SUMMARY: ' + filterDept.toUpperCase() + ' (' + curYr + ')' : 'MASTER SUMMARY (' + curYr + ')';
-    h += '<h4 style="text-align:center; text-decoration:underline; margin:5px 0;">' + title + '</h4>';
-    var groups = {};
-    data.forEach(function(r) {
-        var d = (r.dept || "Other").toUpperCase().trim();
-        if(filterDept && d !== filterDept.toUpperCase()) return;
-        if(!groups[d]) groups[d] = [];
-        groups[d].push(r);
-    });
-    var depts = Object.keys(groups).sort();
-    if(!depts.length) { alert("No faculty found."); return; }
-    depts.forEach(function(d) {
-        h += '<div class="dept-head">DEPARTMENT: ' + d + '</div>';
-        h += '<table class="rpt-table"><thead><tr><th style="width:5%">Sr</th><th style="width:25%">Name</th><th>CL</th><th>ML</th><th>EL</th><th>OD</th><th>RH</th><th>SL</th><th>Mat</th><th>Pat</th><th>Lat</th><th>LWP</th><th>Tot</th></tr></thead><tbody>';
-        groups[d].forEach(function(r, idx) {
-            var res = calcRow(r, curYr);
-            var v = function(k) { return parseFloat((r['leaves_' + curYr]||{})[k]) || 0; };
-            h += '<tr><td>' + (idx+1) + '</td><td style="text-align:left"><b>' + r.name + '</b></td>';
-            h += '<td>' + res.cl_bal + '</td><td>' + res.ml_bal + '</td><td>' + res.el_bal + '</td><td>' + v('od') + '</td>';
-            h += '<td>' + res.rh_bal + '</td><td>' + res.sl_bal + '</td><td>' + res.mat_bal + '</td><td>' + res.pat_bal + '</td>';
-            h += '<td>' + res.late_ded + '</td><td>' + res.lwp_display + '</td><td><b>' + res.grand_tot + '</b></td></tr>';
-        });
-        h += '</tbody></table>';
-    });
-    h += '<div class="print-footer">Designed & Developed by Dr. Jadhav V.R. | Contact: 9518356305</div>';
-    pSec.innerHTML = h;
-    window.print();
-}
-
-function getPrintHeader() {
-    var tVal = document.getElementById('tHead').innerText;
-    var cVal = document.getElementById('cHead').innerText;
-    var aVal = document.getElementById('cAddr').innerText;
-    var logoSrc = document.getElementById('logoImg').src;
-    var logoDisp = document.getElementById('logoImg').style.display !== 'none' ? '<img src="' + logoSrc + '">' : '';
-    var dVal = document.getElementById('reportDate').value;
-    return '<div class="rpt-header"><div class="rpt-logo">' + logoDisp + '</div><div class="rpt-titles"><h3>' + tVal + '</h3><h2>' + cVal + '</h2><h5>' + aVal + '</h5></div><div style="font-size:10px; font-weight:bold; width:80px; text-align:right;">Date: ' + dVal + '</div></div>';
-}
-
-/* ===== UTILS ===== */
-function upd(id, key, val) {
-    var row = data.find(function(r) { return r.id === id; });
-    if(!row['leaves_' + curYr]) row['leaves_' + curYr] = {};
-    row['leaves_' + curYr][key] = val;
-    save(); render();
-}
-function updMeta(id, key, val) {
-    var row = data.find(function(r) { return r.id === id; });
-    row[key] = val;
-    // If code changed, update users
-    if(key === 'code' && val && val.trim().length > 2) {
-        var oldCode = Object.keys(users).find(function(u) { return users[u].facultyId === id && u !== 'admin'; });
-        if(oldCode) delete users[oldCode];
-        users[val.trim()] = { pw: 'damch@' + val.trim(), role: 'faculty', facultyId: id };
-        localStorage.setItem('damch_users_v25', JSON.stringify(users));
-    }
-    save();
-    if(key === 'desig' || key === 'doj') render();
-}
-function addRow() {
-    data.push({ id: Date.now(), name: "", desig: "", dept: "", code: "", doj: "", dob: "", leaves_2025: {}, leaves_2026: {} });
-    save(); render();
-}
-function delRow(id) {
-    if(confirm('Delete this faculty?')) {
-        data = data.filter(function(r) { return r.id !== id; });
-        // Remove user
-        var uKey = Object.keys(users).find(function(u) { return users[u].facultyId === id; });
-        if(uKey) { delete users[uKey]; localStorage.setItem('damch_users_v25', JSON.stringify(users)); }
-        save(); render();
-    }
-}
-function swYear(y) {
-    curYr = y;
-    document.getElementById('btn25').className = y === '2025' ? 'tab-btn active' : 'tab-btn';
-    document.getElementById('btn26').className = y === '2026' ? 'tab-btn active' : 'tab-btn';
-    document.getElementById('yrTitle').innerText = "Record: " + y;
-    render();
-}
-function save() { localStorage.setItem('damch_data_v25', JSON.stringify(data)); }
-function saveData() { save(); alert("Data saved to browser!"); }
-
-function loadLogo(e) {
-    var r = new FileReader();
-    r.onload = function(ev) { localStorage.setItem('damch_logo', ev.target.result); location.reload(); };
-    r.readAsDataURL(e.target.files[0]);
-}
-function downloadJSON() {
-    var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'DAMCH_Backup_' + new Date().toISOString().slice(0, 10) + '.json';
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-}
-function expCSV() {
-    var csv = "Sr,Name,Desig,Dept,Code,DOJ,Experience,DOB,CL_Bal,ML_Bal,EL_Open,EL_Total,EL_Used,EL_Bal,OD,RH_Bal,SL_Bal,Mat_Bal,Pat_Bal,Late_Ded,LWP_Total,Grand_Total\n";
-    data.forEach(function(r, i) {
-        var res = calcRow(r, curYr);
-        var v = function(k) { return parseFloat((r['leaves_' + curYr]||{})[k]) || 0; };
-        var expStr = calcExp(r.doj).replace(/,/g, '');
-        csv += (i+1) + ',"' + r.name + '","' + r.desig + '","' + (r.dept||'') + '","' + (r.code||'') + '","' + formatDateDDMMYYYY(r.doj) + '","' + expStr + '","' + formatDateDDMMYYYY(r.dob) + '",' + res.cl_bal + ',' + res.ml_bal + ',' + res.el_open + ',' + res.el_tot_avail + ',' + v('el_u') + ',' + res.el_bal + ',' + v('od') + ',' + res.rh_bal + ',' + res.sl_bal + ',' + res.mat_bal + ',' + res.pat_bal + ',' + res.late_ded + ',' + res.lwp_display + ',' + res.grand_tot + '\n';
-    });
-    var blob = new Blob([csv], { type: 'text/csv' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'Leave_Report_' + curYr + '.csv';
-    a.click();
-}
-function restData(e) {
-    var r = new FileReader();
-    r.onload = function(ev) {
-        try { data = JSON.parse(ev.target.result); buildDefaultUsers(); save(); render(); alert("Data Restored!"); }
-        catch(err) { alert("Invalid JSON file."); }
-    };
-    r.readAsText(e.target.files[0]);
-}
+/* UTILS */
+function upd(id,key,val){var r=data.find(function(x){return x.id===id});if(!r['leaves_'+curYr])r['leaves_'+curYr]={};r['leaves_'+curYr][key]=val;saveAll();renderLeaveRecord()}
+function addRow(){data.push({id:Date.now(),name:'',desig:'',dept:'',code:'',doj:'',dob:'',leaves_2025:{},leaves_2026:{}});saveAll();renderLeaveRecord()}
+function delRow(id){if(confirm('Delete?')){data=data.filter(function(r){return r.id!==id});var uk=Object.keys(users).find(function(u){return users[u].fid===id});if(uk){delete users[uk];localStorage.setItem('damch_v30_users',JSON.stringify(users))}saveAll();renderLeaveRecord()}}
+function swYear(y){curYr=y;document.getElementById('btnYr25').className=y==='2025'?'btn btn-primary':'btn';document.getElementById('btnYr25').style.cssText=y==='2025'?'':'background:#555;color:#fff';document.getElementById('btnYr26').className=y==='2026'?'btn btn-primary':'btn';document.getElementById('btnYr26').style.cssText=y==='2026'?'':'background:#555;color:#fff';renderLeaveRecord()}
+function calcCarryForward(){if(!confirm('Calculate 2026 Opening EL from 2025?'))return;data.forEach(function(r){var res=calcRow(r,'2025');var pen=res.ld,oth=res.cl_b+res.ml_b+res.rh_b,pe=0;if(pen>oth)pe=pen-oth;var el=res.el_b-pe;if(el<0)el=0;if(!r.leaves_2026)r.leaves_2026={};r.leaves_2026.el_open=el});alert('Done! Switching to 2026');swYear('2026');saveAll()}
+function searchFac(){var n=prompt('Enter name:');if(!n)return;var f=data.find(function(r){return(r.name||'').toLowerCase().indexOf(n.toLowerCase())>-1});if(f)alert('Found: '+f.name+'\nDesig: '+f.desig+'\nDept: '+f.dept+'\nCode: '+f.code+'\nDOJ: '+fmtDt(f.doj)+'\nExp: '+calcExp(f.doj));else alert('Not found')}
+function saveAll(){localStorage.setItem('damch_v30_data',JSON.stringify(data));localStorage.setItem('damch_v30_apps',JSON.stringify(apps))}
+function downloadJSON(){var b=new Blob([JSON.stringify({data:data,apps:apps},null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='DAMCH_Backup_'+new Date().toISOString().slice(0,10)+'.json';a.click()}
+function expCSV(){var csv='Sr,Name,Desig,Dept,Code,DOJ,Exp,CL_Bal,ML_Bal,EL_Bal,OD,Late,LWP,Total\n';data.forEach(function(r,i){var res=calcRow(r,curYr),v=function(k){return parseFloat((r['leaves_'+curYr]||{})[k])||0};csv+=(i+1)+',"'+r.name+'","'+r.desig+'","'+(r.dept||'')+'","'+(r.code||'')+'","'+fmtDt(r.doj)+'","'+calcExp(r.doj)+'",'+res.cl_b+','+res.ml_b+','+res.el_b+','+v('od')+','+res.ld+','+res.lwpd+','+res.gt+'\n'});var b=new Blob([csv],{type:'text/csv'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='DAMCH_Leave_'+curYr+'.csv';a.click()}
+function restoreJSON(e){var r=new FileReader();r.onload=function(ev){try{var d=JSON.parse(ev.target.result);if(d.data)data=d.data;else data=d;if(d.apps)apps=d.apps;buildUsers();saveAll();alert('Restored!');location.reload()}catch(err){alert('Invalid file')}};r.readAsText(e.target.files[0])}
+function uploadLogo(e){var r=new FileReader();r.onload=function(ev){localStorage.setItem('damch_logo',ev.target.result);location.reload()};r.readAsDataURL(e.target.files[0])}
+function resetData(){if(confirm('Reset ALL data to defaults?')){localStorage.removeItem('damch_v30_data');localStorage.removeItem('damch_v30_users');localStorage.removeItem('damch_v30_apps');location.reload()}}
 </script>
-
-<datalist id="desigList">
-    <option value="Principal">
-    <option value="Professor">
-    <option value="Associate Professor">
-    <option value="Assistant Professor">
-</datalist>
-
 </body>
 </html>
